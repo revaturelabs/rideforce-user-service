@@ -1,6 +1,15 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
+@Table(name="RS-ADDRESS")
 public class Address {
+	
 	
 	private int id;
 	private String line1;
@@ -9,9 +18,9 @@ public class Address {
 	private String city;
 	private String state;
 	private int zip;
+	
 	public Address() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public int getId() {
 		return id;
