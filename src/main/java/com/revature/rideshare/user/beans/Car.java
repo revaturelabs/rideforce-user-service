@@ -1,5 +1,13 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
+@Table(name="")
 public class Car {
 	
 	private int id;
