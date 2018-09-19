@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.revature.rideshare.repository")
 public class RepositoryConfig {
-
 	@Bean
+	// @Profile("test")
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		Properties props = getHibernateProperties();
@@ -37,7 +37,7 @@ public class RepositoryConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-		emf.setPackagesToScan(new String[] { "com.revature.rideshare.user.beans" });
+		emf.setPackagesToScan("com.revature.rideshare.user.beans");
 		emf.setDataSource(dataSource());
 		JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
 		emf.setJpaVendorAdapter(adapter);
@@ -47,20 +47,22 @@ public class RepositoryConfig {
 	
 	@Bean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		JpaTransactionManager manager = new JpaTransactionManager();
+		JpaTransactionManager manager = new JpaTransactionManager(emf);
 		manager.setEntityManagerFactory(emf);
 		return manager;
 	}
-	
-	
-	// Helper Method to retrieve our hibernate.properties file
+
+	/**
+	 * Helper method to retrieve our hibernate.properties file.
+	 */
 	private Properties getHibernateProperties() {
-		Properties props = new Properties();
 		try {
-			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/hibernate.properties"));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			Properties props = new Properties();
+			props.load(this.getClass().getResourceAsStream("/hibernate.properties"));
+			return props;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
-		return props;
 	}
 }

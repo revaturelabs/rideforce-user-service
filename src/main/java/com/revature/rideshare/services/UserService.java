@@ -3,10 +3,12 @@ package com.revature.rideshare.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.revature.rideshare.repository.UserRepository;
 import com.revature.rideshare.user.beans.User;
 
+@Service
 public class UserService {
 
 	@Autowired
@@ -14,7 +16,7 @@ public class UserService {
 	
 	
 	public User findById( int id) {
-		return userRepository.findOne(id);
+		return userRepository.getOne(id);
 	}
 	
 	public User findByUsername(String username) {
