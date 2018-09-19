@@ -1,6 +1,7 @@
 package com.revature.rideshare.user.beans;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Table(name="")
 public class Car {
-	
+	@Id
 	private int id;
 	private User owner;
 	private String make;

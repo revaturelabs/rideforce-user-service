@@ -1,6 +1,7 @@
 package com.revature.rideshare.user.beans;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class Address {
 	
 	
+	@Id
 	private int id;
 	private String line1;
 	private String line2;
