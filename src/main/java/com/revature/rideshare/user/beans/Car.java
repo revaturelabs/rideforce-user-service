@@ -1,9 +1,22 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 public class Car {
 	
+	@Id
+	@Column(name="CAR_ID")
 	private int id;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="USER_ID")
 	private User owner;
+	
 	private String make;
 	private String model;
 	private int year;

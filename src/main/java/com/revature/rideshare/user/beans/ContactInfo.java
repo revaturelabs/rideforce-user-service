@@ -1,9 +1,22 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 public class ContactInfo {
 	
+	@Id
+	@Column(name="CONTACT_INFO_ID")
 	private int id;
+	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="USER_ID")
 	private User user;
+	
 	private ContactType type;
 	private String value;
 	

@@ -1,20 +1,22 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-@Table(name="RS-ADDRESS")
+@Table(name="ADDRESS")
 public class Address {
 	
-	
+	@Id
+	@Column(name="ADDRESS_ID")
 	private int id;
 	private String line1;
 	private String line2;
-	private String street;
 	private String city;
 	private String state;
 	private int zip;
@@ -39,12 +41,6 @@ public class Address {
 	}
 	public void setLine2(String line2) {
 		this.line2 = line2;
-	}
-	public String getStreet() {
-		return street;
-	}
-	public void setStreet(String street) {
-		this.street = street;
 	}
 	public String getCity() {
 		return city;
@@ -74,7 +70,6 @@ public class Address {
 		result = prime * result + ((line1 == null) ? 0 : line1.hashCode());
 		result = prime * result + ((line2 == null) ? 0 : line2.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + zip;
 		return result;
 	}
@@ -109,11 +104,6 @@ public class Address {
 			if (other.state != null)
 				return false;
 		} else if (!state.equals(other.state))
-			return false;
-		if (street == null) {
-			if (other.street != null)
-				return false;
-		} else if (!street.equals(other.street))
 			return false;
 		if (zip != other.zip)
 			return false;
