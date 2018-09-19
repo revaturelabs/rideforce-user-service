@@ -1,8 +1,13 @@
 package com.revature.rideshare.user.beans;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
-public class User {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class User implements UserDetails {
 	
 	private int id;
 	private String firstName;
@@ -107,5 +112,43 @@ public class User {
 	public void setVenmo(String venmo) {
 		this.venmo = venmo;
 	}
+	//TODO Handle different user roles
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		GrantedAuthority auth = () -> "user";
+		return Arrays.asList(auth);
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 	
 }
