@@ -1,5 +1,7 @@
 package com.revature.rideshare.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.rideshare.repository.UserRepository;
@@ -17,6 +19,16 @@ public class UserService {
 	
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
+		
+	}
+	
+	public User save(User user) {
+		return userRepository.save(user);
+	}
+	
+	public List<User> findAll() {
+		return userRepository.findAll();
+		
 	}
 	
 	
