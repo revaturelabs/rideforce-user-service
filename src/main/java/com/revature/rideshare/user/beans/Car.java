@@ -4,9 +4,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 import org.springframework.stereotype.Component;
 
@@ -16,10 +19,13 @@ public class Car {
 	
 	@Id
 	@Column(name="CAR_ID")
+	@SequenceGenerator(name="carid", sequenceName="carid")
+	@GeneratedValue(generator="carid", strategy=GenerationType.SEQUENCE)
 	private int id;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name="USER_ID")
+	@Column(name="USER_ID", nullable=false)
 	private User owner;
 	
 	private String make;

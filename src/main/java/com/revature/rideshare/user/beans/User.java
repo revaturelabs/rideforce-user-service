@@ -7,17 +7,65 @@ import java.util.Date;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
+@Table(name="USERS")
 public class User implements UserDetails {
 	
+	@Id
+	@Column(name="USER_ID")
+	@SequenceGenerator(name="userid", sequenceName="userid")
+	@GeneratedValue(generator="userid", strategy=GenerationType.SEQUENCE)
 	private int id;
+	
+	@Column(nullable=false)
 	private String firstName;
+	
+	@Column(nullable=false)
 	private String lastName;
+	
+	@Column(unique=true, nullable=false)
 	private String email;
+	
+	@Column(nullable=false)
 	private String password;
+	
+	@Column(nullable=false)
 	private String photoURL;
+	
+	@Column(nullable=false)
+	private boolean active;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="ROLE_ID")
+	@Column(name="ROLE_ID", nullable=false)
 	private UserRole role;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="OFFICE_ID")
+	@Column(name="OFFICE_ID", nullable=false)
 	private Office office;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="ADDRESS_ID")
+	@Column(name="ADDRESS_ID", nullable=false)
 	private Address address;
+	
+	@Column(nullable=false)
 	private Date batchEnd;
 	private String venmo;
 	
@@ -71,6 +119,14 @@ public class User implements UserDetails {
 
 	public void setPhotoURL(String photoURL) {
 		this.photoURL = photoURL;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public UserRole getRole() {
