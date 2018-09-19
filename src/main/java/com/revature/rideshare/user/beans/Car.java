@@ -29,13 +29,7 @@ public class Car {
 		this.id = id;
 	}
 
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+	
 
 	public String getMake() {
 		return make;
@@ -59,6 +53,16 @@ public class Car {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 	
 	

@@ -4,11 +4,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 public class User implements UserDetails {
-	
 	private int id;
 	private String firstName;
 	private String lastName;

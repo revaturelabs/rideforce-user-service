@@ -1,6 +1,6 @@
 server:
   port: 5555
-debug: true
+
 spring:
   application:
     name: user-service
