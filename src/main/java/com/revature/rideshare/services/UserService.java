@@ -10,29 +10,22 @@ import com.revature.rideshare.user.beans.User;
 
 @Service
 public class UserService {
-
 	@Autowired
 	private UserRepository userRepository;
 	
+	public List<User> findAll() {
+		return userRepository.findAll();
+	}
 	
-	public User findById( int id) {
+	public User findById(int id) {
 		return userRepository.getOne(id);
 	}
 	
-	public User findByUsername(String email) {
-		return userRepository.findByUsername(email);
-		
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 	
 	public User save(User user) {
 		return userRepository.save(user);
 	}
-	
-	public List<User> findAll() {
-		return userRepository.findAll();
-		
-	}
-	
-	
-	
 }

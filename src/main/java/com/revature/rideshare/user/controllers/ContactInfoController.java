@@ -1,6 +1,6 @@
 package com.revature.rideshare.user.controllers;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,52 +13,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.services.ContactInfoService;
 import com.revature.rideshare.user.beans.ContactInfo;
-import com.revature.rideshare.user.beans.User;
+import com.revature.rideshare.user.beans.ResponseError;
 
 @RestController
 public class ContactInfoController {
-	
 	@Autowired
 	ContactInfoService contactInfoService;
-	
-	@RequestMapping(value="/contact-info/{id}", method=RequestMethod.GET)
-	public ResponseEntity<List<ContactInfo>> getContactInfo(@PathVariable User user)
-	{
-		List<ContactInfo> result = contactInfoService.getOne(user);
-		if (result != null)
-		{
-			return new ResponseEntity<List<ContactInfo>>(result, HttpStatus.OK);
-		}
-		else
-		{
-			return new ResponseEntity<List<ContactInfo>>(result, HttpStatus.NOT_FOUND);
-		}
+
+	@RequestMapping(value = "/contact-info/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+		ContactInfo contactInfo = contactInfoService.findById(id);
+		return contactInfo == null ? new ResponseError("Contact info with ID " + id + " does not exist.")
+				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(contactInfo);
 	}
-	
-	@RequestMapping(value="/contact-info", method=RequestMethod.POST)
-	public ResponseEntity<ContactInfo> addContactInfo(@RequestBody ContactInfo info)
-	{
+
+	@RequestMapping(value = "/contact-info", method = RequestMethod.POST)
+	public ResponseEntity<ContactInfo> add(@RequestBody @Valid ContactInfo info) {
+		info.setId(0);
 		ContactInfo result = contactInfoService.save(info);
-		if (result != null)
-		{
+		if (result != null) {
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.CREATED);
-		}
-		else
-		{
+		} else {
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.CONFLICT);
 		}
 	}
-	
-	@RequestMapping(value="/contact-info/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<ContactInfo> updateContactInfo(@PathVariable int id, @RequestBody ContactInfo info)
-	{
+
+	@RequestMapping(value = "/contact-info/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<ContactInfo> update(@PathVariable int id, @RequestBody @Valid ContactInfo info) {
+		info.setId(id);
 		ContactInfo result = contactInfoService.save(info);
-		if (result != null)
-		{
+		if (result != null) {
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.OK);
-		}
-		else
-		{
+		} else {
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.CONFLICT);
 		}
 	}
