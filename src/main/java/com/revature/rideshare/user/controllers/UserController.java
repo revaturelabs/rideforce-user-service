@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,69 +13,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.services.UserService;
+import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
+import com.revature.rideshare.user.beans.UserRegistrationInfo;
 
 @RestController
 public class UserController {
-	
 	@Autowired
 	UserService userService;
-	
-	@RequestMapping(value="/users", method=RequestMethod.GET)
-	public ResponseEntity<User> getUserByUsername(@RequestParam User user)
-	{
-		User result = userService.findByUsername(user.getEmail());
-		if (result != null)
-		{
-			return new ResponseEntity<User>(result, HttpStatus.OK);
-		}
-		else
-		{
-			return new ResponseEntity<User>(result, HttpStatus.NOT_FOUND);
-		}
+
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+		User user = userService.findById(id);
+		return user == null
+				? new ResponseError("User with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
+				: ResponseEntity.ok(user);
 	}
-	
-	@RequestMapping(value="/users/{id}", method=RequestMethod.GET)
-	public ResponseEntity<User> getUserById(@PathVariable User user)
-	{
-		User result = userService.findById(user.getId());
-		if (result != null)
-		{
-			return new ResponseEntity<User>(result, HttpStatus.OK);
-		}
-		else
-		{
-			return new ResponseEntity<User>(result, HttpStatus.NOT_FOUND);
-		}
+
+	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email")
+	public ResponseEntity<?> findByEmail(@RequestParam("email") String email) {
+		User user = userService.findByEmail(email);
+		return user == null ? new ResponseError("User with email " + email + " does not exist.")
+				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 	}
-	
-	@RequestMapping(value="/users", method=RequestMethod.POST)
-	public ResponseEntity<User> addUser(@RequestBody User user)
-	{
-		User result = userService.save(user);
-		if (result != null)
-		{
+
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	public ResponseEntity<User> add(@RequestBody @Valid UserRegistrationInfo registration) {
+		User result = userService.register(registration);
+		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.CREATED);
-		}
-		else
-		{
+		} else {
 			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
 		}
 	}
-	
-	
-	@RequestMapping(value="/users/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user)
-	{
+
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid User user) {
+		user.setId(id);
 		User result = userService.save(user);
-		if (result != null)
-		{
+		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
-		}
-		else
-		{
+		} else {
 			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
 		}
 	}
-	
 }
