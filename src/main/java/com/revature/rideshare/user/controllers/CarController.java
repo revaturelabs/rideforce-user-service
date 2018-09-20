@@ -15,14 +15,13 @@ import com.revature.rideshare.user.beans.User;
 
 @RestController
 public class CarController {
-	
-	@Autowired
-	CarService carService;
+//	@Autowired
+//	CarService carService;
 	
 	@RequestMapping(value="/cars/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Car> getOne(@PathVariable User user)
 	{
-		Car result = carService.getOne(user);
+		Car result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Car>(result, HttpStatus.OK);
@@ -36,7 +35,7 @@ public class CarController {
 	@RequestMapping(value="/cars", method=RequestMethod.POST)
 	public ResponseEntity<Car> addCar(@RequestBody Car car)
 	{
-		Car result = carService.save(car);
+		Car result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Car>(result, HttpStatus.CREATED);
@@ -50,7 +49,7 @@ public class CarController {
 	@RequestMapping(value="/cars/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Car> updateCar(@PathVariable int id, @RequestBody Car car)
 	{
-		Car result = carService.save(car);
+		Car result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Car>(result, HttpStatus.OK);

@@ -17,14 +17,14 @@ import com.revature.rideshare.user.beans.User;
 
 @RestController
 public class ContactInfoController {
-	
-	@Autowired
-	ContactInfoService contactInfoService;
+//	
+//	@Autowired
+//	ContactInfoService contactInfoService;
 	
 	@RequestMapping(value="/contact-info/{id}", method=RequestMethod.GET)
 	public ResponseEntity<List<ContactInfo>> getContactInfo(@PathVariable User user)
 	{
-		List<ContactInfo> result = contactInfoService.getOne(user);
+		List<ContactInfo> result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<List<ContactInfo>>(result, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class ContactInfoController {
 	@RequestMapping(value="/contact-info", method=RequestMethod.POST)
 	public ResponseEntity<ContactInfo> addContactInfo(@RequestBody ContactInfo info)
 	{
-		ContactInfo result = contactInfoService.save(info);
+		ContactInfo result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.CREATED);
@@ -52,7 +52,7 @@ public class ContactInfoController {
 	@RequestMapping(value="/contact-info/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<ContactInfo> updateContactInfo(@PathVariable int id, @RequestBody ContactInfo info)
 	{
-		ContactInfo result = contactInfoService.save(info);
+		ContactInfo result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<ContactInfo>(result, HttpStatus.OK);

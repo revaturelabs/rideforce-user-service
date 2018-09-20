@@ -15,13 +15,13 @@ import com.revature.rideshare.user.beans.Office;
 @RestController
 public class OfficeController {
 
-	@Autowired
-	OfficeService officeService;
+//	@Autowired
+//	OfficeService officeService;
 	
 	@RequestMapping(value="/offices/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Office> getOffice(@PathVariable int id)
 	{
-		Office result = officeService.getOfficeById(id);
+		Office result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Office>(result, HttpStatus.OK);
@@ -35,7 +35,7 @@ public class OfficeController {
 	@RequestMapping(value="/offices", method=RequestMethod.POST)
 	public ResponseEntity<Office> addOffice(@RequestBody Office office)
 	{
-		Office result = officeService.addOffice(office);
+		Office result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Office>(result, HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class OfficeController {
 	@RequestMapping(value="/offices/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Office> updateOffice(@PathVariable int id, @RequestBody Office office)
 	{
-		Office result = officeService.updateOffice(id, office);
+		Office result = null;
 		if (result != null)
 		{
 			return new ResponseEntity<Office>(result, HttpStatus.OK);

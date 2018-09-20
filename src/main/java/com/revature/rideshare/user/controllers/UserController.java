@@ -22,7 +22,7 @@ public class UserController {
 	@RequestMapping(value="/users", method=RequestMethod.GET)
 	public ResponseEntity<User> getUserByUsername(@RequestParam User user)
 	{
-		User result = userService.findByUsername(user.getEmail());
+		User result = userService.findByEmail(user.getEmail());
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.OK);
