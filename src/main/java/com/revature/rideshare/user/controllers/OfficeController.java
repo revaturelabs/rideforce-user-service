@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.rideshare.services.OfficeService;
 import com.revature.rideshare.user.beans.Office;
 
 @RestController
