@@ -11,31 +11,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revature.rideshare.services.UserService;
 
 @Entity
-@Component
 public class Car {
-	
+	@Autowired
+	@JsonIgnore
+	private UserService userService;
+
 	@Id
-	@Column(name="CAR_ID")
-	@SequenceGenerator(name="carid", sequenceName="carid")
-	@GeneratedValue(generator="carid", strategy=GenerationType.SEQUENCE)
+	@Column(name = "CAR_ID")
+	@SequenceGenerator(name = "carid", sequenceName = "carid")
+	@GeneratedValue(generator = "carid", strategy = GenerationType.SEQUENCE)
 	private int id;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID", nullable=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "USER_ID", nullable = false)
 	private User owner;
-	
-	@Column(length=35)
+
+	@Column(length = 35)
 	private String make;
-	
-	@Column(length=30)
+
+	@Column(length = 30)
 	private String model;
-	
-	@Column(nullable=true)
+
+	@Column(nullable = true)
 	private int year;
-	
+
 	public Car() {
 		super();
 	}
@@ -47,8 +55,6 @@ public class Car {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	
 
 	public String getMake() {
 		return make;
@@ -74,8 +80,6 @@ public class Car {
 		this.year = year;
 	}
 
-	
-
 	public User getOwner() {
 		return owner;
 	}
@@ -83,7 +87,26 @@ public class Car {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	
-	
 
+	/**
+	 * Gets the owner property as a link.
+	 * 
+	 * @return a link to the owner
+	 */
+	@JsonProperty("owner")
+	public String getOwnerLink() {
+		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(owner.getId()).toString();
+	}
+
+	/**
+	 * Sets the owner from a link string.
+	 * 
+	 * @param uri the URI linking to the owner
+	 */
+	@JsonProperty("owner")
+	public void setOwnerLink(String uri) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		int userId = Integer.parseInt(matcher.extractUriTemplateVariables("/users/{id}", uri).get("id"));
+		owner = userService.findById(userId);
+	}
 }

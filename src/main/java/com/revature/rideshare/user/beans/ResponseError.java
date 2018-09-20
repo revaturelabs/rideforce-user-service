@@ -2,9 +2,9 @@ package com.revature.rideshare.user.beans;
 
 import java.util.Arrays;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
