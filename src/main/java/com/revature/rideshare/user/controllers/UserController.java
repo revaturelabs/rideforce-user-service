@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.services.UserService;
 import com.revature.rideshare.user.beans.User;
+import com.revature.rideshare.user.beans.UserRegistrationInfo;
 
 @RestController
 public class UserController {
@@ -48,9 +49,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/users", method=RequestMethod.POST)
-	public ResponseEntity<User> addUser(@RequestBody User user)
+	public ResponseEntity<User> addUser(@RequestBody UserRegistrationInfo userInfo)
 	{
-		User result = userService.save(user);
+		User result = userService.register(userInfo);
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.CREATED);
