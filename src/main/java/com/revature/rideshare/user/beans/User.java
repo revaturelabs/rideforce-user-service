@@ -41,13 +41,12 @@ public class User implements UserDetails {
 	@Column(unique=true, nullable=false, length=40)
 	private String email;
 	
-	@Column(nullable=false, length=40)
+	@Column(nullable=false, length=70)
 	private String password;
 	
-	@Column(nullable=false)
+	@Column(length=200)
 	private String photoURL;
 	
-	@Column(nullable=false)
 	private boolean active;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
@@ -62,7 +61,7 @@ public class User implements UserDetails {
 	@JoinColumn(name="ADDRESS_ID", nullable=false)
 	private Address address;
 	
-	@Column(nullable=false, columnDefinition="DATE")
+	@Column(columnDefinition="DATE")
 	private Date batchEnd;
 	
 	@Column(length=30)
