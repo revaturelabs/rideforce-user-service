@@ -60,9 +60,7 @@ public class User implements UserDetails {
 	@JoinColumn(name = "OFFICE_ID", nullable = false)
 	private Office office;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "ADDRESS_ID", nullable = false)
-	private Address address;
+	private String address;
 
 	@Column(columnDefinition = "DATE")
 	private Date batchEnd;
@@ -72,22 +70,6 @@ public class User implements UserDetails {
 
 	public User() {
 		super();
-	}
-
-	public User(int id, String firstName, String lastName, String email, String photoURL, boolean active, UserRole role,
-			Office office, Address address, Date batchEnd, String venmo) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.photoURL = photoURL;
-		this.active = active;
-		this.role = role;
-		this.office = office;
-		this.address = address;
-		this.batchEnd = batchEnd;
-		this.venmo = venmo;
 	}
 
 	public int getId() {
@@ -162,11 +144,11 @@ public class User implements UserDetails {
 		this.office = office;
 	}
 
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
