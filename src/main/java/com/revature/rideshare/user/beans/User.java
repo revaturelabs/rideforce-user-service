@@ -3,6 +3,8 @@ package com.revature.rideshare.user.beans;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,28 +15,46 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revature.rideshare.services.CarService;
+import com.revature.rideshare.services.ContactInfoService;
+import com.revature.rideshare.services.OfficeService;
 
 @Entity
-@Component
 @Table(name = "USERS")
 public class User implements UserDetails {
+	private static final long serialVersionUID = 1L;
+
+	@Autowired
+	@JsonIgnore
+	private OfficeService officeService;
+
+	@Autowired
+	@JsonIgnore
+	private CarService carService;
+	
+	@Autowired
+	@JsonIgnore
+	private ContactInfoService contactInfoService;
 
 	@Id
 	@Column(name = "USER_ID")
 	@SequenceGenerator(name = "userid", sequenceName = "userid")
 	@GeneratedValue(generator = "userid", strategy = GenerationType.SEQUENCE)
-
 	private int id;
 
 	@Column(nullable = false, length = 25)
@@ -51,7 +71,7 @@ public class User implements UserDetails {
 	private String password;
 
 	@Column(length = 200)
-	private String photoURL;
+	private String photoUrl;
 
 	private boolean active;
 
@@ -70,8 +90,14 @@ public class User implements UserDetails {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	private Date batchEnd;
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
+	private Set<Car> cars;
+
 	@Column(length = 30)
 	private String venmo;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<ContactInfo> contactInfo;
 
 	public User() {
 		super();
@@ -117,12 +143,12 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
-	public String getPhotoURL() {
-		return photoURL;
+	public String getPhotoUrl() {
+		return photoUrl;
 	}
 
-	public void setPhotoURL(String photoURL) {
-		this.photoURL = photoURL;
+	public void setPhotoUrl(String photoURL) {
+		this.photoUrl = photoURL;
 	}
 
 	public boolean isActive() {
@@ -173,6 +199,80 @@ public class User implements UserDetails {
 		this.venmo = venmo;
 	}
 
+	/**
+	 * Gets the office property as a link.
+	 * 
+	 * @return a link to the office
+	 */
+	@JsonProperty("office")
+	public String getOfficeLink() {
+		return UriComponentsBuilder.fromPath("/offices/{id}").buildAndExpand(office.getId()).toString();
+	}
+
+	/**
+	 * Sets the office from a link string.
+	 * 
+	 * @param uri the URI linking to the office
+	 */
+	@JsonProperty("office")
+	public void setOfficeLink(String uri) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		int userId = Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", uri).get("id"));
+		office = officeService.findById(userId);
+	}
+
+	/**
+	 * Gets the cars property as a set of links.
+	 * 
+	 * @return a set of links to the user's cars
+	 */
+	@JsonProperty("cars")
+	public Set<String> getCarsLinks() {
+		return cars.stream()
+				.map(car -> UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(car.getId()).toString())
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Sets the cars from a set of link strings.
+	 * 
+	 * @param uris the set of URIs linking to the cars
+	 */
+	@JsonProperty("cars")
+	public void setCarsLinks(Set<String> uris) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		cars = uris.stream().map(uri -> {
+			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/cars/{id}", uri).get("id"));
+			return carService.findById(id);
+		}).collect(Collectors.toSet());
+	}
+
+	/**
+	 * Gets the contactInfo property as a set of links.
+	 * 
+	 * @return a set of links to the user's contact info
+	 */
+	@JsonProperty("contactInfo")
+	public Set<String> getContactInfoLinks() {
+		return contactInfo.stream().map(
+				info -> UriComponentsBuilder.fromPath("/contact-info/{id}").buildAndExpand(info.getId()).toString())
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Sets the contactInfo property from a set of link strings.
+	 * 
+	 * @param uris the set of URIs linking to the contact info
+	 */
+	@JsonProperty("contactInfo")
+	public void setContactInfoLinks(Set<String> uris) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		contactInfo = uris.stream().map(uri -> {
+			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/contact-info/{id}", uri).get("id"));
+			return contactInfoService.findById(id);
+		}).collect(Collectors.toSet());
+	}
+
 	// TODO Handle different user roles
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -209,5 +309,4 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
