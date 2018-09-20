@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -19,14 +20,16 @@ public class Address {
 	@GeneratedValue(generator="addressid", strategy=GenerationType.SEQUENCE)
 	private int id;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=80)
 	private String address;
+	
+	@Column(length=80)
 	private String address2;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=30)
 	private String city;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=25)
 	private String state;
 	
 	@Column(nullable=false)

@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
 public class ContactType {
 	
 	@Id
-	@Column(name="CONTACT_INFO_ID")
+	@Column(name="CONTACT_TYPE_ID")
 	@SequenceGenerator(name="contacttypeid", sequenceName="contacttypeid")
 	@GeneratedValue(generator="contacttypeid", strategy=GenerationType.SEQUENCE)
 	private int id;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=20)
 	private String type;
 	
 	public ContactType() {

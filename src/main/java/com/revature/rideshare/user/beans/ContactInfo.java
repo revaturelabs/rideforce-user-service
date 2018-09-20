@@ -26,15 +26,14 @@ public class ContactInfo {
 	private int id;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID")
-	@Column(name="USER_ID", nullable=false)
+	@JoinColumn(name="USER_ID", nullable=false)
 	private User user;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="CONTACT_TYPE_ID")
-	@Column(name="CONTACT_TYPE_ID", nullable=false)
+	@JoinColumn(name="CONTACT_TYPE_ID", nullable=false)
 	private ContactType type;
 	
+	@Column(length=100)
 	private String info;
 	
 	public ContactInfo() {

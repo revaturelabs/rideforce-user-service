@@ -23,12 +23,11 @@ public class Office {
 	@GeneratedValue(generator="officeid", strategy=GenerationType.SEQUENCE)
 	private int id;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=30)
 	private String name;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ADDRESS_ID")
-	@Column(name="ADDRESS_ID", nullable=false)
+	@JoinColumn(name="ADDRESS_ID", unique=true, nullable=false)
 	private Address address;
 	
 	public Office() {

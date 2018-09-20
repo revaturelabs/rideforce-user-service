@@ -32,16 +32,16 @@ public class User implements UserDetails {
 	@GeneratedValue(generator="userid", strategy=GenerationType.SEQUENCE)
 	private int id;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=25)
 	private String firstName;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=30)
 	private String lastName;
 	
-	@Column(unique=true, nullable=false)
+	@Column(unique=true, nullable=false, length=40)
 	private String email;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=40)
 	private String password;
 	
 	@Column(nullable=false)
@@ -51,22 +51,21 @@ public class User implements UserDetails {
 	private boolean active;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ROLE_ID")
-	@Column(name="ROLE_ID", nullable=false)
+	@JoinColumn(name="ROLE_ID", nullable=false)
 	private UserRole role;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="OFFICE_ID")
-	@Column(name="OFFICE_ID", nullable=false)
+	@JoinColumn(name="OFFICE_ID", nullable=false)
 	private Office office;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ADDRESS_ID")
-	@Column(name="ADDRESS_ID", nullable=false)
+	@JoinColumn(name="ADDRESS_ID", nullable=false)
 	private Address address;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition="DATE")
 	private Date batchEnd;
+	
+	@Column(length=30)
 	private String venmo;
 	
 	public User() {

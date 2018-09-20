@@ -24,12 +24,16 @@ public class Car {
 	private int id;
 	
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID")
-	@Column(name="USER_ID", nullable=false)
+	@JoinColumn(name="USER_ID", nullable=false)
 	private User owner;
 	
+	@Column(length=35)
 	private String make;
+	
+	@Column(length=30)
 	private String model;
+	
+	@Column(nullable=true)
 	private int year;
 	
 	public Car() {
