@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import javax.validation.Valid;
 
-import org.apache.http.HttpStatus;
+//import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.http.MediaType;
