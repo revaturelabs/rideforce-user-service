@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.rideshare.services.CarService;
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.ResponseError;
+import com.revature.rideshare.user.services.CarService;
 
 @RestController
 public class CarController {

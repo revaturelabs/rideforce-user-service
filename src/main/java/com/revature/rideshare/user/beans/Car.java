@@ -15,15 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.rideshare.services.UserService;
+import com.revature.rideshare.user.services.UserService;
 
 @Entity
 public class Car {
 	@Autowired
-	@JsonIgnore
-	private UserService userService;
+	private transient UserService userService;
 
 	@Id
 	@Column(name = "CAR_ID")

@@ -30,9 +30,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.rideshare.services.CarService;
-import com.revature.rideshare.services.ContactInfoService;
-import com.revature.rideshare.services.OfficeService;
+import com.revature.rideshare.user.services.CarService;
+import com.revature.rideshare.user.services.ContactInfoService;
+import com.revature.rideshare.user.services.OfficeService;
 
 @Entity
 @Table(name = "USERS")
@@ -40,16 +40,13 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	@JsonIgnore
-	private OfficeService officeService;
+	private transient OfficeService officeService;
 
 	@Autowired
-	@JsonIgnore
-	private CarService carService;
+	private transient CarService carService;
 	
 	@Autowired
-	@JsonIgnore
-	private ContactInfoService contactInfoService;
+	private transient ContactInfoService contactInfoService;
 
 	@Id
 	@Column(name = "USER_ID")
