@@ -1,5 +1,6 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -8,12 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-@Table(name="RS-USER_ROLE")
+@Table(name="ROLE")
 public class UserRole {
 	
 	@Id
+	@Column(name="ROLE_ID")
 	private int id;
-	private String role;
+	
+	@Column(nullable=false, length=30)
+	private String type;
 	
 	public UserRole() {
 		super();
@@ -26,10 +30,10 @@ public class UserRole {
 		this.id = id;
 	}
 	public String getRole() {
-		return role;
+		return type;
 	}
 	public void setRole(String role) {
-		this.role = role;
+		this.type = role;
 	}
 	
 	

@@ -20,9 +20,9 @@ public class UserController {
 	UserService userService;
 	
 	@RequestMapping(value="/users", method=RequestMethod.GET)
-	public ResponseEntity<User> getUser(@RequestParam String email)
+	public ResponseEntity<User> getUserByUsername(@RequestParam User user)
 	{
-		User result = userService.getUserByEmail(email);
+		User result = userService.findByUsername(user.getEmail());
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.OK);
@@ -34,9 +34,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/users/{id}", method=RequestMethod.GET)
-	public ResponseEntity<User> getUser(@PathVariable int id)
+	public ResponseEntity<User> getUserById(@PathVariable User user)
 	{
-		User result = userService.getUserById(id);
+		User result = userService.findById(user.getId());
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.OK);
@@ -50,7 +50,7 @@ public class UserController {
 	@RequestMapping(value="/users", method=RequestMethod.POST)
 	public ResponseEntity<User> addUser(@RequestBody User user)
 	{
-		User result = userService.addUser(user);
+		User result = userService.save(user);
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.CREATED);
@@ -65,7 +65,7 @@ public class UserController {
 	@RequestMapping(value="/users/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user)
 	{
-		User result = userService.updateUser(id, user);
+		User result = userService.save(user);
 		if (result != null)
 		{
 			return new ResponseEntity<User>(result, HttpStatus.OK);
