@@ -13,7 +13,12 @@ public class ContactInfoService {
 	ContactInfoRepository contactInfoRepository;
 	
 	public List<ContactInfo> getOne(User user) {
-		return contactInfoRepository.findByUser(user.getId());
-		
+		return contactInfoRepository.findByUserId(user.getId());
 	}
+	
+	public ContactInfo save(ContactInfo contactInfo) {
+		return contactInfoRepository.save(contactInfo);
+	}
+	
+	
 }

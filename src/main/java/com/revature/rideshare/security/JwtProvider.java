@@ -31,7 +31,7 @@ public class JwtProvider implements InitializingBean {
     
     private static final String ISSUER = "revature";
 
-    @Value("${JWT_SECRET}")
+    @Value("SECRET")
     private String secret;
     private Algorithm algorithm;
     private JWTVerifier verifier;

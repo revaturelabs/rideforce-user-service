@@ -8,5 +8,5 @@ import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.beans.User;
 
 public interface ContactInfoRepository extends JpaRepository<ContactInfo, Integer> {
-	public List<ContactInfo> findByUser(int user_id);
+	public List<ContactInfo> findByUserId(int id);
 }
