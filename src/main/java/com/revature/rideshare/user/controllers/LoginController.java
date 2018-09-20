@@ -23,9 +23,9 @@ public class LoginController {
 	private JwtProvider tokenProvider;
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> login(@RequestBody @Valid UserCredentials credentials) {
-		// Login successful; generate a token.
-		String token = tokenProvider.generateToken(999);
-		return ResponseEntity.ok('"' + token + '"');
-	}
+    public ResponseEntity<?> login(@RequestBody @Valid UserCredentials credentials) {
+        // Login successful; generate a token.
+        String token = tokenProvider.generateToken(999);
+        return ResponseEntity.ok('"' + token + '"');
+    }
 }

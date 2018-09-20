@@ -16,20 +16,18 @@ import org.springframework.stereotype.Component;
 @Entity
 @Component
 public class Office {
-	
+
 	@Id
-	@Column(name="OFFICE_ID")
-	@SequenceGenerator(name="officeid", sequenceName="officeid")
-	@GeneratedValue(generator="officeid", strategy=GenerationType.SEQUENCE)
+	@Column(name = "OFFICE_ID")
+	@SequenceGenerator(name = "officeid", sequenceName = "officeid")
+	@GeneratedValue(generator = "officeid", strategy = GenerationType.SEQUENCE)
 	private int id;
-	
-	@Column(nullable=false, length=30)
+
+	@Column(nullable = false, length = 30)
 	private String name;
-	
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ADDRESS_ID", unique=true, nullable=false)
-	private Address address;
-	
+
+	private String address;
+
 	public Office() {
 		super();
 	}
@@ -50,14 +48,12 @@ public class Office {
 		this.name = name;
 	}
 
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
 
 }

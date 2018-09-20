@@ -4,14 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,57 +15,64 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Component
-@Table(name="USERS")
+@Table(name = "USERS")
 public class User implements UserDetails {
 
-	
 	@Id
-	@Column(name="USER_ID")
-	@SequenceGenerator(name="userid", sequenceName="userid")
-	@GeneratedValue(generator="userid", strategy=GenerationType.SEQUENCE)
+	@Column(name = "USER_ID")
+	@SequenceGenerator(name = "userid", sequenceName = "userid")
+	@GeneratedValue(generator = "userid", strategy = GenerationType.SEQUENCE)
 
 	private int id;
-	
-	@Column(nullable=false, length=25)
+
+	@Column(nullable = false, length = 25)
 	private String firstName;
-	
-	@Column(nullable=false, length=30)
+
+	@Column(nullable = false, length = 30)
 	private String lastName;
-	
-	@Column(unique=true, nullable=false, length=40)
+
+	@Column(unique = true, nullable = false, length = 40)
 	private String email;
-	
-	@Column(nullable=false, length=70)
+
+	@JsonIgnore
+	@Column(nullable = false, length = 70)
 	private String password;
-	
-	@Column(length=200)
+
+	@Column(length = 200)
 	private String photoURL;
-	
+
 	private boolean active;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ROLE_ID", nullable=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "ROLE_ID", nullable = false)
 	private UserRole role;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="OFFICE_ID", nullable=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "OFFICE_ID", nullable = false)
 	private Office office;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="ADDRESS_ID", nullable=false)
-	private Address address;
-	
-	@Column(columnDefinition="DATE")
+
+	private String address;
+
+	@Column(columnDefinition = "DATE")
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	private Date batchEnd;
-	
-	@Column(length=30)
+
+	@Column(length = 30)
 	private String venmo;
-	
+
 	public User() {
 		super();
 	}
@@ -125,7 +124,7 @@ public class User implements UserDetails {
 	public void setPhotoURL(String photoURL) {
 		this.photoURL = photoURL;
 	}
-	
+
 	public boolean isActive() {
 		return active;
 	}
@@ -150,11 +149,11 @@ public class User implements UserDetails {
 		this.office = office;
 	}
 
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
@@ -173,7 +172,8 @@ public class User implements UserDetails {
 	public void setVenmo(String venmo) {
 		this.venmo = venmo;
 	}
-	//TODO Handle different user roles
+
+	// TODO Handle different user roles
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		GrantedAuthority auth = () -> "user";
@@ -209,7 +209,5 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	
-	
+
 }
