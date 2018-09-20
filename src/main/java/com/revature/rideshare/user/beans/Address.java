@@ -1,22 +1,38 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-@Table(name="RS-ADDRESS")
 public class Address {
 	
-	
+	@Id
+	@Column(name="ADDRESS_ID")
+	@SequenceGenerator(name="addressid", sequenceName="addressid")
+	@GeneratedValue(generator="addressid", strategy=GenerationType.SEQUENCE)
 	private int id;
-	private String line1;
-	private String line2;
-	private String street;
+	
+	@Column(nullable=false, length=80)
+	private String address;
+	
+	@Column(length=80)
+	private String address2;
+	
+	@Column(nullable=false, length=30)
 	private String city;
+	
+	@Column(nullable=false, length=25)
 	private String state;
+	
+	@Column(nullable=false)
 	private int zip;
 	
 	public Address() {
@@ -29,22 +45,16 @@ public class Address {
 		this.id = id;
 	}
 	public String getLine1() {
-		return line1;
+		return address;
 	}
 	public void setLine1(String line1) {
-		this.line1 = line1;
+		this.address = line1;
 	}
 	public String getLine2() {
-		return line2;
+		return address2;
 	}
 	public void setLine2(String line2) {
-		this.line2 = line2;
-	}
-	public String getStreet() {
-		return street;
-	}
-	public void setStreet(String street) {
-		this.street = street;
+		this.address2 = line2;
 	}
 	public String getCity() {
 		return city;
@@ -71,10 +81,9 @@ public class Address {
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((line1 == null) ? 0 : line1.hashCode());
-		result = prime * result + ((line2 == null) ? 0 : line2.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((address2 == null) ? 0 : address2.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + zip;
 		return result;
 	}
@@ -95,25 +104,20 @@ public class Address {
 			return false;
 		if (id != other.id)
 			return false;
-		if (line1 == null) {
-			if (other.line1 != null)
+		if (address == null) {
+			if (other.address != null)
 				return false;
-		} else if (!line1.equals(other.line1))
+		} else if (!address.equals(other.address))
 			return false;
-		if (line2 == null) {
-			if (other.line2 != null)
+		if (address2 == null) {
+			if (other.address2 != null)
 				return false;
-		} else if (!line2.equals(other.line2))
+		} else if (!address2.equals(other.address2))
 			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
 		} else if (!state.equals(other.state))
-			return false;
-		if (street == null) {
-			if (other.street != null)
-				return false;
-		} else if (!street.equals(other.street))
 			return false;
 		if (zip != other.zip)
 			return false;

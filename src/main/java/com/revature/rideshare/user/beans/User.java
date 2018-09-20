@@ -1,19 +1,77 @@
 package com.revature.rideshare.user.beans;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
-public class User {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
+@Table(name="USERS")
+public class User implements UserDetails {
+
 	
+	@Id
+	@Column(name="USER_ID")
+	@SequenceGenerator(name="userid", sequenceName="userid")
+	@GeneratedValue(generator="userid", strategy=GenerationType.SEQUENCE)
+
 	private int id;
+	
+	@Column(nullable=false, length=25)
 	private String firstName;
+	
+	@Column(nullable=false, length=30)
 	private String lastName;
+	
+	@Column(unique=true, nullable=false, length=40)
 	private String email;
+	
+	@Column(nullable=false, length=70)
 	private String password;
+	
+	@Column(length=200)
 	private String photoURL;
+	
+	private boolean active;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="ROLE_ID", nullable=false)
 	private UserRole role;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="OFFICE_ID", nullable=false)
 	private Office office;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="ADDRESS_ID", nullable=false)
 	private Address address;
+	
+	@Column(columnDefinition="DATE")
 	private Date batchEnd;
+	
+	@Column(length=30)
 	private String venmo;
 	
 	public User() {
@@ -67,6 +125,14 @@ public class User {
 	public void setPhotoURL(String photoURL) {
 		this.photoURL = photoURL;
 	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public UserRole getRole() {
 		return role;
@@ -107,5 +173,43 @@ public class User {
 	public void setVenmo(String venmo) {
 		this.venmo = venmo;
 	}
+	//TODO Handle different user roles
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		GrantedAuthority auth = () -> "user";
+		return Arrays.asList(auth);
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 	
 }

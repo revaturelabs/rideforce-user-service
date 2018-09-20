@@ -1,11 +1,39 @@
 package com.revature.rideshare.user.beans;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
 public class Car {
 	
+	@Id
+	@Column(name="CAR_ID")
+	@SequenceGenerator(name="carid", sequenceName="carid")
+	@GeneratedValue(generator="carid", strategy=GenerationType.SEQUENCE)
 	private int id;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name="USER_ID", nullable=false)
 	private User owner;
+	
+	@Column(length=35)
 	private String make;
+	
+	@Column(length=30)
 	private String model;
+	
+	@Column(nullable=true)
 	private int year;
 	
 	public Car() {
@@ -20,13 +48,7 @@ public class Car {
 		this.id = id;
 	}
 
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+	
 
 	public String getMake() {
 		return make;
@@ -50,6 +72,16 @@ public class Car {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 	
 	
