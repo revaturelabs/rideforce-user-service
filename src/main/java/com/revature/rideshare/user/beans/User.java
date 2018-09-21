@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.revature.rideshare.user.services.CarService;
 import com.revature.rideshare.user.services.ContactInfoService;
 import com.revature.rideshare.user.services.OfficeService;
+import com.revature.rideshare.user.services.UserRoleService;
 
 @Entity
 @Table(name = "USERS")
@@ -40,11 +41,14 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
+	private transient UserRoleService userRoleService;
+
+	@Autowired
 	private transient OfficeService officeService;
 
 	@Autowired
 	private transient CarService carService;
-	
+
 	@Autowired
 	private transient ContactInfoService contactInfoService;
 
@@ -194,6 +198,32 @@ public class User implements UserDetails {
 
 	public void setVenmo(String venmo) {
 		this.venmo = venmo;
+	}
+
+	/**
+	 * Gets the user's role as a string.
+	 * 
+	 * @return the user's role as an uppercase string
+	 */
+	@JsonProperty("role")
+	public String getRoleString() {
+		return role.getType().toUpperCase();
+	}
+
+	/**
+	 * Sets the user's role from a string value.
+	 * 
+	 * @param role the string representation of the role (case does not matter)
+	 * @throws IllegalArgumentException if the role string does not correspond to a
+	 *                                  role
+	 */
+	@JsonProperty("role")
+	public void setRoleString(String role) {
+		UserRole newRole = userRoleService.findByType(role);
+		if (newRole == null) {
+			throw new IllegalArgumentException(role + " is not a valid role.");
+		}
+		this.role = newRole;
 	}
 
 	/**
