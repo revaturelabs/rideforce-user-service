@@ -1,5 +1,8 @@
 package com.revature.rideshare.user.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,12 @@ public class ContactInfoController {
 
 	@Autowired
 	ContactInfoConverter contactInfoConverter;
+	
+	@RequestMapping(value="/contact-info", method = RequestMethod.GET)
+	public ResponseEntity<List<JsonContactInfo>> findAll() {
+		List<ContactInfo> users = contactInfoService.findAll();
+		return ResponseEntity.ok(users.stream().map(contactInfoConverter::toJson).collect(Collectors.toList()));
+	}
 
 	@RequestMapping(value = "/contact-info/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
