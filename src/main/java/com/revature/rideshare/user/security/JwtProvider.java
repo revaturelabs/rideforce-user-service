@@ -1,4 +1,4 @@
-package com.revature.rideshare.security;
+package com.revature.rideshare.user.security;
 
 import java.time.Instant;
 import java.time.Period;
@@ -18,8 +18,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.revature.rideshare.services.UserService;
 import com.revature.rideshare.user.beans.User;
+import com.revature.rideshare.user.services.UserService;
 
 /**
  * A class for generating and parsing JSON Web Tokens.

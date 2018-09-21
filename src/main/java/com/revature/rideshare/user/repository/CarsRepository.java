@@ -1,4 +1,4 @@
-package com.revature.rideshare.repository;
+package com.revature.rideshare.user.repository;
 
 import java.util.List;
 

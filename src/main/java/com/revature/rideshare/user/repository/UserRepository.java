@@ -1,4 +1,4 @@
-package com.revature.rideshare.repository;
+package com.revature.rideshare.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

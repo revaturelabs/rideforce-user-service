@@ -1,4 +1,4 @@
-package com.revature.rideshare.security;
+package com.revature.rideshare.user.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

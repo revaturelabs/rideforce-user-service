@@ -1,4 +1,4 @@
-package com.revature.rideshare.services;
+package com.revature.rideshare.user.services;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.revature.rideshare.repository.UserRepository;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
+import com.revature.rideshare.user.repository.UserRepository;
 
 @Service
 public class UserService {
