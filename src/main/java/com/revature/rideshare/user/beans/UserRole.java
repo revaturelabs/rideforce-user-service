@@ -5,38 +5,33 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
-
 @Entity
-@Component
-@Table(name="ROLE")
+@Table(name = "ROLE")
 public class UserRole {
-	
 	@Id
-	@Column(name="ROLE_ID")
+	@Column(name = "ROLE_ID")
 	private int id;
-	
-	@Column(nullable=false, length=30)
+
+	@Column(nullable = false, length = 30)
 	private String type;
-	
+
 	public UserRole() {
 		super();
 	}
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getRole() {
+
+	public String getType() {
 		return type;
 	}
-	public void setRole(String role) {
+
+	public void setType(String role) {
 		this.type = role;
 	}
-	
-	
-	
-
 }
