@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,13 +34,18 @@ public class ContactInfo {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_ID", nullable = false)
+	@NotNull
+	@Valid
 	private User user;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "CONTACT_TYPE_ID", nullable = false)
+	@NotNull
+	@Valid
 	private ContactType type;
 
 	@Column(length = 100)
+	@NotEmpty
 	private String info;
 
 	public ContactInfo() {

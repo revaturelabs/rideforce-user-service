@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "CONTACT_TYPE")
@@ -18,6 +19,7 @@ public class ContactType {
 	private int id;
 
 	@Column(nullable = false, length = 20)
+	@NotEmpty
 	private String type;
 
 	public ContactType() {

@@ -20,6 +20,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,12 +62,15 @@ public class User implements UserDetails {
 	private int id;
 
 	@Column(nullable = false, length = 25)
+	@NotEmpty
 	private String firstName;
 
 	@Column(nullable = false, length = 30)
+	@NotEmpty
 	private String lastName;
 
 	@Column(unique = true, nullable = false, length = 40)
+	@NotEmpty
 	private String email;
 
 	@JsonIgnore
@@ -78,26 +84,37 @@ public class User implements UserDetails {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
+	@NotNull
+	@Valid
 	private UserRole role;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "OFFICE_ID", nullable = false)
+	@NotNull
+	@Valid
 	private Office office;
 
+	@Column(nullable = false)
+	@NotEmpty
 	private String address;
 
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	@NotNull
 	private Date batchEnd;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
+	@NotNull
+	@Valid
 	private Set<Car> cars;
 
 	@Column(length = 30)
 	private String venmo;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+	@NotNull
+	@Valid
 	private Set<ContactInfo> contactInfo;
 
 	public User() {
