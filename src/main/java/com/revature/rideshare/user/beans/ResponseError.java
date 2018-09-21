@@ -34,7 +34,7 @@ public class ResponseError {
 	 * Any additional details that may be relevant to the error (can be empty).
 	 */
 	@NotNull
-	private String[] details;
+	private String[] details = {};
 
 	/**
 	 * Constructs a new {@code ResponseError} from the given exception.
