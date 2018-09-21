@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
@@ -31,12 +34,16 @@ public class Car {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_ID", nullable = false)
+	@NotNull
+	@Valid
 	private User owner;
 
 	@Column(length = 35)
+	@NotEmpty
 	private String make;
 
 	@Column(length = 30)
+	@NotEmpty
 	private String model;
 
 	@Column(nullable = true)

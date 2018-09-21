@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class OfficeController {
 	}
 
 	@RequestMapping(value = "/offices", method = RequestMethod.POST)
-	public ResponseEntity<Office> add(@RequestBody Office office) {
+	public ResponseEntity<Office> add(@RequestBody @Valid Office office) {
 		office.setId(0);
 		Office result = officeService.save(office);
 		if (result != null) {

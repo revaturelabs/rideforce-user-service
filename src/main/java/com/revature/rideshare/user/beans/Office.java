@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Office {
@@ -16,9 +17,11 @@ public class Office {
 	private int id;
 
 	@Column(nullable = false, length = 30)
+	@NotEmpty
 	private String name;
 
 	@Column(nullable = false, length = 100)
+	@NotEmpty
 	private String address;
 
 	public Office() {

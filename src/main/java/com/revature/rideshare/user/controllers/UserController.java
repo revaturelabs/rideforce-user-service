@@ -1,6 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email")
-	public ResponseEntity<?> findByEmail(@RequestParam("email") String email) {
+	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		User user = userService.findByEmail(email);
 		return user == null ? new ResponseError("User with email " + email + " does not exist.")
 				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);

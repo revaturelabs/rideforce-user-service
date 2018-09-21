@@ -1,17 +1,18 @@
 package com.revature.rideshare.user.beans;
 
-public class UserCredentials {
+import javax.validation.constraints.NotEmpty;
 
+public class UserCredentials {
+	@NotEmpty
 	private String email;
+
+	@NotEmpty
 	private String password;
 
 	public UserCredentials() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserCredentials(String email, String password) {
-		super();
 		this.email = email;
 		this.password = password;
 	}
@@ -36,5 +37,4 @@ public class UserCredentials {
 	public String toString() {
 		return "UserCredentials [email=" + email + ", password=" + password + "]";
 	}
-
 }
