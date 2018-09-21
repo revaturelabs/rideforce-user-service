@@ -1,15 +1,7 @@
 package com.revature.rideshare.user.beans;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 public class UserRegistrationInfo {
-	@NotNull
-	@Valid
 	private User user;
-	
-	@NotEmpty
 	private String password;
 
 	public UserRegistrationInfo() {
@@ -42,4 +34,5 @@ public class UserRegistrationInfo {
 	public String toString() {
 		return "UserRegistrationInfo [user=" + user + ", password=" + password + "]";
 	}
+
 }

@@ -14,18 +14,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.rideshare.user.services.UserService;
-
 @Entity
 public class Car {
-	@Autowired
-	private transient UserService userService;
-
 	@Id
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
@@ -91,27 +81,5 @@ public class Car {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
-	}
-
-	/**
-	 * Gets the owner property as a link.
-	 * 
-	 * @return a link to the owner
-	 */
-	@JsonProperty("owner")
-	public String getOwnerLink() {
-		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(owner.getId()).toString();
-	}
-
-	/**
-	 * Sets the owner from a link string.
-	 * 
-	 * @param uri the URI linking to the owner
-	 */
-	@JsonProperty("owner")
-	public void setOwnerLink(String uri) {
-		AntPathMatcher matcher = new AntPathMatcher();
-		int userId = Integer.parseInt(matcher.extractUriTemplateVariables("/users/{id}", uri).get("id"));
-		owner = userService.findById(userId);
 	}
 }

@@ -15,17 +15,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.rideshare.user.services.ContactTypeService;
-
 @Entity
 @Table(name = "CONTACT_INFO")
 public class ContactInfo {
-	@Autowired
-	private transient ContactTypeService contactTypeService;
-
 	@Id
 	@Column(name = "CONTACT_INFO_ID")
 	@SequenceGenerator(name = "contactinfoid", sequenceName = "contactinfoid")
@@ -82,31 +74,5 @@ public class ContactInfo {
 
 	public void setInfo(String value) {
 		this.info = value;
-	}
-
-	/**
-	 * Gets the type of this contact information as a string.
-	 * 
-	 * @return this contact info's type as an uppercase string
-	 */
-	@JsonProperty("type")
-	public String getTypeString() {
-		return type.getType().toUpperCase();
-	}
-
-	/**
-	 * Sets the type of this contact information as a string.
-	 * 
-	 * @param type the new contact info type, as a string (case does not matter)
-	 * @throws IllegalArgumentException if the given type string does not correspond
-	 *                                  to a contact type
-	 */
-	@JsonProperty("type")
-	public void setTypeString(String type) {
-		ContactType newType = contactTypeService.findByType(type);
-		if (newType == null) {
-			throw new IllegalArgumentException(type + " is not a valid contact type.");
-		}
-		this.type = newType;
 	}
 }

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
+import com.revature.rideshare.user.jsonbeans.JsonUser;
+import com.revature.rideshare.user.jsonbeans.JsonUserRegistrationInfo;
+import com.revature.rideshare.user.jsonbeans.UserConverter;
 import com.revature.rideshare.user.services.UserService;
 
 @RestController
@@ -23,35 +26,40 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	UserConverter userConverter;
+
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		User user = userService.findById(id);
 		return user == null
 				? new ResponseError("User with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
-				: ResponseEntity.ok(user);
+				: ResponseEntity.ok(userConverter.toJson(user));
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email")
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		User user = userService.findByEmail(email);
 		return user == null ? new ResponseError("User with email " + email + " does not exist.")
-				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(userConverter.toJson(user));
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<User> add(@RequestBody @Valid UserRegistrationInfo registration) {
-		User result = userService.register(registration);
+	public ResponseEntity<JsonUser> add(@RequestBody @Valid JsonUserRegistrationInfo registration) {
+		registration.getUser().setId(0);
+		User result = userService.register(
+				new UserRegistrationInfo(userConverter.fromJson(registration.getUser()), registration.getPassword()));
 		if (result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.CREATED);
+			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
+			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CONFLICT);
 		}
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid User user) {
+	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid JsonUser user) {
 		user.setId(id);
-		User result = userService.save(user);
+		User result = userService.save(userConverter.fromJson(user));
 		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		} else {
