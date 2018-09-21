@@ -1,5 +1,8 @@
 package com.revature.rideshare.user.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -28,6 +31,12 @@ public class UserController {
 
 	@Autowired
 	UserConverter userConverter;
+	
+	@RequestMapping(value="/users", method = RequestMethod.GET)
+	public ResponseEntity<List<JsonUser>> findAll() {
+		List<User> users = userService.findAll();
+		return ResponseEntity.ok(users.stream().map(userConverter::toJson).collect(Collectors.toList()));
+	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
