@@ -14,4 +14,8 @@ public class UserRoleService {
 	public UserRole findByType(String type) {
 		return userRoleRepository.findByTypeIgnoreCase(type);
 	}
+	
+	public UserRole save(UserRole role) {
+		return userRoleRepository.save(role);
+	}
 }
