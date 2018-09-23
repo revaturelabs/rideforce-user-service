@@ -9,9 +9,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.revature.rideshare.user.json.EnumLike;
+
 @Entity
 @Table(name = "CONTACT_TYPE")
-public class ContactType {
+public class ContactType implements EnumLike {
 	@Id
 	@Column(name = "CONTACT_TYPE_ID")
 	@SequenceGenerator(name = "contacttypeid", sequenceName = "contacttypeid")
@@ -40,5 +42,38 @@ public class ContactType {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	@Override
+	public String toEnumString() {
+		return type.toUpperCase();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((type == null) ? 0 : type.toUpperCase().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContactType other = (ContactType) obj;
+		if (id != other.id)
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equalsIgnoreCase(other.type))
+			return false;
+		return true;
 	}
 }

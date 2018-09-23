@@ -14,8 +14,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.revature.rideshare.user.json.JsonLink;
+import com.revature.rideshare.user.json.Linkable;
+import com.revature.rideshare.user.json.UserLinkResolver;
+
 @Entity
-public class Car {
+public class Car implements Linkable {
 	@Id
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
@@ -26,6 +32,7 @@ public class Car {
 	@JoinColumn(name = "USER_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonLink(UserLinkResolver.class)
 	private User owner;
 
 	@Column(length = 35)
@@ -81,5 +88,10 @@ public class Car {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public String toLink() {
+		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toString();
 	}
 }

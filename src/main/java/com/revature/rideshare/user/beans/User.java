@@ -25,13 +25,21 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.rideshare.user.json.CarLinkResolver;
+import com.revature.rideshare.user.json.ContactInfoLinkResolver;
+import com.revature.rideshare.user.json.JsonEnumLike;
+import com.revature.rideshare.user.json.JsonLink;
+import com.revature.rideshare.user.json.Linkable;
+import com.revature.rideshare.user.json.OfficeLinkResolver;
+import com.revature.rideshare.user.json.UserRoleResolver;
 
 @Entity
 @Table(name = "USERS")
-public class User implements UserDetails {
+public class User implements UserDetails, Linkable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -65,12 +73,14 @@ public class User implements UserDetails {
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonEnumLike(UserRoleResolver.class)
 	private UserRole role;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "OFFICE_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 
 	@Column(nullable = false)
@@ -85,6 +95,7 @@ public class User implements UserDetails {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
 	@NotNull
 	@Valid
+	@JsonLink(CarLinkResolver.class)
 	private Set<Car> cars;
 
 	@Column(length = 30)
@@ -93,6 +104,7 @@ public class User implements UserDetails {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
 	@NotNull
 	@Valid
+	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
 
 	public User() {
@@ -197,36 +209,42 @@ public class User implements UserDetails {
 
 	// TODO Handle different user roles
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		GrantedAuthority auth = () -> "user";
 		return Arrays.asList(auth);
 	}
 
 	@Override
+	@JsonIgnore
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return false;
@@ -246,5 +264,10 @@ public class User implements UserDetails {
 
 	public void setContactInfo(Set<ContactInfo> contactInfo) {
 		this.contactInfo = contactInfo;
+	}
+
+	@Override
+	public String toLink() {
+		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toString();
 	}
 }

@@ -1,7 +1,6 @@
 package com.revature.rideshare.user.controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -22,9 +21,6 @@ import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
-import com.revature.rideshare.user.jsonbeans.JsonUser;
-import com.revature.rideshare.user.jsonbeans.JsonUserRegistrationInfo;
-import com.revature.rideshare.user.jsonbeans.UserConverter;
 import com.revature.rideshare.user.services.OfficeService;
 import com.revature.rideshare.user.services.UserRoleService;
 import com.revature.rideshare.user.services.UserService;
@@ -39,21 +35,18 @@ public class UserController {
 
 	@Autowired
 	UserRoleService userRoleService;
-
-	@Autowired
-	UserConverter userConverter;
 	
 	@RequestMapping(value="/users", method = RequestMethod.GET)
-	public ResponseEntity<List<JsonUser>> findAll() {
+	public ResponseEntity<List<User>> findAll() {
 		List<User> users = userService.findAll();
-		return ResponseEntity.ok(users.stream().map(userConverter::toJson).collect(Collectors.toList()));
+		return ResponseEntity.ok(users);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		User user = userService.findByEmail(email);
 		return user == null ? new ResponseError("User with email " + email + " does not exist.")
-				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(userConverter.toJson(user));
+				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = { "office",
@@ -71,8 +64,7 @@ public class UserController {
 					.toResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 
-		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role).stream().map(userConverter::toJson)
-				.collect(Collectors.toSet()));
+		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -80,25 +72,24 @@ public class UserController {
 		User user = userService.findById(id);
 		return user == null
 				? new ResponseError("User with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
-				: ResponseEntity.ok(userConverter.toJson(user));
+				: ResponseEntity.ok(user);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<JsonUser> add(@RequestBody @Valid JsonUserRegistrationInfo registration) {
+	public ResponseEntity<User> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		registration.getUser().setId(0);
-		User result = userService.register(
-				new UserRegistrationInfo(userConverter.fromJson(registration.getUser()), registration.getPassword()));
+		User result = userService.register(registration);
 		if (result != null) {
-			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CREATED);
+			return new ResponseEntity<User>(result, HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CONFLICT);
+			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
 		}
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid JsonUser user) {
+	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid User user) {
 		user.setId(id);
-		User result = userService.save(userConverter.fromJson(user));
+		User result = userService.save(user);
 		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		} else {
