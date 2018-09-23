@@ -21,6 +21,7 @@ import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
+import com.revature.rideshare.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideshare.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideshare.user.services.OfficeService;
 import com.revature.rideshare.user.services.UserRoleService;
@@ -80,14 +81,11 @@ public class UserController {
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		registration.getUser().setId(0);
 		try {
-			User result = userService.register(registration);
-			if (result != null) {
-				return new ResponseEntity<User>(result, HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
-			}
+			return new ResponseEntity<User>(userService.register(registration), HttpStatus.CREATED);
 		} catch (InvalidRegistrationKeyException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		} catch (EmailAlreadyUsedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
 
