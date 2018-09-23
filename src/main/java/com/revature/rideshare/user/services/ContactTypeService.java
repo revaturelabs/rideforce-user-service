@@ -24,4 +24,8 @@ public class ContactTypeService {
 	public Object getAll() {
 		return contactTypeRepository.findAll();
 	}
+	
+	public ContactType findById(int id) {
+		return contactTypeRepository.findById(id);
+	}
 }

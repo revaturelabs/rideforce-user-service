@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.user.beans.ContactType;
+import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.services.ContactTypeService;
 
 @RestController
@@ -43,6 +44,14 @@ public class ContactTypeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> getAll() {
 		return ResponseEntity.ok(contactTypeService.getAll());
+	}
+	
+	@RequestMapping(value = "/contact-type/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+		ContactType contactType = contactTypeService.findById(id);
+		return contactType == null
+				? new ResponseError("Contact type with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
+				: ResponseEntity.ok(contactType); 
 	}
 
 }

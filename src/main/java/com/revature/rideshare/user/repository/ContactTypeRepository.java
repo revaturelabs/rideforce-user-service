@@ -8,4 +8,5 @@ import com.revature.rideshare.user.beans.ContactType;
 @Repository
 public interface ContactTypeRepository extends JpaRepository<ContactType, Integer> {
 	ContactType findByTypeIgnoreCase(String type);
+	ContactType findById(int id);
 }
