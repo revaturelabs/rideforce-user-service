@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 //import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.authentication.UserCredentials;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,19 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.rideshare.user.security.JwtProvider;
+import com.revature.rideshare.user.beans.ResponseError;
+import com.revature.rideshare.user.beans.UserCredentials;
+import com.revature.rideshare.user.services.InvalidCredentialsException;
+import com.revature.rideshare.user.services.UserService;
 
 @RestController
 @RequestMapping("/login")
 @CrossOrigin
 public class LoginController {
 	@Autowired
-	private JwtProvider tokenProvider;
+	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> login(@RequestBody @Valid UserCredentials credentials) {
-        // Login successful; generate a token.
-        String token = tokenProvider.generateToken(999);
-        return ResponseEntity.ok('"' + token + '"');
-    }
+	public ResponseEntity<?> login(@RequestBody @Valid UserCredentials credentials) {
+		try {
+			return ResponseEntity.ok('"' + userService.authenticate(credentials) + '"');
+		} catch (InvalidCredentialsException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
+	}
 }
