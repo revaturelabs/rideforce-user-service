@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.jsonbeans.CarConverter;
-import com.revature.rideshare.user.jsonbeans.JsonCar;
 import com.revature.rideshare.user.services.CarService;
 
 @RestController
@@ -34,14 +33,14 @@ public class CarController {
 	}
 
 	@RequestMapping(value = "/cars", method = RequestMethod.POST)
-	public ResponseEntity<JsonCar> add(@RequestBody @Valid JsonCar car) {
+	public ResponseEntity<Car> add(@RequestBody @Valid Car car) {
 		car.setId(0);
-		return ResponseEntity.ok(carConverter.toJson(carService.save(carConverter.fromJson(car))));
+		return ResponseEntity.ok(carService.save(car));
 	}
 
 	@RequestMapping(value = "/cars/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<JsonCar> update(@PathVariable("id") int id, @RequestBody @Valid JsonCar car) {
+	public ResponseEntity<Car> update(@PathVariable("id") int id, @RequestBody @Valid Car car) {
 		car.setId(id);
-		return ResponseEntity.ok(carConverter.toJson(carService.save(carConverter.fromJson(car))));
+		return ResponseEntity.ok(carService.save(car));
 	}
 }
