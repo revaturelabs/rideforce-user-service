@@ -11,16 +11,16 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.revature.rideshare.user.beans.ResponseError;
 
+@RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
 	private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
@@ -31,9 +31,16 @@ public class ErrorController extends AbstractErrorController {
 
 	@RequestMapping(path = "/error", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<ResponseError> handleError(HttpServletRequest request) {
-		Map<String, Object> errorAttributes = getErrorAttributes(request, false);
-		return new ResponseError((String) errorAttributes.getOrDefault("message", "Internal server error."))
-				.toResponseEntity(getStatus(request));
+		Map<String, Object> errorAttributes = getErrorAttributes(request, true);
+		if (getStatus(request) == HttpStatus.INTERNAL_SERVER_ERROR) {
+			log.error("Handling unexpected error with attributes " + errorAttributes);
+		}
+		String message = (String) errorAttributes.get("message");
+		if (message == null) {
+			Throwable error = (Throwable) errorAttributes.get("trace");
+			message = error == null ? "Internal server error." : error.getMessage();
+		}
+		return new ResponseError(message).toResponseEntity(getStatus(request));
 	}
 
 	/**
@@ -48,32 +55,6 @@ public class ErrorController extends AbstractErrorController {
 				.toArray(String[]::new);
 		return new ResponseError("Input validation failed.").withDetails(details)
 				.toResponseEntity(HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Handles the exception thrown when a request body cannot be read.
-	 */
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ResponseError> handleException(HttpMessageNotReadableException e) {
-		return new ResponseError("Invalid request body format.").withDetails(e.getMessage())
-				.toResponseEntity(HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Handles an invalid request (some parameter or query missing).
-	 */
-	@ExceptionHandler(ServletRequestBindingException.class)
-	public ResponseEntity<ResponseError> handleException(ServletRequestBindingException e) {
-		return new ResponseError(e).toResponseEntity(HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Handles other types of exceptions.
-	 */
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ResponseError> handleException(Exception e) {
-		log.error("Handling unexpected exception.", e);
-		return new ResponseError("Internal server error.").toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@Override
