@@ -25,8 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new AntPathRequestMatcher("/users", "POST"), new AntPathRequestMatcher("/**", "OPTIONS") };
 
         http.csrf().disable();
-        http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();
-//        http.authorizeRequests().anyRequest().permitAll();
+//        http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 //        http.exceptionHandling().accessDeniedHandler(errorController).authenticationEntryPoint(errorController);
