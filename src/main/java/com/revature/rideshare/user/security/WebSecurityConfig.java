@@ -14,7 +14,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private JwtProvider tokenProvider;
+    private LoginTokenProvider tokenProvider;
 //    @Autowired
 //    private ErrorController errorController;
 

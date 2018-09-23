@@ -12,7 +12,7 @@ import com.revature.rideshare.user.beans.UserCredentials;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
 import com.revature.rideshare.user.repository.UserRepository;
-import com.revature.rideshare.user.security.JwtProvider;
+import com.revature.rideshare.user.security.LoginTokenProvider;
 
 @Service
 public class UserService {
@@ -23,7 +23,7 @@ public class UserService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private JwtProvider tokenProvider;
+	private LoginTokenProvider tokenProvider;
 	
 	/**
 	 * Authenticates a user with the given credentials, returning a JSON Web Token that can be used for future authentication.
