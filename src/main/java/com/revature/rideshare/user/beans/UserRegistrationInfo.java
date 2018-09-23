@@ -3,16 +3,7 @@ package com.revature.rideshare.user.beans;
 public class UserRegistrationInfo {
 	private User user;
 	private String password;
-
-	public UserRegistrationInfo() {
-		super();
-	}
-
-	public UserRegistrationInfo(User user, String password) {
-		super();
-		this.user = user;
-		this.password = password;
-	}
+	private String registrationKey;
 
 	public User getUser() {
 		return user;
@@ -30,9 +21,16 @@ public class UserRegistrationInfo {
 		this.password = password;
 	}
 
+	public String getRegistrationKey() {
+		return registrationKey;
+	}
+
+	public void setRegistrationKey(String registrationKey) {
+		this.registrationKey = registrationKey;
+	}
+
 	@Override
 	public String toString() {
 		return "UserRegistrationInfo [user=" + user + ", password=" + password + "]";
 	}
-
 }
