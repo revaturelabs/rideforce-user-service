@@ -21,6 +21,7 @@ import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
+import com.revature.rideshare.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideshare.user.services.OfficeService;
 import com.revature.rideshare.user.services.UserRoleService;
 import com.revature.rideshare.user.services.UserService;
@@ -35,8 +36,8 @@ public class UserController {
 
 	@Autowired
 	UserRoleService userRoleService;
-	
-	@RequestMapping(value="/users", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ResponseEntity<List<User>> findAll() {
 		List<User> users = userService.findAll();
 		return ResponseEntity.ok(users);
@@ -76,13 +77,17 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> add(@RequestBody @Valid UserRegistrationInfo registration) {
+	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		registration.getUser().setId(0);
-		User result = userService.register(registration);
-		if (result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
+		try {
+			User result = userService.register(registration);
+			if (result != null) {
+				return new ResponseEntity<User>(result, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
+			}
+		} catch (InvalidRegistrationKeyException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
 
