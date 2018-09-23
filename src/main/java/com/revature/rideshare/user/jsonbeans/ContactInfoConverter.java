@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.rideshare.user.beans.ContactInfo;
-import com.revature.rideshare.user.beans.ContactType;
+import com.revature.rideshare.user.json.ContactTypeResolver;
 import com.revature.rideshare.user.json.UserLinkResolver;
-import com.revature.rideshare.user.services.ContactTypeService;
 
 @Service
 public class ContactInfoConverter {
@@ -14,20 +13,14 @@ public class ContactInfoConverter {
 	private UserLinkResolver userLinkResolver;
 
 	@Autowired
-	private ContactTypeService contactTypeService;
+	private ContactTypeResolver contactTypeResolver;
 
 	public ContactInfo fromJson(JsonContactInfo json) {
 		ContactInfo info = new ContactInfo();
 
 		info.setId(json.getId());
 		info.setInfo(json.getInfo());
-
-		ContactType type = contactTypeService.findByType(json.getType());
-		if (type == null) {
-			throw new IllegalArgumentException(json.getType() + " is not a valid contact type.");
-		}
-		info.setType(type);
-
+		info.setType(contactTypeResolver.resolve(json.getType()));
 		info.setUser(userLinkResolver.resolve(json.getUser()));
 
 		return info;
@@ -38,7 +31,7 @@ public class ContactInfoConverter {
 
 		json.setId(info.getId());
 		json.setInfo(info.getInfo());
-		json.setType(info.getType().getType().toUpperCase());
+		json.setType(info.getType().toEnumString());
 		json.setUser(info.getUser().toLink());
 		
 		return json;

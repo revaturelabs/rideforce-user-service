@@ -8,16 +8,15 @@ import org.springframework.stereotype.Service;
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.beans.User;
-import com.revature.rideshare.user.beans.UserRole;
 import com.revature.rideshare.user.json.CarLinkResolver;
 import com.revature.rideshare.user.json.ContactInfoLinkResolver;
 import com.revature.rideshare.user.json.OfficeLinkResolver;
-import com.revature.rideshare.user.services.UserRoleService;
+import com.revature.rideshare.user.json.UserRoleResolver;
 
 @Service
 public class UserConverter {
 	@Autowired
-	private UserRoleService userRoleService;
+	private UserRoleResolver userRoleResolver;
 
 	@Autowired
 	private OfficeLinkResolver officeLinkResolver;
@@ -41,13 +40,7 @@ public class UserConverter {
 		user.setActive(json.isActive());
 		user.setBatchEnd(json.getBatchEnd());
 		user.setVenmo(json.getVenmo());
-
-		UserRole role = userRoleService.findByType(json.getRole());
-		if (role == null) {
-			throw new IllegalArgumentException(json.getRole() + " is not a valid role.");
-		}
-		user.setRole(role);
-
+		user.setRole(userRoleResolver.resolve(json.getRole()));
 		user.setOffice(officeLinkResolver.resolve(json.getOffice()));
 		user.setCars(json.getCars().stream().map(carLinkResolver::resolve).collect(Collectors.toSet()));
 		user.setContactInfo(
@@ -69,7 +62,7 @@ public class UserConverter {
 		json.setActive(user.isActive());
 		json.setBatchEnd(user.getBatchEnd());
 		json.setVenmo(user.getVenmo());
-		json.setRole(user.getRole().getType().toUpperCase());
+		json.setRole(user.getRole().toEnumString());
 		json.setOffice(user.getOffice().toLink());
 		json.setCars(user.getCars().stream().map(Car::toLink).collect(Collectors.toSet()));
 		json.setContactInfo(user.getContactInfo().stream().map(ContactInfo::toLink).collect(Collectors.toSet()));

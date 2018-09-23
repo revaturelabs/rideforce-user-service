@@ -2,8 +2,7 @@ package com.revature.rideshare.user.json;
 
 /**
  * An interface for classes that can resolve links, providing the inverse
- * functionality of the {@link com.revature.rideshare.user.json.Linkable
- * Linkable} interface.
+ * functionality of the {@link Linkable} interface.
  * 
  * @param <T> the type to which links will be resolved
  */
