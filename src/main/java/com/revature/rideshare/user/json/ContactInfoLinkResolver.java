@@ -1,11 +1,13 @@
 package com.revature.rideshare.user.json;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
 import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.services.ContactInfoService;
 
+@Service
 public class ContactInfoLinkResolver implements LinkResolver<ContactInfo> {
 	private static final AntPathMatcher matcher = new AntPathMatcher();
 

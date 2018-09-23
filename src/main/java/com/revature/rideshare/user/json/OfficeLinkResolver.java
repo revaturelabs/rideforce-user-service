@@ -1,11 +1,13 @@
 package com.revature.rideshare.user.json;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
 import com.revature.rideshare.user.beans.Office;
 import com.revature.rideshare.user.services.OfficeService;
 
+@Service
 public class OfficeLinkResolver implements LinkResolver<Office> {
 	private static final AntPathMatcher matcher = new AntPathMatcher();
 	
