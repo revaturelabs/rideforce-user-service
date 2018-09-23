@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.services;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +15,17 @@ public class ContactTypeService {
 	
 	public ContactType findByType(String type) {
 		return contactTypeRepository.findByTypeIgnoreCase(type);
+	}
+
+	public ContactType save(@Valid ContactType type) {
+		return contactTypeRepository.save(type);
+	}
+	
+	public Object getAll() {
+		return contactTypeRepository.findAll();
+	}
+	
+	public ContactType findById(int id) {
+		return contactTypeRepository.findById(id);
 	}
 }
