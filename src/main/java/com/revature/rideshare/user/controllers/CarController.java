@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,12 @@ import com.revature.rideshare.user.services.CarService;
 public class CarController {
 	@Autowired
 	CarService carService;
+
+	@RequestMapping(value="/cars", method = RequestMethod.GET)
+	public ResponseEntity<List<Car>> findAll() {
+		List<Car> users = carService.findAll();
+		return ResponseEntity.ok(users);
+	}
 
 	@RequestMapping(value = "/cars/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {

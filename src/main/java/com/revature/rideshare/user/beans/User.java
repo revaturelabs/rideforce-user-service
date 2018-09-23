@@ -90,7 +90,6 @@ public class User implements UserDetails, Linkable {
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-	@NotNull
 	private Date batchEnd;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")

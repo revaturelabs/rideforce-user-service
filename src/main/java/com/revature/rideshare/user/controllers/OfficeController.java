@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,12 @@ import com.revature.rideshare.user.services.OfficeService;
 public class OfficeController {
 	@Autowired
 	OfficeService officeService;
+	
+	@RequestMapping(value = "/offices", method = RequestMethod.GET)
+	public ResponseEntity<List<Office>> findAll() {
+		List<Office> offices = officeService.findAll();
+		return ResponseEntity.ok(offices);
+	}
 
 	@RequestMapping(value = "/offices/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {

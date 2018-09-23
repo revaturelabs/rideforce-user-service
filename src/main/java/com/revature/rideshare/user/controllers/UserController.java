@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -33,6 +35,12 @@ public class UserController {
 
 	@Autowired
 	UserRoleService userRoleService;
+	
+	@RequestMapping(value="/users", method = RequestMethod.GET)
+	public ResponseEntity<List<User>> findAll() {
+		List<User> users = userService.findAll();
+		return ResponseEntity.ok(users);
+	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
