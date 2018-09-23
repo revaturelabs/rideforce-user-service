@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.UserCredentials;
-import com.revature.rideshare.user.services.InvalidCredentialsException;
+import com.revature.rideshare.user.exceptions.InvalidCredentialsException;
 import com.revature.rideshare.user.services.UserService;
 
 @RestController

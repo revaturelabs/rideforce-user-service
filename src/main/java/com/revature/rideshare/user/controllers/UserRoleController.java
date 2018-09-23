@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.UserRole;
+import com.revature.rideshare.user.exceptions.DuplicateRoleException;
 import com.revature.rideshare.user.services.UserRoleService;
 
 @RestController
@@ -20,18 +21,16 @@ import com.revature.rideshare.user.services.UserRoleService;
 public class UserRoleController {
 	@Autowired
 	private UserRoleService userRoleService;
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<UserRole> add(@RequestBody @Valid UserRole role) {
-		role.setId(0);
-		UserRole result = userRoleService.save(role);
-		if (result != null) {
-			return new ResponseEntity<UserRole>(result, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<UserRole>(result, HttpStatus.CONFLICT);
+	public ResponseEntity<?> add(@RequestBody @Valid UserRole role) {
+		try {
+			return new ResponseEntity<UserRole>(userRoleService.add(role), HttpStatus.CREATED);
+		} catch (DuplicateRoleException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
- 	
+
 	@RequestMapping(value = "/roles/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<UserRole> update(@PathVariable int id, @RequestBody @Valid UserRole role) {
 		role.setId(id);
@@ -42,13 +41,13 @@ public class UserRoleController {
 			return new ResponseEntity<UserRole>(result, HttpStatus.CONFLICT);
 		}
 	}
-	
- 	@RequestMapping(method = RequestMethod.GET)
+
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> getAll() {
 		return ResponseEntity.ok(userRoleService.getAll());
 	}
- 	
- 	@RequestMapping(value = "/roles/{id}", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/roles/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		UserRole userRole = userRoleService.findById(id);
 		return userRole == null

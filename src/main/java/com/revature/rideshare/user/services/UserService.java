@@ -11,6 +11,8 @@ import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserCredentials;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
+import com.revature.rideshare.user.exceptions.EmailAlreadyUsedException;
+import com.revature.rideshare.user.exceptions.InvalidCredentialsException;
 import com.revature.rideshare.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideshare.user.repository.UserRepository;
 import com.revature.rideshare.user.security.LoginTokenProvider;
@@ -73,13 +75,18 @@ public class UserService {
 	 * @return the user that was created
 	 * @throws InvalidRegistrationKeyException if the provided registration key was
 	 *                                         invalid
+	 * @throws EmailAlreadyUsedException       if the given email is already used by
+	 *                                         another user
 	 */
-	public User register(UserRegistrationInfo info) throws InvalidRegistrationKeyException {
+	public User register(UserRegistrationInfo info) throws InvalidRegistrationKeyException, EmailAlreadyUsedException {
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			throw new InvalidRegistrationKeyException();
 		}
 		User newUser = info.getUser();
+		if (findByEmail(newUser.getEmail()) != null) {
+			throw new EmailAlreadyUsedException(newUser.getEmail());
+		}
 		String passwordHash = passwordEncoder.encode(info.getPassword());
 		newUser.setPassword(passwordHash);
 		return userRepository.save(newUser);
