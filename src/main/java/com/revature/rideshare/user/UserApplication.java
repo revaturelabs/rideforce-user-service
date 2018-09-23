@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.revature.rideshare.user.json.EnumLikeDeserializerModifier;
+import com.revature.rideshare.user.json.EnumLikeSerializerModifier;
 import com.revature.rideshare.user.json.LinkDeserializerModifier;
 import com.revature.rideshare.user.json.LinkSerializerModifier;
 
@@ -29,9 +31,11 @@ public class UserApplication {
 	public Jackson2ObjectMapperBuilderCustomizer objectMapperCustomizer() {
 		Module jsonLinks = new SimpleModule("json-links").setSerializerModifier(new LinkSerializerModifier())
 				.setDeserializerModifier(new LinkDeserializerModifier(context));
+		Module jsonEnumLike = new SimpleModule("json-enum-like").setSerializerModifier(new EnumLikeSerializerModifier())
+				.setDeserializerModifier(new EnumLikeDeserializerModifier(context));
 
 		return builder -> {
-			builder.modules(jsonLinks);
+			builder.modules(jsonLinks, jsonEnumLike);
 		};
 	}
 }

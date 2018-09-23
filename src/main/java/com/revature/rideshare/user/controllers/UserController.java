@@ -74,14 +74,14 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<JsonUser> add(@RequestBody @Valid JsonUserRegistrationInfo registration) {
+	public ResponseEntity<User> add(@RequestBody @Valid JsonUserRegistrationInfo registration) {
 		registration.getUser().setId(0);
 		User result = userService.register(
 				new UserRegistrationInfo(userConverter.fromJson(registration.getUser()), registration.getPassword()));
 		if (result != null) {
-			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CREATED);
+			return new ResponseEntity<User>(result, HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<JsonUser>(userConverter.toJson(result), HttpStatus.CONFLICT);
+			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
 		}
 	}
 

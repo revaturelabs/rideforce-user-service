@@ -12,21 +12,21 @@ import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 
 /**
- * A {@link BeanDeserializerModifier} that looks for {@link JsonLink}
+ * A {@link BeanDeserializerModifier} that looks for {@link JsonEnumLike}
  * annotations and marks corresponding fields for conversion using the
- * {@link LinkDeserializer}.
+ * {@link EnumLikeDeserializer}.
  */
-public class LinkDeserializerModifier extends BeanDeserializerModifier {
+public class EnumLikeDeserializerModifier extends BeanDeserializerModifier {
 	private ApplicationContext context;
 
 	/**
-	 * Constructs a new {@link LinkDeserializerModifier} using the given
-	 * {@link ApplicationContext} to look up the necessary {@link LinkResolver}.
+	 * Constructs a new {@link EnumLikeDeserializerModifier} using the given
+	 * {@link ApplicationContext} to look up the necessary {@link EnumLikeResolver}.
 	 * 
 	 * @param context the {@link ApplicationContext} to be used to look up
-	 *                {@link LinkResolver} beans.
+	 *                {@link EnumLikeResolver} beans.
 	 */
-	public LinkDeserializerModifier(ApplicationContext context) {
+	public EnumLikeDeserializerModifier(ApplicationContext context) {
 		this.context = context;
 	}
 
@@ -36,10 +36,11 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 		// Collect a list of all properties to be changed.
 		List<SettableBeanProperty> toChange = new ArrayList<>();
 		builder.getProperties().forEachRemaining(prop -> {
-			JsonLink jsonLink = prop.getAnnotation(JsonLink.class);
-			if (jsonLink != null) {
-				LinkResolver<? extends Linkable> resolver = context.getBean(jsonLink.value());
-				LinkDeserializer<? extends Linkable> deserializer = new LinkDeserializer<>(prop.getType(), resolver);
+			JsonEnumLike jsonEnumLike = prop.getAnnotation(JsonEnumLike.class);
+			if (jsonEnumLike != null) {
+				EnumLikeResolver<? extends EnumLike> resolver = context.getBean(jsonEnumLike.value());
+				EnumLikeDeserializer<? extends EnumLike> deserializer = new EnumLikeDeserializer<>(prop.getType(),
+						resolver);
 				toChange.add(prop.withValueDeserializer(deserializer));
 			}
 		});

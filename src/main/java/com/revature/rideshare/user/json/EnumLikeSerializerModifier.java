@@ -9,17 +9,17 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
 /**
- * A {@link BeanSerializerModifier} that looks for {@link JsonLink} annotations
- * and marks any such fields for conversion to links using the
- * {@link LinkWriter}.
+ * A {@link BeanSerializerModifier} that looks for {@link EnumLike} annotations
+ * and marks any such fields for conversion to values using the
+ * {@link EnumLikeWriter}.
  */
-public class LinkSerializerModifier extends BeanSerializerModifier {
+public class EnumLikeSerializerModifier extends BeanSerializerModifier {
 	@Override
 	public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc,
 			List<BeanPropertyWriter> beanProperties) {
 		return beanProperties.stream().map(writer -> {
-			JsonLink jsonLink = writer.getAnnotation(JsonLink.class);
-			return jsonLink == null ? writer : new LinkWriter(writer);
+			JsonEnumLike jsonEnumLike = writer.getAnnotation(JsonEnumLike.class);
+			return jsonEnumLike == null ? writer : new EnumLikeWriter(writer);
 		}).collect(Collectors.toList());
 	}
 }

@@ -9,10 +9,17 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 /**
  * A {@link BeanPropertyWriter} that converts {@link Linkable} objects to links.
  */
-public class JsonLinkWriter extends BeanPropertyWriter {
+public class LinkWriter extends BeanPropertyWriter {
 	private static final long serialVersionUID = 1L;
 
-	public JsonLinkWriter(BeanPropertyWriter writer) {
+	/**
+	 * Constructs a new {@link LinkWriter} with the given base
+	 * {@link BeanPropertyWriter}.
+	 * 
+	 * @param writer the base writer, to be overridden with link-specific
+	 *               functionality
+	 */
+	public LinkWriter(BeanPropertyWriter writer) {
 		super(writer);
 	}
 
