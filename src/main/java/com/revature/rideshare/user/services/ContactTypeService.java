@@ -20,4 +20,8 @@ public class ContactTypeService {
 	public ContactType save(@Valid ContactType type) {
 		return contactTypeRepository.save(type);
 	}
+	
+	public Object getAll() {
+		return contactTypeRepository.findAll();
+	}
 }

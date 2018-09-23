@@ -39,5 +39,10 @@ public class ContactTypeController {
 			return new ResponseEntity<ContactType>(result, HttpStatus.CONFLICT);
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<?> getAll() {
+		return ResponseEntity.ok(contactTypeService.getAll());
+	}
 
 }
