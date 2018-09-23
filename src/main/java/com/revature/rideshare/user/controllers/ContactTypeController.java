@@ -2,6 +2,7 @@ package com.revature.rideshare.user.controllers;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,10 +18,13 @@ import com.revature.rideshare.user.services.ContactTypeService;
 @RestController
 @RequestMapping("/contact-type")
 public class ContactTypeController {
+	
+	@Autowired
 	private ContactTypeService contactTypeService;
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<ContactType> add(@RequestBody @Valid ContactType type) {
+		System.out.println("in add method");
 		type.setId(0);
 		ContactType result = contactTypeService.save(type);
 		if (result != null) {
