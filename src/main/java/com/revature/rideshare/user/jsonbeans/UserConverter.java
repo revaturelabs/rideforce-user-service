@@ -5,8 +5,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.user.beans.Car;
+import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.beans.Office;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRole;
@@ -83,15 +84,10 @@ public class UserConverter {
 		json.setVenmo(user.getVenmo());
 
 		json.setRole(user.getRole().getType().toUpperCase());
-		json.setOffice(
-				UriComponentsBuilder.fromPath("/offices/{id}").buildAndExpand(user.getOffice().getId()).toString());
-		json.setCars(user.getCars().stream()
-				.map(car -> UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(car.getId()).toString())
-				.collect(Collectors.toSet()));
-		json.setContactInfo(user.getContactInfo().stream().map(
-				info -> UriComponentsBuilder.fromPath("/contact-info/{id}").buildAndExpand(info.getId()).toString())
-				.collect(Collectors.toSet()));
-		
+		json.setOffice(user.getOffice().toLink());
+		json.setCars(user.getCars().stream().map(Car::toLink).collect(Collectors.toSet()));
+		json.setContactInfo(user.getContactInfo().stream().map(ContactInfo::toLink).collect(Collectors.toSet()));
+
 		return json;
 	}
 }

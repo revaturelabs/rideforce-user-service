@@ -15,9 +15,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.revature.rideshare.user.json.Linkable;
+
 @Entity
 @Table(name = "CONTACT_INFO")
-public class ContactInfo {
+public class ContactInfo implements Linkable {
 	@Id
 	@Column(name = "CONTACT_INFO_ID")
 	@SequenceGenerator(name = "contactinfoid", sequenceName = "contactinfoid")
@@ -74,5 +78,10 @@ public class ContactInfo {
 
 	public void setInfo(String value) {
 		this.info = value;
+	}
+	
+	@Override
+	public String toLink() {
+		return UriComponentsBuilder.fromPath("/contact-info/{id}").buildAndExpand(id).toString();
 	}
 }

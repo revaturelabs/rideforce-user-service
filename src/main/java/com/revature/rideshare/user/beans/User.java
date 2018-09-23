@@ -25,13 +25,15 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.rideshare.user.json.Linkable;
 
 @Entity
 @Table(name = "USERS")
-public class User implements UserDetails {
+public class User implements UserDetails, Linkable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -247,5 +249,10 @@ public class User implements UserDetails {
 
 	public void setContactInfo(Set<ContactInfo> contactInfo) {
 		this.contactInfo = contactInfo;
+	}
+
+	@Override
+	public String toLink() {
+		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toString();
 	}
 }

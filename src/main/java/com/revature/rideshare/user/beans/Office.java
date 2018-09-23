@@ -8,8 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.revature.rideshare.user.json.Linkable;
+
 @Entity
-public class Office {
+public class Office implements Linkable {
 	@Id
 	@Column(name = "OFFICE_ID")
 	@SequenceGenerator(name = "officeid", sequenceName = "officeid")
@@ -50,5 +54,10 @@ public class Office {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	@Override
+	public String toLink() {
+		return UriComponentsBuilder.fromPath("/offices/{id}").buildAndExpand(id).toString();
 	}
 }

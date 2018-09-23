@@ -3,7 +3,6 @@ package com.revature.rideshare.user.jsonbeans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.services.UserService;
@@ -36,7 +35,7 @@ public class CarConverter {
 		json.setModel(car.getModel());
 		json.setYear(car.getYear());
 
-		json.setOwner(UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(car.getOwner().getId()).toString());
+		json.setOwner(car.getOwner().toLink());
 		
 		return json;
 	}

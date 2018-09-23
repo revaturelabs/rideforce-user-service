@@ -3,7 +3,6 @@ package com.revature.rideshare.user.jsonbeans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.beans.ContactType;
@@ -45,7 +44,7 @@ public class ContactInfoConverter {
 		json.setId(info.getId());
 		json.setInfo(info.getInfo());
 		json.setType(info.getType().getType().toUpperCase());
-		json.setUser(UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(info.getUser().getId()).toString());
+		json.setUser(info.getUser().toLink());
 		
 		return json;
 	}
