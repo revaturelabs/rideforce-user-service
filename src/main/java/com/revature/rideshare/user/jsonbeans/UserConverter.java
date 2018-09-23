@@ -4,16 +4,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.AntPathMatcher;
 
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.ContactInfo;
-import com.revature.rideshare.user.beans.Office;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRole;
-import com.revature.rideshare.user.services.CarService;
-import com.revature.rideshare.user.services.ContactInfoService;
-import com.revature.rideshare.user.services.OfficeService;
+import com.revature.rideshare.user.json.CarLinkResolver;
+import com.revature.rideshare.user.json.ContactInfoLinkResolver;
+import com.revature.rideshare.user.json.OfficeLinkResolver;
 import com.revature.rideshare.user.services.UserRoleService;
 
 @Service
@@ -22,13 +20,13 @@ public class UserConverter {
 	private UserRoleService userRoleService;
 
 	@Autowired
-	private OfficeService officeService;
+	private OfficeLinkResolver officeLinkResolver;
 
 	@Autowired
-	private CarService carService;
+	private CarLinkResolver carLinkResolver;
 
 	@Autowired
-	private ContactInfoService contactInfoService;
+	private ContactInfoLinkResolver contactInfoLinkResolver;
 
 	public User fromJson(JsonUser json) {
 		User user = new User();
@@ -50,21 +48,10 @@ public class UserConverter {
 		}
 		user.setRole(role);
 
-		AntPathMatcher matcher = new AntPathMatcher();
-		int officeId = Integer
-				.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", json.getOffice()).get("id"));
-		Office office = officeService.findById(officeId);
-		user.setOffice(office);
-
-		user.setCars(json.getCars().stream().map(uri -> {
-			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/cars/{id}", uri).get("id"));
-			return carService.findById(id);
-		}).collect(Collectors.toSet()));
-
-		user.setContactInfo(json.getContactInfo().stream().map(uri -> {
-			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/contact-info/{id}", uri).get("id"));
-			return contactInfoService.findById(id);
-		}).collect(Collectors.toSet()));
+		user.setOffice(officeLinkResolver.resolve(json.getOffice()));
+		user.setCars(json.getCars().stream().map(carLinkResolver::resolve).collect(Collectors.toSet()));
+		user.setContactInfo(
+				json.getContactInfo().stream().map(contactInfoLinkResolver::resolve).collect(Collectors.toSet()));
 
 		return user;
 	}
@@ -82,7 +69,6 @@ public class UserConverter {
 		json.setActive(user.isActive());
 		json.setBatchEnd(user.getBatchEnd());
 		json.setVenmo(user.getVenmo());
-
 		json.setRole(user.getRole().getType().toUpperCase());
 		json.setOffice(user.getOffice().toLink());
 		json.setCars(user.getCars().stream().map(Car::toLink).collect(Collectors.toSet()));

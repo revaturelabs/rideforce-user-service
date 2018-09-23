@@ -2,15 +2,14 @@ package com.revature.rideshare.user.jsonbeans;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.AntPathMatcher;
 
 import com.revature.rideshare.user.beans.Car;
-import com.revature.rideshare.user.services.UserService;
+import com.revature.rideshare.user.json.UserLinkResolver;
 
 @Service
 public class CarConverter {
 	@Autowired
-	UserService userService;
+	UserLinkResolver userLinkResolver;
 
 	public Car fromJson(JsonCar json) {
 		Car car = new Car();
@@ -19,10 +18,7 @@ public class CarConverter {
 		car.setMake(json.getMake());
 		car.setModel(json.getModel());
 		car.setYear(json.getYear());
-
-		AntPathMatcher matcher = new AntPathMatcher();
-		int ownerId = Integer.parseInt(matcher.extractUriTemplateVariables("/users/{id}", json.getOwner()).get("id"));
-		car.setOwner(userService.findById(ownerId));
+		car.setOwner(userLinkResolver.resolve(json.getOwner()));
 
 		return car;
 	}
@@ -34,7 +30,6 @@ public class CarConverter {
 		json.setMake(car.getMake());
 		json.setModel(car.getModel());
 		json.setYear(car.getYear());
-
 		json.setOwner(car.getOwner().toLink());
 		
 		return json;

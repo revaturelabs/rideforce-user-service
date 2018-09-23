@@ -2,18 +2,16 @@ package com.revature.rideshare.user.jsonbeans;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.AntPathMatcher;
 
 import com.revature.rideshare.user.beans.ContactInfo;
 import com.revature.rideshare.user.beans.ContactType;
-import com.revature.rideshare.user.beans.User;
+import com.revature.rideshare.user.json.UserLinkResolver;
 import com.revature.rideshare.user.services.ContactTypeService;
-import com.revature.rideshare.user.services.UserService;
 
 @Service
 public class ContactInfoConverter {
 	@Autowired
-	private UserService userService;
+	private UserLinkResolver userLinkResolver;
 
 	@Autowired
 	private ContactTypeService contactTypeService;
@@ -30,10 +28,7 @@ public class ContactInfoConverter {
 		}
 		info.setType(type);
 
-		AntPathMatcher matcher = new AntPathMatcher();
-		int userId = Integer.parseInt(matcher.extractUriTemplateVariables("/users/{id}", json.getUser()).get("id"));
-		User user = userService.findById(userId);
-		info.setUser(user);
+		info.setUser(userLinkResolver.resolve(json.getUser()));
 
 		return info;
 	}
