@@ -25,4 +25,8 @@ public class ContactInfoService {
 	public ContactInfo save(ContactInfo contactInfo) {
 		return contactInfoRepository.save(contactInfo);
 	}
+
+	public List<ContactInfo> findAll() {
+		return contactInfoRepository.findAll();
+	}
 }

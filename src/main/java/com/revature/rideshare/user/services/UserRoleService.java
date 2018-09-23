@@ -18,4 +18,12 @@ public class UserRoleService {
 	public UserRole save(UserRole role) {
 		return userRoleRepository.save(role);
 	}
+
+	public Object getAll() {
+		return userRoleRepository.findAll();
+	}
+
+	public UserRole findById(int id) {
+		return userRoleRepository.findById(id);
+	}
 }
