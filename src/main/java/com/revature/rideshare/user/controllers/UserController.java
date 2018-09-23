@@ -19,9 +19,6 @@ import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.beans.UserRegistrationInfo;
 import com.revature.rideshare.user.beans.UserRole;
-import com.revature.rideshare.user.jsonbeans.JsonUser;
-import com.revature.rideshare.user.jsonbeans.JsonUserRegistrationInfo;
-import com.revature.rideshare.user.jsonbeans.UserConverter;
 import com.revature.rideshare.user.services.OfficeService;
 import com.revature.rideshare.user.services.UserRoleService;
 import com.revature.rideshare.user.services.UserService;
@@ -36,9 +33,6 @@ public class UserController {
 
 	@Autowired
 	UserRoleService userRoleService;
-
-	@Autowired
-	UserConverter userConverter;
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
@@ -74,10 +68,9 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> add(@RequestBody @Valid JsonUserRegistrationInfo registration) {
+	public ResponseEntity<User> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		registration.getUser().setId(0);
-		User result = userService.register(
-				new UserRegistrationInfo(userConverter.fromJson(registration.getUser()), registration.getPassword()));
+		User result = userService.register(registration);
 		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.CREATED);
 		} else {
@@ -86,9 +79,9 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid JsonUser user) {
+	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid User user) {
 		user.setId(id);
-		User result = userService.save(userConverter.fromJson(user));
+		User result = userService.save(user);
 		if (result != null) {
 			return new ResponseEntity<User>(result, HttpStatus.OK);
 		} else {

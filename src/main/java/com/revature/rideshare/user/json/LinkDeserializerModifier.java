@@ -1,15 +1,22 @@
 package com.revature.rideshare.user.json;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
+import com.fasterxml.jackson.databind.deser.std.CollectionDeserializer;
+import com.fasterxml.jackson.databind.deser.std.StdValueInstantiator;
 
 /**
  * A {@link BeanDeserializerModifier} that looks for {@link JsonLink}
@@ -39,12 +46,43 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 			JsonLink jsonLink = prop.getAnnotation(JsonLink.class);
 			if (jsonLink != null) {
 				LinkResolver<? extends Linkable> resolver = context.getBean(jsonLink.value());
-				LinkDeserializer<? extends Linkable> deserializer = new LinkDeserializer<>(prop.getType(), resolver);
-				toChange.add(prop.withValueDeserializer(deserializer));
+				System.out.println(prop.getType());
+				JavaType propType = prop.getType();
+				LinkDeserializer<? extends Linkable> valueDeserializer = new LinkDeserializer<>(prop.getType(),
+						resolver);
+				if (propType.isCollectionLikeType()) {
+					// All of this nonsense is needed to create a deserializer
+					// for a set based on the deserializer for its values.
+					// Someone please tell the Jackson team to make this easier
+					// :(
+					JavaType valueType = propType.getContentType();
+					System.out.println(valueType);
+					System.out.println(prop);
+					@SuppressWarnings("unchecked")
+					CollectionDeserializer collectionDeserializer = new CollectionDeserializer(propType,
+							(JsonDeserializer<Object>) valueDeserializer, null,
+							new SetValueInstantiator(config, propType));
+					toChange.add(prop.withValueDeserializer(collectionDeserializer));
+				} else {
+					toChange.add(prop.withValueDeserializer(valueDeserializer));
+				}
 			}
 		});
 
 		toChange.forEach(prop -> builder.addOrReplaceProperty(prop, true));
 		return builder;
+	}
+
+	private static class SetValueInstantiator extends StdValueInstantiator {
+		private static final long serialVersionUID = 1L;
+
+		public SetValueInstantiator(DeserializationConfig config, JavaType valueType) {
+			super(config, valueType);
+		}
+
+		@Override
+		public Object createUsingDefault(DeserializationContext ctxt) throws IOException {
+			return new HashSet<>();
+		}
 	}
 }

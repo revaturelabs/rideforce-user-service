@@ -38,6 +38,7 @@ public class ErrorController extends AbstractErrorController {
 		String message = (String) errorAttributes.get("message");
 		if (message == null) {
 			Throwable error = (Throwable) errorAttributes.get("trace");
+			log.error("Handling error due to exception.", error);
 			message = error == null ? "Internal server error." : error.getMessage();
 		}
 		return new ResponseError(message).toResponseEntity(getStatus(request));

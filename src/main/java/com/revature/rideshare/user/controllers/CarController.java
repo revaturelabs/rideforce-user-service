@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.ResponseError;
-import com.revature.rideshare.user.jsonbeans.CarConverter;
 import com.revature.rideshare.user.services.CarService;
 
 @RestController
 public class CarController {
 	@Autowired
 	CarService carService;
-
-	@Autowired
-	CarConverter carConverter;
 
 	@RequestMapping(value = "/cars/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
