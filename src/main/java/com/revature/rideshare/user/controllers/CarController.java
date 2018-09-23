@@ -30,7 +30,7 @@ public class CarController {
 		Car car = carService.findById(id);
 		return car == null
 				? new ResponseError("Car with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
-				: ResponseEntity.ok(carConverter.toJson(car));
+				: ResponseEntity.ok(car);
 	}
 
 	@RequestMapping(value = "/cars", method = RequestMethod.POST)

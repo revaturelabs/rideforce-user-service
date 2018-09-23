@@ -1,7 +1,5 @@
 package com.revature.rideshare.user.controllers;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -46,7 +44,7 @@ public class UserController {
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		User user = userService.findByEmail(email);
 		return user == null ? new ResponseError("User with email " + email + " does not exist.")
-				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(userConverter.toJson(user));
+				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, params = { "office",
@@ -64,8 +62,7 @@ public class UserController {
 					.toResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 
-		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role).stream().map(userConverter::toJson)
-				.collect(Collectors.toSet()));
+		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -73,7 +70,7 @@ public class UserController {
 		User user = userService.findById(id);
 		return user == null
 				? new ResponseError("User with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
-				: ResponseEntity.ok(userConverter.toJson(user));
+				: ResponseEntity.ok(user);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
