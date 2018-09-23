@@ -35,8 +35,12 @@ public class ErrorController extends AbstractErrorController {
 		if (getStatus(request) == HttpStatus.INTERNAL_SERVER_ERROR) {
 			log.error("Handling unexpected error with attributes " + errorAttributes);
 		}
-		return new ResponseError((String) errorAttributes.getOrDefault("message", "Internal server error."))
-				.toResponseEntity(getStatus(request));
+		String message = (String) errorAttributes.get("message");
+		if (message == null) {
+			Throwable error = (Throwable) errorAttributes.get("trace");
+			message = error == null ? "Internal server error." : error.getMessage();
+		}
+		return new ResponseError(message).toResponseEntity(getStatus(request));
 	}
 
 	/**
