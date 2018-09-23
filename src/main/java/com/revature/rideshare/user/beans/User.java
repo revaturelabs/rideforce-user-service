@@ -29,7 +29,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.rideshare.user.json.CarLinkResolver;
+import com.revature.rideshare.user.json.ContactInfoLinkResolver;
+import com.revature.rideshare.user.json.JsonEnumLike;
+import com.revature.rideshare.user.json.JsonLink;
 import com.revature.rideshare.user.json.Linkable;
+import com.revature.rideshare.user.json.OfficeLinkResolver;
+import com.revature.rideshare.user.json.UserRoleResolver;
 
 @Entity
 @Table(name = "USERS")
@@ -67,12 +73,14 @@ public class User implements UserDetails, Linkable {
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonEnumLike(UserRoleResolver.class)
 	private UserRole role;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "OFFICE_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 
 	@Column(nullable = false)
@@ -88,6 +96,7 @@ public class User implements UserDetails, Linkable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
 	@NotNull
 	@Valid
+	@JsonLink(CarLinkResolver.class)
 	private Set<Car> cars;
 
 	@Column(length = 30)
@@ -96,6 +105,7 @@ public class User implements UserDetails, Linkable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
 	@NotNull
 	@Valid
+	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
 
 	public User() {

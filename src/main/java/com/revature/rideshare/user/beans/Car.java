@@ -16,7 +16,9 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.user.json.JsonLink;
 import com.revature.rideshare.user.json.Linkable;
+import com.revature.rideshare.user.json.UserLinkResolver;
 
 @Entity
 public class Car implements Linkable {
@@ -30,6 +32,7 @@ public class Car implements Linkable {
 	@JoinColumn(name = "USER_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonLink(UserLinkResolver.class)
 	private User owner;
 
 	@Column(length = 35)

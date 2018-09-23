@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.user.json.ContactTypeResolver;
+import com.revature.rideshare.user.json.JsonEnumLike;
 import com.revature.rideshare.user.json.Linkable;
 
 @Entity
@@ -38,6 +40,7 @@ public class ContactInfo implements Linkable {
 	@JoinColumn(name = "CONTACT_TYPE_ID", nullable = false)
 	@NotNull
 	@Valid
+	@JsonEnumLike(ContactTypeResolver.class)
 	private ContactType type;
 
 	@Column(length = 100)
