@@ -59,9 +59,9 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 					JavaType valueType = propType.getContentType();
 					System.out.println(valueType);
 					System.out.println(prop);
-					@SuppressWarnings("unchecked")
+					@SuppressWarnings({ "unchecked", "rawtypes" })
 					CollectionDeserializer collectionDeserializer = new CollectionDeserializer(propType,
-							(JsonDeserializer<Object>) valueDeserializer, null,
+							(JsonDeserializer) valueDeserializer, null,
 							new SetValueInstantiator(config, propType));
 					toChange.add(prop.withValueDeserializer(collectionDeserializer));
 				} else {
