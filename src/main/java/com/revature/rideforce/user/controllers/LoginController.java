@@ -29,7 +29,7 @@ public class LoginController {
 	public ResponseEntity<?> getCurrentUser() {
 		User currentUser = authenticationService.getCurrentUser();
 		return currentUser == null ? new ResponseError("Not logged in.").toResponseEntity(HttpStatus.FORBIDDEN)
-				: ResponseEntity.status(HttpStatus.FOUND).location(currentUser.toUri()).build();
+				: ResponseEntity.ok(currentUser);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
