@@ -1,13 +1,16 @@
-# RideShare User Service
+# RideForce User Service
 
 This service handles the following endpoints (see the API documentation in
 the gateway service repo for all endpoints and their explanations):
 
+- `/registration-key`
 - `/login`
 - `/users`
 - `/offices`
 - `/cars`
 - `/contact-info`
+- `/roles`
+- `/contact-types`
 
 ## Environment variables
 
