@@ -4,6 +4,15 @@ server:
 spring:
   application:
     name: user-service
+  datasource:
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: create    
+
 
 eureka:
   client:
