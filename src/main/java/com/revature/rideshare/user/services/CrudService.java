@@ -2,25 +2,42 @@ package com.revature.rideshare.user.services;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.revature.rideshare.user.beans.Identifiable;
 import com.revature.rideshare.user.controllers.CrudController;
 import com.revature.rideshare.user.exceptions.EntityConflictException;
 
 /**
- * An interface abstracting the basic methods of a CRUD service. The purpose of
- * this interface is to enforce consistency in naming and method availability
- * and to provide inherited documentation which would be otherwise tedious to
- * write. Additionally, this may be used in conjunction with
- * {@link CrudController} to simplify construction of controller classes.
+ * An abstract class implementing the basic methods of a CRUD service. The
+ * purpose of this class is to enforce consistency in naming and method
+ * availability and to provide inherited behavior and documentation which would
+ * be otherwise tedious to write. Additionally, this may be used in conjunction
+ * with {@link CrudController} to simplify construction of controller classes.
  * 
  * @param <T> the type of object on which this service acts
  */
-public interface CrudService<T> {
+public abstract class CrudService<T extends Identifiable> {
+	protected JpaRepository<T, Integer> repository;
+
+	/**
+	 * Constructs a new {@link CrudService}, using the given {@link JpaRepository}
+	 * as a base.
+	 * 
+	 * @param repository the repository to use for CRUD operations
+	 */
+	protected CrudService(JpaRepository<T, Integer> repository) {
+		this.repository = repository;
+	}
+
 	/**
 	 * Finds all instances of type {@code T} under consideration.
 	 * 
 	 * @return all instances that are known to the service
 	 */
-	List<T> findAll();
+	public List<T> findAll() {
+		return repository.findAll();
+	}
 
 	/**
 	 * Finds a single instance of type {@code T}.
@@ -28,7 +45,9 @@ public interface CrudService<T> {
 	 * @param id the ID of the instance to find
 	 * @return the instance that was found, or {@code null} if none were found
 	 */
-	T findById(int id);
+	public T findById(int id) {
+		return repository.findById(id).orElse(null);
+	}
 
 	/**
 	 * Adds a new instance of type {@code T} to persistent storage.
@@ -39,7 +58,12 @@ public interface CrudService<T> {
 	 * @throws EntityConflictException if the instance would conflict with another
 	 *                                 instance that is already persistent
 	 */
-	T add(T obj) throws EntityConflictException;
+	public T add(T obj) throws EntityConflictException {
+		// Ensure that a new entity is created.
+		obj.setId(0);
+		throwOnConflict(obj);
+		return repository.save(obj);
+	}
 
 	/**
 	 * Saves updates to an existing instance of type {@code T} to persistent
@@ -52,5 +76,20 @@ public interface CrudService<T> {
 	 * @throws EntityConflictException if the proposed changes to the instance would
 	 *                                 conflict with another instance
 	 */
-	T save(T obj) throws EntityConflictException;
+	public T save(T obj) throws EntityConflictException {
+		throwOnConflict(obj);
+		return repository.save(obj);
+	}
+
+	/**
+	 * A helper method which throws an instance of {@link EntityConflictException}
+	 * when the given object conflicts with one that is already persistent. The
+	 * default implementation is to do nothing.
+	 * 
+	 * @param obj the object to check for conflict
+	 * @throws EntityConflictException if the given object conflicts with one that
+	 *                                 is already persistent
+	 */
+	protected void throwOnConflict(T obj) throws EntityConflictException {
+	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.revature.rideshare.user.beans.Identifiable;
 import com.revature.rideshare.user.beans.ResponseError;
 import com.revature.rideshare.user.exceptions.EntityConflictException;
 import com.revature.rideshare.user.json.Linkable;
@@ -22,7 +23,7 @@ import com.revature.rideshare.user.services.CrudService;
  * An abstract base class for CRUD controllers that takes care of common CRUD
  * method implementations.
  */
-public abstract class CrudController<T extends Linkable> {
+public abstract class CrudController<T extends Identifiable & Linkable> {
 	protected CrudService<T> service;
 
 	/**

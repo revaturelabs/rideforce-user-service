@@ -10,33 +10,16 @@ import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.repository.ContactInfoRepository;
 
 @Service
-public class ContactInfoService implements CrudService<ContactInfo> {
-	@Autowired
+public class ContactInfoService extends CrudService<ContactInfo> {
 	ContactInfoRepository contactInfoRepository;
 
-	@Override
-	public List<ContactInfo> findAll() {
-		return contactInfoRepository.findAll();
-	}
-	
-	@Override
-	public ContactInfo findById(int id) {
-		return contactInfoRepository.findById(id);
+	@Autowired
+	public ContactInfoService(ContactInfoRepository contactInfoRepository) {
+		super(contactInfoRepository);
+		this.contactInfoRepository = contactInfoRepository;
 	}
 	
 	public List<ContactInfo> findByUser(User user) {
 		return contactInfoRepository.findByUserId(user.getId());
-	}
-	
-	@Override
-	public ContactInfo add(ContactInfo contactInfo) {
-		// Ensure that a new entity is created.
-		contactInfo.setId(0);
-		return contactInfoRepository.save(contactInfo);
-	}
-	
-	@Override
-	public ContactInfo save(ContactInfo contactInfo) {
-		return contactInfoRepository.save(contactInfo);
 	}
 }

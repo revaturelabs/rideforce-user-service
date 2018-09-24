@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.revature.rideshare.user.json.Linkable;
 
 @Entity
-public class Office implements Linkable {
+public class Office implements Identifiable, Linkable {
 	@Id
 	@Column(name = "OFFICE_ID")
 	@SequenceGenerator(name = "officeid", sequenceName = "officeid")
@@ -30,14 +30,12 @@ public class Office implements Linkable {
 	@NotEmpty
 	private String address;
 
-	public Office() {
-		super();
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -18,7 +18,7 @@ import com.revature.rideshare.user.json.Linkable;
 
 @Entity
 @Table(name = "CONTACT_TYPE")
-public class ContactType implements EnumLike, Linkable {
+public class ContactType implements EnumLike, Identifiable, Linkable {
 	@Id
 	@Column(name = "CONTACT_TYPE_ID")
 	@SequenceGenerator(name = "contacttypeid", sequenceName = "contacttypeid")
@@ -29,14 +29,12 @@ public class ContactType implements EnumLike, Linkable {
 	@NotEmpty
 	private String type;
 
-	public ContactType() {
-		super();
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -1,27 +1,21 @@
 package com.revature.rideshare.user.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.rideshare.user.beans.ContactType;
 import com.revature.rideshare.user.exceptions.DuplicateContactTypeException;
+import com.revature.rideshare.user.exceptions.EntityConflictException;
 import com.revature.rideshare.user.repository.ContactTypeRepository;
 
 @Service
-public class ContactTypeService implements CrudService<ContactType> {
-	@Autowired
+public class ContactTypeService extends CrudService<ContactType> {
 	private ContactTypeRepository contactTypeRepository;
-	
-	@Override
-	public List<ContactType> findAll() {
-		return contactTypeRepository.findAll();
-	}
-	
-	@Override
-	public ContactType findById(int id) {
-		return contactTypeRepository.findById(id);
+
+	@Autowired
+	public ContactTypeService(ContactTypeRepository contactTypeRepository) {
+		super(contactTypeRepository);
+		this.contactTypeRepository = contactTypeRepository;
 	}
 	
 	public ContactType findByType(String type) {
@@ -29,21 +23,10 @@ public class ContactTypeService implements CrudService<ContactType> {
 	}
 	
 	@Override
-	public ContactType add(ContactType type) throws DuplicateContactTypeException {
-		// Ensure that a new type is created.
-		type.setId(0);
-		if (findByType(type.getType()) != null) {
-			throw new DuplicateContactTypeException(type.getType());
+	protected void throwOnConflict(ContactType obj) throws EntityConflictException {
+		ContactType existing = findByType(obj.getType());
+		if (existing != null && existing.getId() != obj.getId()) {
+			throw new DuplicateContactTypeException(obj.getType());
 		}
-		return contactTypeRepository.save(type);
-	}
-
-	@Override
-	public ContactType save(ContactType type) throws DuplicateContactTypeException {
-		ContactType existing = findByType(type.getType());
-		if (existing != null && existing.getId() != type.getId()) {
-			throw new DuplicateContactTypeException(type.getType());
-		}
-		return contactTypeRepository.save(type);
 	}
 }

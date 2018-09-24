@@ -23,7 +23,7 @@ import com.revature.rideshare.user.json.Linkable;
 import com.revature.rideshare.user.json.UserLinkResolver;
 
 @Entity
-public class Car implements Linkable {
+public class Car implements Identifiable, Linkable {
 	@Id
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
@@ -48,14 +48,12 @@ public class Car implements Linkable {
 	@Column(nullable = true)
 	private int year;
 
-	public Car() {
-		super();
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}

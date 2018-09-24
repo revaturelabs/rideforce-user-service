@@ -18,7 +18,7 @@ import com.revature.rideshare.user.json.Linkable;
 
 @Entity
 @Table(name = "ROLE")
-public class UserRole implements EnumLike, Linkable {
+public class UserRole implements EnumLike, Identifiable, Linkable {
 	@Id
 	@Column(name = "ROLE_ID")
 	@SequenceGenerator(name = "roleid", sequenceName = "roleid")
@@ -29,13 +29,12 @@ public class UserRole implements EnumLike, Linkable {
 	@NotEmpty
 	private String type;
 
-	public UserRole() {
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
