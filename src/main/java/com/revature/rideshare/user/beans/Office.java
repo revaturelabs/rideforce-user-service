@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,7 +59,7 @@ public class Office implements Linkable {
 	}
 	
 	@Override
-	public String toLink() {
-		return UriComponentsBuilder.fromPath("/offices/{id}").buildAndExpand(id).toString();
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/offices/{id}").buildAndExpand(id).toUri();
 	}
 }

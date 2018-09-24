@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +30,7 @@ import com.revature.rideshare.user.services.UserRoleService;
 import com.revature.rideshare.user.services.UserService;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 	@Autowired
 	UserService userService;
@@ -38,21 +41,19 @@ public class UserController {
 	@Autowired
 	UserRoleService userRoleService;
 
-	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<User>> findAll() {
-		List<User> users = userService.findAll();
-		return ResponseEntity.ok(users);
+		return ResponseEntity.ok(userService.findAll());
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.GET, params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		User user = userService.findByEmail(email);
 		return user == null ? new ResponseError("User with email " + email + " does not exist.")
 				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.GET, params = { "office",
-			"role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(params = { "office", "role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByOfficeAndRole(@RequestParam("office") int officeId,
 			@RequestParam("role") String roleString) {
 		Office office = officeService.findById(officeId);
@@ -69,7 +70,7 @@ public class UserController {
 		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
 	}
 
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		User user = userService.findById(id);
 		return user == null
@@ -77,11 +78,11 @@ public class UserController {
 				: ResponseEntity.ok(user);
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
-		registration.getUser().setId(0);
 		try {
-			return new ResponseEntity<User>(userService.register(registration), HttpStatus.CREATED);
+			User created = userService.register(registration);
+			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EmailAlreadyUsedException e) {
@@ -89,14 +90,13 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> update(@PathVariable("id") int id, @RequestBody @Valid User user) {
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody @Valid User user) {
 		user.setId(id);
-		User result = userService.save(user);
-		if (result != null) {
-			return new ResponseEntity<User>(result, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<User>(result, HttpStatus.CONFLICT);
+		try {
+			return ResponseEntity.ok(userService.save(user));
+		} catch (EmailAlreadyUsedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
 }

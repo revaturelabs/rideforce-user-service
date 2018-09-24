@@ -10,14 +10,16 @@ import com.revature.rideshare.user.beans.User;
 import com.revature.rideshare.user.repository.CarsRepository;
 
 @Service
-public class CarService {
+public class CarService implements CrudService<Car> {
 	@Autowired
 	private CarsRepository carRepository;
 	
+	@Override
 	public List<Car> findAll() {
 		return carRepository.findAll();
 	}
 	
+	@Override
 	public Car findById(int id) {
 		return carRepository.findById(id);
 	}
@@ -26,6 +28,14 @@ public class CarService {
 		return carRepository.findByOwner(owner);
 	}
 	
+	@Override
+	public Car add(Car car) {
+		// Ensure that a new car is created.
+		car.setId(0);
+		return carRepository.save(car);
+	}
+	
+	@Override
 	public Car save(Car car) {
 		return carRepository.save(car);
 	}

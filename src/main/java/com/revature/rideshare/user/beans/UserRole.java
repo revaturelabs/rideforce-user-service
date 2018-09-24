@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.revature.rideshare.user.json.EnumLike;
+import com.revature.rideshare.user.json.Linkable;
 
 @Entity
 @Table(name = "ROLE")
-public class UserRole implements EnumLike {
+public class UserRole implements EnumLike, Linkable {
 	@Id
 	@Column(name = "ROLE_ID")
 	@SequenceGenerator(name = "roleid", sequenceName = "roleid")
@@ -46,6 +51,11 @@ public class UserRole implements EnumLike {
 	@Override
 	public String toEnumString() {
 		return type.toUpperCase();
+	}
+	
+	@Override
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/roles/{id}").buildAndExpand(id).toUri();
 	}
 
 	@Override

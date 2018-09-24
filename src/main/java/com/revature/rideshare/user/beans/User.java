@@ -1,5 +1,6 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -267,7 +268,7 @@ public class User implements UserDetails, Linkable {
 	}
 
 	@Override
-	public String toLink() {
-		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toString();
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
 }

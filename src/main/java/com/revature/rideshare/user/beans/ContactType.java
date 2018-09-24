@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.revature.rideshare.user.json.EnumLike;
+import com.revature.rideshare.user.json.Linkable;
 
 @Entity
 @Table(name = "CONTACT_TYPE")
-public class ContactType implements EnumLike {
+public class ContactType implements EnumLike, Linkable {
 	@Id
 	@Column(name = "CONTACT_TYPE_ID")
 	@SequenceGenerator(name = "contacttypeid", sequenceName = "contacttypeid")
@@ -56,6 +61,11 @@ public class ContactType implements EnumLike {
 		result = prime * result + id;
 		result = prime * result + ((type == null) ? 0 : type.toUpperCase().hashCode());
 		return result;
+	}
+
+	@Override
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/contact-types/{id}").buildAndExpand(id).toUri();
 	}
 
 	@Override

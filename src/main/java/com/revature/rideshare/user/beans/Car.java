@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -91,7 +93,7 @@ public class Car implements Linkable {
 	}
 
 	@Override
-	public String toLink() {
-		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toString();
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toUri();
 	}
 }
