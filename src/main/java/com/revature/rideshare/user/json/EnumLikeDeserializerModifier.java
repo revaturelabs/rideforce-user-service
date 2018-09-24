@@ -41,6 +41,9 @@ public class EnumLikeDeserializerModifier extends BeanDeserializerModifier {
 				EnumLikeResolver<? extends EnumLike> resolver = context.getBean(jsonEnumLike.value());
 				EnumLikeDeserializer<? extends EnumLike> deserializer = new EnumLikeDeserializer<>(prop.getType(),
 						resolver);
+				// TODO: add support for deserializing collections of enum-like
+				// values (see LinkDeserializerModifier for how this might be
+				// done).
 				toChange.add(prop.withValueDeserializer(deserializer));
 			}
 		});

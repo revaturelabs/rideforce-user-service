@@ -1,5 +1,6 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -39,7 +40,7 @@ import com.revature.rideshare.user.json.UserRoleResolver;
 
 @Entity
 @Table(name = "USERS")
-public class User implements UserDetails, Linkable {
+public class User implements UserDetails, Identifiable, Linkable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -107,14 +108,12 @@ public class User implements UserDetails, Linkable {
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
 
-	public User() {
-		super();
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -267,7 +266,7 @@ public class User implements UserDetails, Linkable {
 	}
 
 	@Override
-	public String toLink() {
-		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toString();
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
 }

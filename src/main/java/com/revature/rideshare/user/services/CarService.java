@@ -7,26 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.revature.rideshare.user.beans.Car;
 import com.revature.rideshare.user.beans.User;
-import com.revature.rideshare.user.repository.CarsRepository;
+import com.revature.rideshare.user.repository.CarRepository;
 
 @Service
-public class CarService {
+public class CarService extends CrudService<Car> {
+	private CarRepository carRepository;
+
 	@Autowired
-	private CarsRepository carRepository;
-	
-	public List<Car> findAll() {
-		return carRepository.findAll();
+	public CarService(CarRepository carRepository) {
+		super(carRepository);
+		this.carRepository = carRepository;
 	}
-	
-	public Car findById(int id) {
-		return carRepository.findById(id);
-	}
-	
+
 	public List<Car> findByOwner(User owner) {
 		return carRepository.findByOwner(owner);
-	}
-	
-	public Car save(Car car) {
-		return carRepository.save(car);
 	}
 }

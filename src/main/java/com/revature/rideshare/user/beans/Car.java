@@ -1,5 +1,7 @@
 package com.revature.rideshare.user.beans;
 
+import java.net.URI;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +23,7 @@ import com.revature.rideshare.user.json.Linkable;
 import com.revature.rideshare.user.json.UserLinkResolver;
 
 @Entity
-public class Car implements Linkable {
+public class Car implements Identifiable, Linkable {
 	@Id
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
@@ -46,14 +48,12 @@ public class Car implements Linkable {
 	@Column(nullable = true)
 	private int year;
 
-	public Car() {
-		super();
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -91,7 +91,7 @@ public class Car implements Linkable {
 	}
 
 	@Override
-	public String toLink() {
-		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toString();
+	public URI toUri() {
+		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toUri();
 	}
 }

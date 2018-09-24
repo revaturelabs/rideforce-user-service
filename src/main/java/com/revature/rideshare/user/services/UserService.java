@@ -79,6 +79,8 @@ public class UserService {
 	 *                                         another user
 	 */
 	public User register(UserRegistrationInfo info) throws InvalidRegistrationKeyException, EmailAlreadyUsedException {
+		// Make sure that we create a new user.
+		info.getUser().setId(0);
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			throw new InvalidRegistrationKeyException();
@@ -92,7 +94,11 @@ public class UserService {
 		return userRepository.save(newUser);
 	}
 
-	public User save(User user) {
+	public User save(User user) throws EmailAlreadyUsedException {
+		User existing = findByEmail(user.getEmail());
+		if (existing != null && existing.getId() != user.getId()) {
+			throw new EmailAlreadyUsedException(user.getEmail());
+		}
 		return userRepository.save(user);
 	}
 }
