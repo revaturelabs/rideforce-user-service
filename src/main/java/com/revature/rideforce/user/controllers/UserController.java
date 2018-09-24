@@ -23,8 +23,9 @@ import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
-import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
+import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
@@ -34,6 +35,9 @@ import com.revature.rideforce.user.services.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	AuthenticationService authenticationService;
 
 	@Autowired
 	OfficeService officeService;
@@ -81,11 +85,11 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
-			User created = userService.register(registration);
+			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
-		} catch (EmailAlreadyUsedException e) {
+		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
@@ -95,7 +99,7 @@ public class UserController {
 		user.setId(id);
 		try {
 			return ResponseEntity.ok(userService.save(user));
-		} catch (EmailAlreadyUsedException e) {
+		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
