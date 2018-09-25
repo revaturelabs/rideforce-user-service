@@ -55,7 +55,6 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 					// for a set based on the deserializer for its values.
 					// Someone please tell the Jackson team to make this easier
 					// :(
-					JavaType valueType = propType.getContentType();
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					CollectionDeserializer collectionDeserializer = new CollectionDeserializer(propType,
 							(JsonDeserializer) valueDeserializer, null,
