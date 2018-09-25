@@ -40,11 +40,11 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	}
 
 	public String getType() {
-		return type;
+		return type.toUpperCase();
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.type = type.toUpperCase();
 	}
 
 	@Override
