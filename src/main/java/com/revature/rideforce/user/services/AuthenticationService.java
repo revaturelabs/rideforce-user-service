@@ -13,6 +13,7 @@ import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
@@ -64,8 +65,14 @@ public class AuthenticationService {
 	 *                                         invalid
 	 * @throws EntityConflictException         if the given email is already used by
 	 *                                         another user
+	 * @throws PermissionDeniedException       if the currently logged-in user does
+	 *                                         not have permission to create the
+	 *                                         desired user (e.g. if an
+	 *                                         unauthenticated user attempts to
+	 *                                         create an admin)
 	 */
-	public User register(UserRegistrationInfo info) throws InvalidRegistrationKeyException, EntityConflictException {
+	public User register(UserRegistrationInfo info)
+			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
 		// Make sure that we create a new user.
 		info.getUser().setId(0);
 		// Make sure that the registration key is valid.
@@ -78,6 +85,12 @@ public class AuthenticationService {
 		}
 		String passwordHash = passwordEncoder.encode(info.getPassword());
 		newUser.setPassword(passwordHash);
+
+		// Make sure the user has permissions to make this new user.
+		User loggedIn = getCurrentUser();
+		if ((newUser.isAdmin() || newUser.isTrainer()) && (loggedIn == null || !loggedIn.isAdmin())) {
+			throw new PermissionDeniedException("Cannot create a user with elevated permissions.");
+		}
 		return userRepository.save(newUser);
 	}
 

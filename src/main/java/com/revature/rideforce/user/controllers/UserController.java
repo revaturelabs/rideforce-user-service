@@ -55,9 +55,13 @@ public class UserController {
 
 	@GetMapping(params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
-		User user = userService.findByEmail(email);
-		return user == null ? new ResponseError("User with email " + email + " does not exist.")
-				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+		try {
+			User user = userService.findByEmail(email);
+			return user == null ? new ResponseError("User with email " + email + " does not exist.")
+					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	@GetMapping(params = { "office", "role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -97,7 +101,7 @@ public class UserController {
 		try {
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
-		} catch (InvalidRegistrationKeyException e) {
+		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);

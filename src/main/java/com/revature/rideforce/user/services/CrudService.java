@@ -22,7 +22,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  */
 public abstract class CrudService<T extends Identifiable> {
 	@Autowired
-	private AuthenticationService authenticationService;
+	protected AuthenticationService authenticationService;
 
 	protected JpaRepository<T, Integer> repository;
 
@@ -44,7 +44,7 @@ public abstract class CrudService<T extends Identifiable> {
 	 *                                   have permission to access all objects
 	 */
 	public List<T> findAll() throws PermissionDeniedException {
-		if (!canFindAll(authenticationService.getCurrentUser())) {
+		if (!canFindAll()) {
 			throw new PermissionDeniedException("Permission denied to find all objects.");
 		}
 		return repository.findAll();
@@ -60,7 +60,7 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	public T findById(int id) throws PermissionDeniedException {
 		T obj = repository.findById(id).orElse(null);
-		if (!canFindOne(authenticationService.getCurrentUser(), obj)) {
+		if (!canFindOne(obj)) {
 			throw new PermissionDeniedException("Permission denied to find requested object.");
 		}
 		return obj;
@@ -72,8 +72,8 @@ public abstract class CrudService<T extends Identifiable> {
 	 * @param obj the instance to add
 	 * @return the instance after being saved, which may contain additional
 	 *         information (such as a generated ID)
-	 * @throws EntityConflictException if the instance would conflict with another
-	 *                                 instance that is already persistent
+	 * @throws EntityConflictException   if the instance would conflict with another
+	 *                                   instance that is already persistent
 	 * @throws PermissionDeniedException if the currently logged-in user does not
 	 *                                   have permission to add the object
 	 */
@@ -83,7 +83,7 @@ public abstract class CrudService<T extends Identifiable> {
 		}
 		// Ensure that a new entity is created.
 		obj.setId(0);
-		if (!canAdd(authenticationService.getCurrentUser(), obj)) {
+		if (!canAdd(obj)) {
 			throw new PermissionDeniedException("Permission denied to add object.");
 		}
 		throwOnConflict(obj);
@@ -107,7 +107,7 @@ public abstract class CrudService<T extends Identifiable> {
 		if (obj == null) {
 			throw new IllegalArgumentException("Cannot save null object.");
 		}
-		if (!canSave(authenticationService.getCurrentUser(), obj)) {
+		if (!canSave(obj)) {
 			throw new PermissionDeniedException("Permission denied to save object.");
 		}
 		throwOnConflict(obj);
@@ -139,6 +139,17 @@ public abstract class CrudService<T extends Identifiable> {
 	}
 
 	/**
+	 * Determines whether the currently logged-in user can retrieve a list of all
+	 * objects. This is a helper method wrapping {@link #canFindAll(User)}.
+	 * 
+	 * @return whether the currently logged-in user is allowed to retrieve a list of
+	 *         all objects
+	 */
+	protected final boolean canFindAll() {
+		return canFindAll(authenticationService.getCurrentUser());
+	}
+
+	/**
 	 * Determines whether the user can retrieve one particular object. The default
 	 * implementation is to allow all logged-in users to retrieve all objects.
 	 * 
@@ -149,6 +160,18 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	protected boolean canFindOne(User user, T obj) {
 		return user != null;
+	}
+
+	/**
+	 * Determines whether the currently logged-in user can retrieve one particular
+	 * object. This is a helper method wrapping
+	 * {@link #canFindOne(User, Identifiable)}.
+	 * 
+	 * @param obj the requested object, which may be {@code null}
+	 * @return whether the currently logged-in user can retrieve the given object
+	 */
+	protected final boolean canFindOne(T obj) {
+		return canFindOne(authenticationService.getCurrentUser(), obj);
 	}
 
 	/**
@@ -166,6 +189,17 @@ public abstract class CrudService<T extends Identifiable> {
 	}
 
 	/**
+	 * Determines whether the currently logged-in user can add a particular object.
+	 * This is a helper method wrapping {@link #canAdd(User, Identifiable)}.
+	 * 
+	 * @param obj the object to be added, which will never be {@code null}
+	 * @return whether the currently logged-in user can add the given object
+	 */
+	protected final boolean canAdd(T obj) {
+		return canAdd(authenticationService.getCurrentUser(), obj);
+	}
+
+	/**
 	 * Determines whether the user can save a particular object. The default
 	 * implementation is to allow only admins and trainers to save arbitrary objects
 	 * and deny any save permissions to other users.
@@ -177,5 +211,16 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	protected boolean canSave(User user, T obj) {
 		return user != null && (user.isAdmin() || user.isTrainer());
+	}
+
+	/**
+	 * Determines whether the currently logged-in user can save a particular object.
+	 * This is a helper method wrapping {@link #canSave(User, Identifiable)}.
+	 * 
+	 * @param obj the object to be saved, which will never be {@code null}
+	 * @return whether the currently logged-in user can save the given object
+	 */
+	protected final boolean canSave(T obj) {
+		return canSave(authenticationService.getCurrentUser(), obj);
 	}
 }

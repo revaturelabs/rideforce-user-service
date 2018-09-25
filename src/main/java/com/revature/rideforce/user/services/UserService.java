@@ -10,6 +10,7 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @Service
@@ -22,17 +23,24 @@ public class UserService extends CrudService<User> {
 		this.userRepository = userRepository;
 	}
 
-	public User findByEmail(String email) {
+	public User findByEmail(String email) throws PermissionDeniedException {
+		User found = userRepository.findByEmail(email);
+		if (!canFindOne(found)) {
+			throw new PermissionDeniedException("Permission denied to get user by email.");
+		}
 		return userRepository.findByEmail(email);
 	}
 
-	public List<User> findByOfficeAndRole(Office office, UserRole role) {
+	public List<User> findByOfficeAndRole(Office office, UserRole role) throws PermissionDeniedException {
+		if (!canFindAll()) {
+			throw new PermissionDeniedException("Permission denied to get users by office and role.");
+		}
 		return userRepository.findByOfficeAndRole(office, role);
 	}
-	
+
 	@Override
 	protected void throwOnConflict(User obj) throws EntityConflictException {
-		User existing = findByEmail(obj.getEmail());
+		User existing = userRepository.findByEmail(obj.getEmail());
 		if (existing != null && existing.getId() != obj.getId()) {
 			throw new EmailAlreadyUsedException(obj.getEmail());
 		}
