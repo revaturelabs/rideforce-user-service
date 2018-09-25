@@ -22,4 +22,18 @@ public class ContactInfoService extends CrudService<ContactInfo> {
 	public List<ContactInfo> findByUser(User user) {
 		return contactInfoRepository.findByUserId(user.getId());
 	}
+	
+	@Override
+	protected boolean canAdd(User user, ContactInfo obj) {
+		// Users can only add their own contact info, except for admins who can
+		// do so for any user.
+		return user != null && (user.isAdmin() || user.getId() == obj.getUser().getId());
+	}
+	
+	@Override
+	protected boolean canSave(User user, ContactInfo obj) {
+		// Users can only save their own contact info, except for admins who can
+		// do so for any user.
+		return user != null && (user.isAdmin() || user.getId() == obj.getUser().getId());
+	}
 }
