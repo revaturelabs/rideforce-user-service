@@ -46,7 +46,6 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 			JsonLink jsonLink = prop.getAnnotation(JsonLink.class);
 			if (jsonLink != null) {
 				LinkResolver<? extends Linkable> resolver = context.getBean(jsonLink.value());
-				System.out.println(prop.getType());
 				JavaType propType = prop.getType();
 				LinkDeserializer<? extends Linkable> valueDeserializer = new LinkDeserializer<>(prop.getType(),
 						resolver);
@@ -57,8 +56,6 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 					// Someone please tell the Jackson team to make this easier
 					// :(
 					JavaType valueType = propType.getContentType();
-					System.out.println(valueType);
-					System.out.println(prop);
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					CollectionDeserializer collectionDeserializer = new CollectionDeserializer(propType,
 							(JsonDeserializer) valueDeserializer, null,

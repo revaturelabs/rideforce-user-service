@@ -28,7 +28,6 @@ public class LinkDeserializer<T extends Linkable> extends StdDeserializer<T> {
 
 	@Override
 	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		System.out.println(p.getValueAsString());
 		return resolver.resolve(p.getValueAsString());
 	}
 }
