@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -29,6 +28,9 @@ public class AuthenticationService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private LoginTokenProvider loginTokenProvider;
@@ -73,25 +75,13 @@ public class AuthenticationService {
 	 */
 	public User register(UserRegistrationInfo info)
 			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
-		// Make sure that we create a new user.
-		info.getUser().setId(0);
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			throw new InvalidRegistrationKeyException();
 		}
-		User newUser = info.getUser();
-		if (userRepository.findByEmail(newUser.getEmail()) != null) {
-			throw new EmailAlreadyUsedException(newUser.getEmail());
-		}
 		String passwordHash = passwordEncoder.encode(info.getPassword());
-		newUser.setPassword(passwordHash);
-
-		// Make sure the user has permissions to make this new user.
-		User loggedIn = getCurrentUser();
-		if ((newUser.isAdmin() || newUser.isTrainer()) && (loggedIn == null || !loggedIn.isAdmin())) {
-			throw new PermissionDeniedException("Cannot create a user with elevated permissions.");
-		}
-		return userRepository.save(newUser);
+		info.getUser().setPassword(passwordHash);
+		return userService.add(info.getUser());
 	}
 
 	/**

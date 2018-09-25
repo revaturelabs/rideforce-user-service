@@ -21,10 +21,24 @@ public class CarService extends CrudService<Car> {
 	}
 
 	public List<Car> findByOwner(User owner) throws PermissionDeniedException {
-		User current = authenticationService.getCurrentUser();
-		if (current == null || (!current.isAdmin() && !current.isTrainer() && current.getId() != owner.getId())) {
-			throw new PermissionDeniedException("Permission denied to access this user's cars.");
+		// Make this more restrictive if necessary.
+		if (!canFindAll()) {
+			throw new PermissionDeniedException("Permission denied to access user's cars.");
 		}
 		return carRepository.findByOwner(owner);
+	}
+
+	@Override
+	protected boolean canAdd(User user, Car obj) {
+		// Users can only add cars for themselves, except admins who can add
+		// cars to any user.
+		return user != null && (user.isAdmin() || user.getId() == obj.getOwner().getId());
+	}
+
+	@Override
+	protected boolean canSave(User user, Car obj) {
+		// Users can only save cars for themselves, except admins who can save
+		// cars for any user.
+		return user != null && (user.isAdmin() || user.getId() == obj.getOwner().getId());
 	}
 }

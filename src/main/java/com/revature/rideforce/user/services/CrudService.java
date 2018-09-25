@@ -176,7 +176,7 @@ public abstract class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the user can add a particular object. The default
-	 * implementation is to allow only admins and trainers to add arbitrary objects
+	 * implementation is to allow only admins to add arbitrary objects
 	 * and deny any addition to other users.
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
@@ -185,7 +185,7 @@ public abstract class CrudService<T extends Identifiable> {
 	 * @return whether the user can add the given object
 	 */
 	protected boolean canAdd(User user, T obj) {
-		return user != null && (user.isAdmin() || user.isTrainer());
+		return user != null && user.isAdmin();
 	}
 
 	/**
@@ -201,7 +201,7 @@ public abstract class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the user can save a particular object. The default
-	 * implementation is to allow only admins and trainers to save arbitrary objects
+	 * implementation is to allow only admins to save arbitrary objects
 	 * and deny any save permissions to other users.
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
@@ -210,7 +210,7 @@ public abstract class CrudService<T extends Identifiable> {
 	 * @return whether the user can save the given object
 	 */
 	protected boolean canSave(User user, T obj) {
-		return user != null && (user.isAdmin() || user.isTrainer());
+		return user != null && user.isAdmin();
 	}
 
 	/**

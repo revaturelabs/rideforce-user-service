@@ -45,4 +45,19 @@ public class UserService extends CrudService<User> {
 			throw new EmailAlreadyUsedException(obj.getEmail());
 		}
 	}
+	
+	@Override
+	protected boolean canAdd(User user, User obj) {
+		// Make sure users can't add other users with elevated permissions.
+		if (obj.isAdmin() || obj.isTrainer()) {
+			return user != null && user.isAdmin();
+		}
+		return true;
+	}
+	
+	@Override
+	protected boolean canSave(User user, User obj) {
+		// Any user can update themself; only admins can update any user.
+		return user != null && (user.getId() == obj.getId() || user.isAdmin());
+	}
 }
