@@ -1,7 +1,5 @@
 package com.revature.rideforce.user.controllers;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -25,6 +23,7 @@ import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
@@ -35,7 +34,7 @@ import com.revature.rideforce.user.services.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	AuthenticationService authenticationService;
 
@@ -46,40 +45,55 @@ public class UserController {
 	UserRoleService userRoleService;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<User>> findAll() {
-		return ResponseEntity.ok(userService.findAll());
+	public ResponseEntity<?> findAll() {
+		try {
+			return ResponseEntity.ok(userService.findAll());
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	@GetMapping(params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
-		User user = userService.findByEmail(email);
-		return user == null ? new ResponseError("User with email " + email + " does not exist.")
-				.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+		try {
+			User user = userService.findByEmail(email);
+			return user == null ? new ResponseError("User with email " + email + " does not exist.")
+					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	@GetMapping(params = { "office", "role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByOfficeAndRole(@RequestParam("office") int officeId,
 			@RequestParam("role") String roleString) {
-		Office office = officeService.findById(officeId);
-		if (office == null) {
-			return new ResponseError("Office with ID " + officeId + " does not exist.")
-					.toResponseEntity(HttpStatus.BAD_REQUEST);
-		}
-		UserRole role = userRoleService.findByType(roleString);
-		if (role == null) {
-			return new ResponseError(roleString + " is not a valid user role.")
-					.toResponseEntity(HttpStatus.BAD_REQUEST);
-		}
+		try {
+			Office office = officeService.findById(officeId);
+			if (office == null) {
+				return new ResponseError("Office with ID " + officeId + " does not exist.")
+						.toResponseEntity(HttpStatus.BAD_REQUEST);
+			}
+			UserRole role = userRoleService.findByType(roleString);
+			if (role == null) {
+				return new ResponseError(roleString + " is not a valid user role.")
+						.toResponseEntity(HttpStatus.BAD_REQUEST);
+			}
 
-		return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
+			return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
-		User user = userService.findById(id);
-		return user == null
-				? new ResponseError("User with ID " + id + " does not exist.").toResponseEntity(HttpStatus.NOT_FOUND)
-				: ResponseEntity.ok(user);
+		try {
+			User user = userService.findById(id);
+			return user == null ? new ResponseError("User with ID " + id + " does not exist.")
+					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -87,7 +101,7 @@ public class UserController {
 		try {
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
-		} catch (InvalidRegistrationKeyException e) {
+		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
@@ -101,6 +115,8 @@ public class UserController {
 			return ResponseEntity.ok(userService.save(user));
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
 }

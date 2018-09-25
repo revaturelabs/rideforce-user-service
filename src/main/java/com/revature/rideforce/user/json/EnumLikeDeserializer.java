@@ -10,12 +10,12 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 /**
- * A {@link JsonDeserializer} that resolves enum-like values in JSON input, converting them
- * to the corresponding enum-like objects.
+ * A {@link JsonDeserializer} that resolves enum-like values in JSON input,
+ * converting them to the corresponding enum-like objects.
  * 
  * @param <T> the type to which to deserialize
  */
-public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T>{
+public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T> {
 	private static final long serialVersionUID = 1L;
 
 	private EnumLikeResolver<T> resolver;

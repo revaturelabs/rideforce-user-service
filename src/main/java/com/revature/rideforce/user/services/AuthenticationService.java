@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
+import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
@@ -25,6 +26,9 @@ public class AuthenticationService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Autowired
 	private UserService userService;
 
@@ -44,7 +48,7 @@ public class AuthenticationService {
 	 *                                     (wrong email or password)
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
-		User found = userService.findByEmail(credentials.getEmail());
+		User found = userRepository.findByEmail(credentials.getEmail());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -63,21 +67,21 @@ public class AuthenticationService {
 	 *                                         invalid
 	 * @throws EntityConflictException         if the given email is already used by
 	 *                                         another user
+	 * @throws PermissionDeniedException       if the currently logged-in user does
+	 *                                         not have permission to create the
+	 *                                         desired user (e.g. if an
+	 *                                         unauthenticated user attempts to
+	 *                                         create an admin)
 	 */
-	public User register(UserRegistrationInfo info) throws InvalidRegistrationKeyException, EntityConflictException {
-		// Make sure that we create a new user.
-		info.getUser().setId(0);
+	public User register(UserRegistrationInfo info)
+			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			throw new InvalidRegistrationKeyException();
 		}
-		User newUser = info.getUser();
-		if (userService.findByEmail(newUser.getEmail()) != null) {
-			throw new EmailAlreadyUsedException(newUser.getEmail());
-		}
 		String passwordHash = passwordEncoder.encode(info.getPassword());
-		newUser.setPassword(passwordHash);
-		return userService.add(newUser);
+		info.getUser().setPassword(passwordHash);
+		return userService.add(info.getUser());
 	}
 
 	/**
