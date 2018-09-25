@@ -65,6 +65,13 @@ public class UserService extends CrudService<User> {
 	}
 	
 	@Override
+	protected boolean canFindAll(User user) {
+		// This is not ideal, but needs to be this way until the matching
+		// service can pass along authorization headers.
+		return true;
+	}
+	
+	@Override
 	protected boolean canAdd(User user, User obj) {
 		// Make sure users can't add other users with elevated permissions.
 		if (obj.isAdmin() || obj.isTrainer()) {
