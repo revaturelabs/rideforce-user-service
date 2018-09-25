@@ -76,14 +76,14 @@ public class User implements UserDetails, Identifiable, Linkable {
 
 	private boolean active;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	@NotNull
 	@Valid
 	@JsonEnumLike(UserRoleResolver.class)
 	private UserRole role;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "OFFICE_ID", nullable = false)
 	@NotNull
 	@Valid

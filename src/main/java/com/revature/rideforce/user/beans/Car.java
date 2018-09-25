@@ -2,7 +2,6 @@ package com.revature.rideforce.user.beans;
 
 import java.net.URI;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +29,7 @@ public class Car implements Identifiable, Linkable {
 	@GeneratedValue(generator = "carid", strategy = GenerationType.SEQUENCE)
 	private int id;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID", nullable = false)
 	@NotNull
 	@Valid
