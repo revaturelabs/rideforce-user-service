@@ -1,7 +1,5 @@
 package com.revature.rideforce.user.controllers;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.services.CrudService;
 
@@ -41,8 +40,12 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	 * @return a {@link ResponseEntity} containing all the objects found
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<T>> findAll() {
-		return ResponseEntity.ok(service.findAll());
+	public ResponseEntity<?> findAll() {
+		try {
+			return ResponseEntity.ok(service.findAll());
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	/**
@@ -54,10 +57,14 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	 */
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+		try {
 		T found = service.findById(id);
 		return found == null
 				? new ResponseError("Instance with ID " + id + " not found.").toResponseEntity(HttpStatus.NOT_FOUND)
 				: ResponseEntity.ok(found);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
 	}
 
 	/**
@@ -74,6 +81,8 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
 
@@ -90,6 +99,8 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 			return ResponseEntity.ok(service.save(obj));
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
 }

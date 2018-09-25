@@ -13,6 +13,7 @@ import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
@@ -26,7 +27,7 @@ public class AuthenticationService {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
 	@Autowired
 	private LoginTokenProvider loginTokenProvider;
@@ -44,7 +45,7 @@ public class AuthenticationService {
 	 *                                     (wrong email or password)
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
-		User found = userService.findByEmail(credentials.getEmail());
+		User found = userRepository.findByEmail(credentials.getEmail());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -72,12 +73,12 @@ public class AuthenticationService {
 			throw new InvalidRegistrationKeyException();
 		}
 		User newUser = info.getUser();
-		if (userService.findByEmail(newUser.getEmail()) != null) {
+		if (userRepository.findByEmail(newUser.getEmail()) != null) {
 			throw new EmailAlreadyUsedException(newUser.getEmail());
 		}
 		String passwordHash = passwordEncoder.encode(info.getPassword());
 		newUser.setPassword(passwordHash);
-		return userService.add(newUser);
+		return userRepository.save(newUser);
 	}
 
 	/**

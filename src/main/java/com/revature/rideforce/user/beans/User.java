@@ -69,7 +69,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 	@Column(length = 200)
 	@Size(max = 200)
 	private String photoUrl;
-	
+
 	@Column(length = 200)
 	@Size(max = 200)
 	private String bio;
@@ -212,47 +212,53 @@ public class User implements UserDetails, Identifiable, Linkable {
 		this.venmo = venmo;
 	}
 
-	// TODO Handle different user roles
+	@JsonIgnore
+	public boolean isAdmin() {
+		return getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase("admin")).findAny()
+				.isPresent();
+	}
+
+	@JsonIgnore
+	public boolean isTrainer() {
+		return getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase("trainer")).findAny()
+				.isPresent();
+	}
+
 	@Override
 	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		GrantedAuthority auth = () -> "user";
+		GrantedAuthority auth = () -> this.getRole().toEnumString();
 		return Arrays.asList(auth);
 	}
 
 	@Override
 	@JsonIgnore
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return email;
 	}
 
 	@Override
 	@JsonIgnore
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	@JsonIgnore
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	@JsonIgnore
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return active;
 	}
 
 	public Set<Car> getCars() {

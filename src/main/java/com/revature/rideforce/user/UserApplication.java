@@ -22,9 +22,9 @@ import com.revature.rideforce.user.json.EnumLikeDeserializerModifier;
 import com.revature.rideforce.user.json.EnumLikeSerializerModifier;
 import com.revature.rideforce.user.json.LinkDeserializerModifier;
 import com.revature.rideforce.user.json.LinkSerializerModifier;
-import com.revature.rideforce.user.services.OfficeService;
-import com.revature.rideforce.user.services.UserRoleService;
-import com.revature.rideforce.user.services.UserService;
+import com.revature.rideforce.user.repository.OfficeRepository;
+import com.revature.rideforce.user.repository.UserRepository;
+import com.revature.rideforce.user.repository.UserRoleRepository;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -34,13 +34,13 @@ public class UserApplication implements InitializingBean {
 	private ApplicationContext context;
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
 	@Autowired
-	private OfficeService officeService;
+	private OfficeRepository officeRepository;
 
 	@Autowired
-	private UserRoleService userRoleService;
+	private UserRoleRepository userRoleRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -64,18 +64,18 @@ public class UserApplication implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// Create a dummy admin if none exist.
-		if (userService.findAll().isEmpty()) {
-			if (officeService.findAll().isEmpty()) {
+		if (userRepository.findAll().isEmpty()) {
+			if (officeRepository.findAll().isEmpty()) {
 				Office reston = new Office();
 				reston.setName("Reston");
 				reston.setAddress("11730 Plaza America Dr. Reston, VA");
-				officeService.add(reston);
+				officeRepository.save(reston);
 			}
 
-			if (userRoleService.findByType("ADMIN") == null) {
+			if (userRoleRepository.findByTypeIgnoreCase("ADMIN") == null) {
 				UserRole adminRole = new UserRole();
 				adminRole.setType("ADMIN");
-				adminRole = userRoleService.add(adminRole);
+				adminRole = userRoleRepository.save(adminRole);
 			}
 
 			User admin = new User();
@@ -83,13 +83,13 @@ public class UserApplication implements InitializingBean {
 			admin.setLastName("Admin");
 			admin.setEmail("admin@revature.com");
 			admin.setAddress("11730 Plaza America Dr. Reston, VA");
-			admin.setOffice(officeService.findAll().get(0));
+			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
 			admin.setContactInfo(new HashSet<>());
 			admin.setActive(true);
-			admin.setRole(userRoleService.findByType("ADMIN"));
+			admin.setRole(userRoleRepository.findByTypeIgnoreCase("ADMIN"));
 			admin.setPassword(passwordEncoder.encode("password"));
-			userService.add(admin);
+			userRepository.save(admin);
 		}
 	}
 }
