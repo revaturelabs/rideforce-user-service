@@ -40,11 +40,11 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 	}
 
 	public String getType() {
-		return type;
+		return type.toUpperCase();
 	}
 
 	public void setType(String role) {
-		this.type = role;
+		this.type = role.toUpperCase();
 	}
 
 	@Override
