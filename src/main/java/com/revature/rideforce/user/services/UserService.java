@@ -3,6 +3,7 @@ package com.revature.rideforce.user.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.revature.rideforce.user.beans.Office;
@@ -16,6 +17,9 @@ import com.revature.rideforce.user.repository.UserRepository;
 @Service
 public class UserService extends CrudService<User> {
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public UserService(UserRepository userRepository) {
@@ -36,6 +40,20 @@ public class UserService extends CrudService<User> {
 			throw new PermissionDeniedException("Permission denied to get users by office and role.");
 		}
 		return userRepository.findByOfficeAndRole(office, role);
+	}
+	
+	public void updatePassword(User user, String oldPassword, String newPassword) throws PermissionDeniedException {
+		User loggedIn = authenticationService.getCurrentUser();
+		// Check permission to update password. Admins can update anyone's
+		// password, provided they know the old password.
+		if (loggedIn == null || (!loggedIn.isAdmin() && loggedIn.getId() != user.getId())) {
+			throw new PermissionDeniedException("Cannot change this user's password.");
+		}
+		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+			throw new PermissionDeniedException("Old password is incorrect.");
+		}
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
 	}
 
 	@Override
