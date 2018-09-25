@@ -32,7 +32,7 @@ public class ContactInfo implements Identifiable, Linkable {
 	@GeneratedValue(generator = "contactinfoid", strategy = GenerationType.SEQUENCE)
 	private int id;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID", nullable = false)
 	@NotNull
 	@Valid

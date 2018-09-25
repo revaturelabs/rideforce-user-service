@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.services.UserService;
+import com.revature.rideforce.user.repository.UserRepository;
 
 /**
  * A class for generating and parsing JSON Web Tokens.
@@ -20,7 +20,7 @@ import com.revature.rideforce.user.services.UserService;
 @Service
 public class LoginTokenProvider extends JwtProvider {
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
 	/**
 	 * Generates a new JWT which can be used to authenticate the user with the given
@@ -43,7 +43,7 @@ public class LoginTokenProvider extends JwtProvider {
 	public Authentication getAuthentication(String token) {
 		try {
 			int userId = Integer.parseInt(getSubject(token));
-			User user = userService.findById(userId);
+			User user = userRepository.findById(userId);
 			if (user == null) {
 				return null;
 			}
