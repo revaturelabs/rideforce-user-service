@@ -13,21 +13,23 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private LoginTokenProvider tokenProvider;
+	@Autowired
+	private LoginTokenProvider tokenProvider;
 //    @Autowired
 //    private ErrorController errorController;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // Matchers for routes that can be accessed without authentication.
-        RequestMatcher[] allowable = { new AntPathRequestMatcher("/login", "POST"),
-                new AntPathRequestMatcher("/users", "POST"), new AntPathRequestMatcher("/**", "OPTIONS") };
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// Matchers for routes that can be accessed without authentication.
+		RequestMatcher[] allowable = { new AntPathRequestMatcher("/login", "POST"),
+				new AntPathRequestMatcher("/users/**", "GET"), new AntPathRequestMatcher("/users", "POST"),
+				new AntPathRequestMatcher("/offices", "GET"), new AntPathRequestMatcher("/contact-types", "GET"),
+				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS") };
 
-        http.csrf().disable();
-        http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+		http.csrf().disable();
+		http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 //        http.exceptionHandling().accessDeniedHandler(errorController).authenticationEntryPoint(errorController);
-    }
+	}
 }

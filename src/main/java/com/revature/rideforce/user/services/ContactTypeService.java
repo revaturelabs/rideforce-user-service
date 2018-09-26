@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.rideforce.user.beans.ContactType;
+import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.exceptions.DuplicateContactTypeException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.repository.ContactTypeRepository;
@@ -28,5 +29,15 @@ public class ContactTypeService extends CrudService<ContactType> {
 		if (existing != null && existing.getId() != obj.getId()) {
 			throw new DuplicateContactTypeException(obj.getType());
 		}
+	}
+	
+	@Override
+	protected boolean canFindAll(User user) {
+		return true;
+	}
+	
+	@Override
+	protected boolean canFindOne(User user, ContactType obj) {
+		return true;
 	}
 }
