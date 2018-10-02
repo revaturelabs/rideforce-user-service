@@ -12,14 +12,13 @@ import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.UserCredentials;
+import com.revature.rideforce.user.beans.UserRole;
 
-
-
-public class UserCredentialsTest {
+public class UserRoleTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
-
-	private UserCredentials uc;
+	
+	private UserRole ur;
 	
 	@Before
     public void setupValidatorFactory () {
@@ -29,22 +28,26 @@ public class UserCredentialsTest {
     }
 	
 	@Test
-	public void userCredentialNullFieldsTest() {
-		uc = new UserCredentials();
-		Assertions.assertThat(uc.getEmail()).isEqualTo(null);
-		Assertions.assertThat(uc.getPassword()).isEqualTo(null);
+	public void userRoleNullTest() {
+		ur = new UserRole();
 		Validator validator = localValidatorFactory.getValidator();
-		Set<ConstraintViolation<UserCredentials>> violations = validator.validate(uc);
+		Set<ConstraintViolation<UserRole>> violations = validator.validate(ur);
 		Assertions.assertThat(violations.size()).isEqualTo(2);
 	}
 	
 	@Test
-	public void userCredentialValidFieldsTest() {
-		uc = new UserCredentials("email@gmail.com", "password");
-		Assertions.assertThat(uc.getEmail()).isEqualTo("email@gmail.com");
-		Assertions.assertThat(uc.getPassword()).isEqualTo("password");
+	public void userRoleInvalidIdTest() {
+		ur = new UserRole(0, "test");
 		Validator validator = localValidatorFactory.getValidator();
-		Set<ConstraintViolation<UserCredentials>> violations = validator.validate(uc);
-		Assertions.assertThat(violations.size()).isEqualTo(0);
+		Set<ConstraintViolation<UserRole>> violations = validator.validate(ur);
+		Assertions.assertThat(violations.size()).isEqualTo(1);
+	}
+	
+	@Test
+	public void userRoleInvalidTypeTest() {
+		ur = new UserRole(1, null);
+		Validator validator = localValidatorFactory.getValidator();
+		Set<ConstraintViolation<UserRole>> violations = validator.validate(ur);
+		Assertions.assertThat(violations.size()).isEqualTo(1);
 	}
 }
