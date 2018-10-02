@@ -74,6 +74,19 @@ public class Car implements Identifiable, Linkable {
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */
+	public Car() {
+		super();
+	}
+	
+	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
+		super();
+		this.id = id;
+		this.owner = owner;
+		this.make = make;
+		this.model = model;
+		this.year = year;
+	}
+
 	@Override
 	public int getId() {
 		return id;
