@@ -28,11 +28,22 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	@Column(nullable = false, length = 20)
 	@NotEmpty
 	private String type;
-
+	
+	public ContactType() {
+		super();
+	}
+	
+	public ContactType(int id, @NotEmpty String type) {
+		super();
+		this.id = id;
+		this.type = type;
+	}
+	
 	@Override
 	public int getId() {
 		return id;
 	}
+
 
 	@Override
 	public void setId(int id) {
