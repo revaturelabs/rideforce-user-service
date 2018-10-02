@@ -39,6 +39,17 @@ public class Office implements Identifiable, Linkable {
 	@NotEmpty
 	private String address;
 
+	public Office() {
+		super();
+	}
+	
+	public Office(int id, @NotEmpty String name, @NotEmpty String address) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */

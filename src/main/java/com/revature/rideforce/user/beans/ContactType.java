@@ -39,6 +39,16 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	@NotEmpty
 	private String type;
 
+	public ContactType() {
+		super();
+	}
+	
+	public ContactType(int id, @NotEmpty String type) {
+		super();
+		this.id = id;
+		this.type = type;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */

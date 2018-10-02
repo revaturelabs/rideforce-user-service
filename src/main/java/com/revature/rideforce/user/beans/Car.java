@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -47,7 +48,9 @@ import com.revature.rideforce.user.json.UserLinkResolver;
  */
 @Entity
 public class Car implements Identifiable, Linkable {
+	
 	@Id
+	@Min(1)
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
 	@GeneratedValue(generator = "carid", strategy = GenerationType.SEQUENCE)
@@ -77,6 +80,7 @@ public class Car implements Identifiable, Linkable {
 	public Car() {
 		super();
 	}
+
 	
 	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
 		super();
