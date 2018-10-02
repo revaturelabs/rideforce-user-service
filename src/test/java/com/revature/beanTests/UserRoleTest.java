@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRole;
 
 public class UserRoleTest {
