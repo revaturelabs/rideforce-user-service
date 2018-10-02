@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -26,7 +27,9 @@ import com.revature.rideforce.user.json.Linkable;
 @Entity
 @Table(name = "CONTACT_INFO")
 public class ContactInfo implements Identifiable, Linkable {
+	
 	@Id
+	@Min(1)
 	@Column(name = "CONTACT_INFO_ID")
 	@SequenceGenerator(name = "contactinfoid", sequenceName = "contactinfoid")
 	@GeneratedValue(generator = "contactinfoid", strategy = GenerationType.SEQUENCE)
@@ -48,6 +51,21 @@ public class ContactInfo implements Identifiable, Linkable {
 	@Column(length = 100)
 	@NotEmpty
 	private String info;
+	
+	
+
+	public ContactInfo() {
+		super();
+	}
+
+	public ContactInfo(@Min(1) int id, @NotNull @Valid User user, @NotNull @Valid ContactType type,
+			@NotEmpty String info) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.type = type;
+		this.info = info;
+	}
 
 	@Override
 	public int getId() {
