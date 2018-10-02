@@ -34,7 +34,7 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 	public UserRole() {
 		super();
 	}
-	
+
 
 	public UserRole(int id, @NotEmpty String type) {
 		super();
