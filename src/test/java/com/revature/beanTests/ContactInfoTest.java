@@ -22,8 +22,6 @@ import com.revature.rideforce.user.beans.UserRole;
 public class ContactInfoTest {
 	
 	private LocalValidatorFactoryBean localValidatorFactory;
-	private User user;
-	
 	
 	@Before
 	public void setupValidatorFactory () {

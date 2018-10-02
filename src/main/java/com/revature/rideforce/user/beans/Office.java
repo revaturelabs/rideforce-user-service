@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,7 +17,9 @@ import com.revature.rideforce.user.json.Linkable;
 
 @Entity
 public class Office implements Identifiable, Linkable {
+	
 	@Id
+	@Min(1)
 	@Column(name = "OFFICE_ID")
 	@SequenceGenerator(name = "officeid", sequenceName = "officeid")
 	@GeneratedValue(generator = "officeid", strategy = GenerationType.SEQUENCE)
