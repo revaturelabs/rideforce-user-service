@@ -18,6 +18,13 @@ public class CarTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
 	
+	@Before
+	public void setupValidatorFactory () {
+		localValidatorFactory = new LocalValidatorFactoryBean();
+		localValidatorFactory.setProviderClass(HibernateValidator.class);
+		localValidatorFactory.afterPropertiesSet();
+	}
+	
 	@Test
 	public void testCreationOfAValidCar() {
 		Car car = new Car(101, new User(), "Honda", "Accord", 2001);
@@ -26,13 +33,6 @@ public class CarTest {
 		Assertions.assertThat(car.getModel()).isEqualTo("Accord");
 		Assertions.assertThat(car.getYear()).isEqualTo(2001);
 		Assertions.assertThat(car.getOwner()).isNotNull();
-	}
-	
-	@Before
-	public void setupValidatorFactory () {
-		localValidatorFactory = new LocalValidatorFactoryBean();
-		localValidatorFactory.setProviderClass(HibernateValidator.class);
-		localValidatorFactory.afterPropertiesSet();
 	}
 	
 	@Test
