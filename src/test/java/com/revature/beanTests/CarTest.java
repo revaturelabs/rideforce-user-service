@@ -33,7 +33,7 @@ public class CarTest {
 	@Test
 	public void testValidatorWorksOnAValidCar() {
 		Validator validator = localValidatorFactory.getValidator();
-        Set<ConstraintViolation<Car>> violations = validator.validate(member);
+//        Set<ConstraintViolation<Car>> violations = validator.validate(car);
         
 	}
 	
