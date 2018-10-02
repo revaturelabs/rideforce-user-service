@@ -1,9 +1,28 @@
 package com.revature.rideforce.user.beans;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class UserRegistrationInfo {
+	@Valid
+	@NotNull
 	private User user;
+	@NotEmpty
 	private String password;
+	@NotEmpty
 	private String registrationKey;
+	
+	public UserRegistrationInfo() {
+		super();
+	}
+
+	public UserRegistrationInfo(@NotEmpty User user, @NotEmpty String password, @NotEmpty String registrationKey) {
+		super();
+		this.user = user;
+		this.password = password;
+		this.registrationKey = registrationKey;
+	}
 
 	public User getUser() {
 		return user;
