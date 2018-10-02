@@ -16,6 +16,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.revature.rideforce.user.json.EnumLike;
 import com.revature.rideforce.user.json.Linkable;
 
+/** Class that describes the type of the contact
+ * <br> Used as a member variable of the class ContactInfo.<p>
+ * <strong>Member Variables:</strong><br>
+ * int id <br>
+ * String type
+ * @see com.revature.rideforce.user.beans.ContactInfo ContactInfo
+ * @author clpeng
+ * @since Iteration 1: 10/01/2018
+ *
+ */
 @Entity
 @Table(name = "CONTACT_TYPE")
 public class ContactType implements EnumLike, Identifiable, Linkable {
@@ -29,29 +39,47 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	@NotEmpty
 	private String type;
 
+	/* (non-Javadoc)
+	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
+	 */
 	@Override
 	public int getId() {
 		return id;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.revature.rideforce.user.beans.Identifiable#setId(int)
+	 */
 	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**gets the type of the object, which will always be capitalized
+	 * @return <code>String</code> type of the object
+	 */
 	public String getType() {
 		return type.toUpperCase();
 	}
 
+	/**sets the type of the object, which will always be capitalized
+	 * @param type the String object that will be ContactType.type's new value
+	 */
 	public void setType(String type) {
 		this.type = type.toUpperCase();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.revature.rideforce.user.json.EnumLike#toEnumString()
+	 */
 	@Override
 	public String toEnumString() {
 		return type.toUpperCase();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,11 +89,17 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.revature.rideforce.user.json.Linkable#toUri()
+	 */
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/contact-types/{id}").buildAndExpand(id).toUri();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

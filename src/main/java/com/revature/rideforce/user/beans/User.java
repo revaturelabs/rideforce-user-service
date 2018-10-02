@@ -39,6 +39,10 @@ import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
 
+/**
+ * @author clpeng
+ *
+ */
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails, Identifiable, Linkable {
