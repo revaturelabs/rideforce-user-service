@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,7 +30,9 @@ import com.revature.rideforce.user.json.Linkable;
 @Entity
 @Table(name = "CONTACT_TYPE")
 public class ContactType implements EnumLike, Identifiable, Linkable {
+	
 	@Id
+	@Min(1)
 	@Column(name = "CONTACT_TYPE_ID")
 	@SequenceGenerator(name = "contacttypeid", sequenceName = "contacttypeid")
 	@GeneratedValue(generator = "contacttypeid", strategy = GenerationType.SEQUENCE)
