@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,6 +53,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Min(1)
 	@Column(name = "USER_ID")
 	@SequenceGenerator(name = "userid", sequenceName = "userid")
 	@GeneratedValue(generator = "userid", strategy = GenerationType.SEQUENCE)
@@ -71,6 +73,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 
 	@JsonIgnore
 	@Column(nullable = false, length = 70)
+	@NotEmpty
 	private String password;
 
 	@Column(length = 200)
