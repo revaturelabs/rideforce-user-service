@@ -16,6 +16,20 @@ public class PasswordChangeRequest {
 	@JsonProperty("new")
 	@NotEmpty
 	private String newPassword;
+	
+	
+
+	public PasswordChangeRequest() {
+		super();
+	}
+	
+	public PasswordChangeRequest(@NotEmpty String oldPassword, @NotEmpty String newPassword) {
+		super();
+		this.oldPassword = oldPassword;
+		this.newPassword = newPassword;
+	}
+
+
 
 	public String getOldPassword() {
 		return oldPassword;

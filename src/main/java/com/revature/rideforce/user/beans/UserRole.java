@@ -33,9 +33,8 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 	
 	public UserRole() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	
+
 
 	public UserRole(int id, @NotEmpty String type) {
 		super();
