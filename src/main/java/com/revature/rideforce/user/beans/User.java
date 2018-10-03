@@ -40,10 +40,12 @@ import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
 
 /**
+
   Encapsulates state information of the end user. 
 
 
   */
+
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails, Identifiable, Linkable {
@@ -121,6 +123,32 @@ public class User implements UserDetails, Identifiable, Linkable {
 	@Valid
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
+	
+	public User() {
+		super();
+	}
+
+	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
+			@Size(max = 200) String photoUrl, @Size(max = 200) String bio, boolean active,
+			@NotNull @Valid UserRole role, @NotNull @Valid Office office, @NotEmpty String address, Date batchEnd,
+			@NotNull @Valid Set<Car> cars, String venmo, @NotNull @Valid Set<ContactInfo> contactInfo) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.photoUrl = photoUrl;
+		this.bio = bio;
+		this.active = active;
+		this.role = role;
+		this.office = office;
+		this.address = address;
+		this.batchEnd = batchEnd;
+		this.cars = cars;
+		this.venmo = venmo;
+		this.contactInfo = contactInfo;
+	}
 
 	@Override
 	public int getId() {

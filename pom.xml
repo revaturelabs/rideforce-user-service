@@ -133,8 +133,10 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc7</artifactId>
-			<version>11.2.0</version>
+			<version>11.2.0</version>                  <!-- FIXME just for now heheh ;) not sure how to get the previous ojdbc version -->
+			<!--   <version>12.1.0</version>    -->
 		</dependency>
+		
 	</dependencies>
 
 	<build>
