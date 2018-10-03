@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdValueInstantiator;
  * A {@link BeanDeserializerModifier} that looks for {@link JsonLink}
  * annotations and marks corresponding fields for conversion using the
  * {@link LinkDeserializer}.
+ * @since Iteration1: 10/01/2018
  */
 public class LinkDeserializerModifier extends BeanDeserializerModifier {
 	private ApplicationContext context;
