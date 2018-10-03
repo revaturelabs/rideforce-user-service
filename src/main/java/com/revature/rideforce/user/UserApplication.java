@@ -45,6 +45,11 @@ public class UserApplication implements InitializingBean {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	/**
+	 * Just starts the Spring Application
+	 * @param 	args 		String[]
+	 * @throws 	Exception 	will just throw any exception I guess
+	 */
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(UserApplication.class, args);
 	}

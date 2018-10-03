@@ -32,7 +32,10 @@ public class UserCredentials {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+/**
+  Gets information about this object's state
+  @return string containing ["email=" <code>email</code>, "password"= <code>password</code>]
+  */
 	@Override
 	public String toString() {
 		return "UserCredentials [email=" + email + ", password=" + password + "]";

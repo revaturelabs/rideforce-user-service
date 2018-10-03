@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,12 +40,20 @@ import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
 
+/**
+
+  Encapsulates state information of the end user. 
+
+
+  */
+
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails, Identifiable, Linkable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Min(1)
 	@Column(name = "USER_ID")
 	@SequenceGenerator(name = "userid", sequenceName = "userid")
 	@GeneratedValue(generator = "userid", strategy = GenerationType.SEQUENCE)
@@ -64,6 +73,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 
 	@JsonIgnore
 	@Column(nullable = false, length = 70)
+	@NotEmpty
 	private String password;
 
 	@Column(length = 200)
@@ -74,6 +84,9 @@ public class User implements UserDetails, Identifiable, Linkable {
 	@Size(max = 200)
 	private String bio;
 
+  /**
+    indicates if a 
+    */
 	private boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -113,6 +126,32 @@ public class User implements UserDetails, Identifiable, Linkable {
 	@Valid
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
+	
+	public User() {
+		super();
+	}
+
+	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
+			@Size(max = 200) String photoUrl, @Size(max = 200) String bio, boolean active,
+			@NotNull @Valid UserRole role, @NotNull @Valid Office office, @NotEmpty String address, Date batchEnd,
+			@NotNull @Valid Set<Car> cars, String venmo, @NotNull @Valid Set<ContactInfo> contactInfo) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.photoUrl = photoUrl;
+		this.bio = bio;
+		this.active = active;
+		this.role = role;
+		this.office = office;
+		this.address = address;
+		this.batchEnd = batchEnd;
+		this.cars = cars;
+		this.venmo = venmo;
+		this.contactInfo = contactInfo;
+	}
 
 	@Override
 	public int getId() {
@@ -277,6 +316,9 @@ public class User implements UserDetails, Identifiable, Linkable {
 		this.contactInfo = contactInfo;
 	}
 
+  /**
+    @return endpoint where this <code>User</code>'s information can be accessed
+    */
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();

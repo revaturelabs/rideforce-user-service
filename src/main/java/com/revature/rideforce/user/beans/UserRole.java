@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,6 +21,7 @@ import com.revature.rideforce.user.json.Linkable;
 @Table(name = "ROLE")
 public class UserRole implements EnumLike, Identifiable, Linkable {
 	@Id
+	@Min(1)
 	@Column(name = "ROLE_ID")
 	@SequenceGenerator(name = "roleid", sequenceName = "roleid")
 	@GeneratedValue(generator = "roleid", strategy = GenerationType.SEQUENCE)
@@ -28,6 +30,18 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 	@Column(nullable = false, length = 30)
 	@NotEmpty
 	private String type;
+	
+	public UserRole() {
+		super();
+	}
+
+
+	public UserRole(int id, @NotEmpty String type) {
+		super();
+		this.id = id;
+		this.type = type;
+	}
+
 
 	@Override
 	public int getId() {
