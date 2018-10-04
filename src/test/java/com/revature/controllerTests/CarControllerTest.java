@@ -1,48 +1,54 @@
 package com.revature.controllerTests;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.revature.rideforce.user.UserApplication;
-import com.revature.rideforce.user.controllers.CarController;
-import com.revature.rideforce.user.services.CarService;
-
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-////@ContextConfiguration(classes=UserApplication.class)
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
-@WebMvcTest(controllers = CarController.class)
-//@EnableWebMvc
-//@AutoConfigureMockMvc
+@AutoConfigureMockMvc
 public class CarControllerTest {
-
-    @Autowired
+	
+	@Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private CarService carService;
-
-
-    @Test
-    public void loggedOutUserCannotAccessSecureEndpoint() throws Exception {
-        mockMvc.perform(get("/cars")).andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void fourIsFour() {
-        Assertions.assertThat(4).isEqualTo(4);
-    }
-
+	
+	@Test
+	public void loggedOutUserCannotGetAccessSecureEndpoint() throws Exception {
+		this.mockMvc.perform(get("/cars")).andExpect(status().isForbidden());
+	}
+	
+	@Test
+	public void loggedOutUserCannotGetIdAccessSecureEndpoint() throws Exception {
+		this.mockMvc.perform(get("/cars/1")).andExpect(status().isForbidden());
+	}
+	
+	@Test
+	public void loggedOutUserCannotPostAccessSecureEndpoint() throws Exception {
+		this.mockMvc.perform(post("/cars")).andExpect(status().isForbidden());
+	}
+	
+	@Test
+	public void loggedOutUserCannotPutAccessSecureEndpoint() throws Exception {
+		this.mockMvc.perform(put("/cars/1")).andExpect(status().isForbidden());
+	}
+	
+	@Test
+	public void loggedOutUserCannotDeleteAccessSecureEndpoint() throws Exception {
+		this.mockMvc.perform(delete("/cars/1")).andExpect(status().isForbidden());
+	}
+	
+	
 }
