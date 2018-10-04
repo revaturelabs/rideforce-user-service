@@ -62,10 +62,10 @@ public class ContactInfo implements Identifiable, Linkable {
 	@NotEmpty
 	private String info;
 	
-	
-
 	public ContactInfo() {
 		super();
+		this.user = new User();
+		this.type = new ContactType();
 	}
 
 	public ContactInfo(@Min(1) int id, @NotNull @Valid User user, @NotNull @Valid ContactType type,

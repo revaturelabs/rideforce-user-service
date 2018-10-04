@@ -129,6 +129,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 	
 	public User() {
 		super();
+		this.role = new UserRole();
 	}
 
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,

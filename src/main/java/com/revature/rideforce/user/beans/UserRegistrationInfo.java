@@ -15,6 +15,7 @@ public class UserRegistrationInfo {
 	
 	public UserRegistrationInfo() {
 		super();
+		this.user = new User();
 	}
 
 	public UserRegistrationInfo(@NotEmpty User user, @NotEmpty String password, @NotEmpty String registrationKey) {
