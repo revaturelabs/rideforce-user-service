@@ -10,6 +10,9 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.CarRepository;
 
+/**
+  Service to check permissions of a user's car management
+  */
 @Service
 public class CarService extends CrudService<Car> {
 	private CarRepository carRepository;
@@ -28,13 +31,24 @@ public class CarService extends CrudService<Car> {
 		return carRepository.findByOwner(owner);
 	}
 
+  /**
+    Checks if user can add a car 
+    @param User
+    @param Car
+    @return true if user is admin or owner of car
+    */
 	@Override
 	protected boolean canAdd(User user, Car obj) {
 		// Users can only add cars for themselves, except admins who can add
 		// cars to any user.
 		return user != null && (user.isAdmin() || user.getId() == obj.getOwner().getId());
 	}
-
+  /**
+    Checks if user can save a car 
+    @param User
+    @param Car
+    @return true if user is admin or owner
+    */
 	@Override
 	protected boolean canSave(User user, Car obj) {
 		// Users can only save cars for themselves, except admins who can save
