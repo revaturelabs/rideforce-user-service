@@ -24,6 +24,7 @@ public class UserControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	// Current build allows anyone to get request all users, this should be changed to be more secure
 	@Test
 	public void loggedOutUserCanGetUsers() throws Exception {
 		this.mockMvc.perform(get("/users")).andExpect(status().isOk());
@@ -36,7 +37,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void loggedOutUserCannotPostUsers() throws Exception {
-		this.mockMvc.perform(post("/users")).andExpect(status().isForbidden());
+		this.mockMvc.perform(post("/users")).andExpect(status().isUnsupportedMediaType());
 	}
 	
 	@Test
@@ -46,7 +47,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void loggedOutUserCannotPutUsers() throws Exception {
-		this.mockMvc.perform(put("/users")).andExpect(status().isUnsupportedMediaType());
+		this.mockMvc.perform(put("/users")).andExpect(status().isForbidden());
 	}
 	
 	@Test
@@ -62,5 +63,57 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserCannotDeleteUsersById() throws Exception {
 		this.mockMvc.perform(delete("/users/1")).andExpect(status().isForbidden());
+	}
+	
+	// Logged out user get requests permissions may be security concern
+	@Test
+	public void loggedOutUserCanGetByEmail() throws Exception {
+		this.mockMvc.perform(get("/users?email=admin@revature.com")).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void loggedOutUserCanGetByEmptyEmail() throws Exception {
+		this.mockMvc.perform(get("/users?email=")).andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void loggedOutUserCanGetByInvalidEmail() throws Exception {
+		this.mockMvc.perform(get("/users?email=test")).andExpect(status().isNotFound());
+	}
+	
+	// Logged out user get requests permissions may be security concern
+	@Test
+	public void loggedOutUserCanGetByOfficeIdAndRole() throws Exception {
+		this.mockMvc.perform(get("/users?office=1&role=ADMIN")).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void loggedOutUserBadRequestByEmptyOfficeIdAndEmptyRole() throws Exception {
+		this.mockMvc.perform(get("/users?office=&role=")).andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void loggedOutUserBadRequestByEmptyOfficeIdAndValidRole() throws Exception {
+		this.mockMvc.perform(get("/users?office=&role=ADMIN")).andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void loggedOutUserNotFoundByValidOfficeIdAndEmptyRole() throws Exception {
+		this.mockMvc.perform(get("/users?office=1&role=")).andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void loggedOutUserCanGetByValidId() throws Exception {
+		this.mockMvc.perform(get("/users/1")).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void loggedOutUserNotFoundGetByInvalidId() throws Exception {
+		this.mockMvc.perform(get("/users/-1")).andExpect(status().isNotFound());
+	}
+	
+	@Test
+	public void loggedOutUserBadRequestGetByStringId() throws Exception {
+		this.mockMvc.perform(get("/users/a")).andExpect(status().isBadRequest());
 	}
 }
