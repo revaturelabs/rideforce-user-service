@@ -77,4 +77,11 @@ public class PasswordChangeRequest {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "PasswordChangeRequest [oldPassword=" + oldPassword + ", newPassword=" + newPassword + "]";
+	}
+	
+	
 }
