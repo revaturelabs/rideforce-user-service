@@ -49,7 +49,10 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	public List<T> findAll() throws PermissionDeniedException {
 		if (!canFindAll()) {
-			throw new PermissionDeniedException("Permission denied to find all objects.");
+      String msg = "Permission denied to find all objects";
+      log.info(msg + " for user: ");
+      log.info(authenticationService.getCurrentUser.toString());
+			throw new PermissionDeniedException();
 		}
 		return repository.findAll();
 	}
@@ -139,7 +142,6 @@ public abstract class CrudService<T extends Identifiable> {
 	 * @return whether the given user is allowed to retrieve a list of all objects
 	 */
 	protected boolean canFindAll(User user) {
-    logger.info(user.toString());
 		return user != null;
 	}
 

@@ -90,7 +90,7 @@ public class UserService extends CrudService<User> {
 		}
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepository.save(user);
-    logger.info("user saved");
+    logger.info("updated user: " + user.toString());
 	}
 
 	/* (non-Javadoc)

@@ -51,7 +51,6 @@ public class UserController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findAll() {
 		try {
-      logger.info("Finding all users");
 			return ResponseEntity.ok(userService.findAll());
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
