@@ -41,9 +41,12 @@ import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
 
 /**
- * @author clpeng
- *
- */
+
+  Encapsulates state information of the end user. 
+
+
+  */
+
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails, Identifiable, Linkable {
@@ -81,6 +84,9 @@ public class User implements UserDetails, Identifiable, Linkable {
 	@Size(max = 200)
 	private String bio;
 
+  /**
+    indicates if a 
+    */
 	private boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -310,6 +316,9 @@ public class User implements UserDetails, Identifiable, Linkable {
 		this.contactInfo = contactInfo;
 	}
 
+  /**
+    @return endpoint where this <code>User</code>'s information can be accessed
+    */
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.revature.rideforce.user.UserApplication;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
@@ -63,6 +65,5 @@ public class UserRoleControllerTest {
 	public void loggedOutUserCannotDeleteRoleById() throws Exception {
 		this.mockMvc.perform(delete("/roles/1")).andExpect(status().isForbidden());
 	}
-	
 	
 }
