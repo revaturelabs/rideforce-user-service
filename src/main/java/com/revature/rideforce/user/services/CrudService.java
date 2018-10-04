@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.User;
@@ -21,6 +23,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @param <T> the type of object on which this service acts
  */
 public abstract class CrudService<T extends Identifiable> {
+  private final static Logger logger = LoggerFactory.getLogger(CrudService.class);
 	@Autowired
 	protected AuthenticationService authenticationService;
 
@@ -135,6 +138,7 @@ public abstract class CrudService<T extends Identifiable> {
 	 * @return whether the given user is allowed to retrieve a list of all objects
 	 */
 	protected boolean canFindAll(User user) {
+    logger.info(user.toString());
 		return user != null;
 	}
 

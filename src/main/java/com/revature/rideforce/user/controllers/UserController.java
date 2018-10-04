@@ -51,6 +51,7 @@ public class UserController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findAll() {
 		try {
+      logger.info("Finding all users");
 			return ResponseEntity.ok(userService.findAll());
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
@@ -61,6 +62,7 @@ public class UserController {
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		try {
 			User user = userService.findByEmail(email);
+
 			return user == null ? new ResponseError("User with email " + email + " does not exist.")
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
