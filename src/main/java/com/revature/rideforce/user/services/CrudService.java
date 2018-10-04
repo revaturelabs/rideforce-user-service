@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.User;
@@ -22,6 +24,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @since Iteration1 10/01/2018
  */
 public abstract class CrudService<T extends Identifiable> {
+  private final static Logger logger = LoggerFactory.getLogger(CrudService.class);
 	@Autowired
 	protected AuthenticationService authenticationService;
 
@@ -46,7 +49,10 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	public List<T> findAll() throws PermissionDeniedException {
 		if (!canFindAll()) {
-			throw new PermissionDeniedException("Permission denied to find all objects.");
+      String msg = "Permission denied to find all objects";
+      log.info(msg + " for user: ");
+      log.info(authenticationService.getCurrentUser.toString());
+			throw new PermissionDeniedException();
 		}
 		return repository.findAll();
 	}
