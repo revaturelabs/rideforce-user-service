@@ -20,11 +20,19 @@ public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T>
 
 	private EnumLikeResolver<T> resolver;
 
+	
+	/**Constructor for EnumLikeDeserializer class
+	 * @param valueType <code>JavaType</code> for its super class' constructor 
+	 * @param resolver provide the <code>EnumLikeResolver</code> interface's instance class 
+	 */
 	public EnumLikeDeserializer(JavaType valueType, EnumLikeResolver<T> resolver) {
 		super(valueType);
 		this.resolver = resolver;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
+	 */
 	@Override
 	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		return resolver.resolve(p.getValueAsString());
