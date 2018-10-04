@@ -102,10 +102,6 @@ public class UserControllerTest {
 		this.mockMvc.perform(get("/users?office=1&role=")).andExpect(status().isBadRequest());
 	}
 	
-	@Test
-	public void loggedOutUserCanGetByValidId() throws Exception {
-		this.mockMvc.perform(get("/users/1")).andExpect(status().isOk());
-	}
 	
 	@Test
 	public void loggedOutUserNotFoundGetByInvalidId() throws Exception {
