@@ -29,11 +29,24 @@ public class UserTest {
         localValidatorFactory = new LocalValidatorFactoryBean();
         localValidatorFactory.setProviderClass(HibernateValidator.class);
         localValidatorFactory.afterPropertiesSet();
+        u = new User();
+		u.setId(100);
+		u.setFirstName("first");
+		u.setLastName("last");
+		u.setEmail("j@gmail.com");
+		u.setPassword("password");
+		u.setPhotoUrl("test.jpg");
+		u.setAddress("5125 Ven Ln.");
+		u.setBatchEnd(Date.valueOf("2018-11-01"));
+		u.setOffice(new Office());
+		u.setCars(new HashSet<Car>());
+		u.setContactInfo(new HashSet<ContactInfo>());
+		u.setVenmo("venmo");
     }
 	
 	@Test
 	public void validUserTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -47,7 +60,7 @@ public class UserTest {
 	
 	@Test
 	public void invalidUserIdTest() {
-		u = new User(0, "first", "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setId(0);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -61,21 +74,7 @@ public class UserTest {
 	
 	@Test
 	public void emptyUserFirstNameTest() {
-		u = new User(100, "", "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
-	}
-	
-	@Test
-	public void nullUserFirstNameTest() {
-		u = new User(100, null, "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setFirstName("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -89,7 +88,7 @@ public class UserTest {
 	
 	@Test
 	public void emptyUserLastNameTest() {
-		u = new User(100, "first", "", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setLastName("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -101,37 +100,9 @@ public class UserTest {
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
 
-	@Test
-	public void nullUserLastNameTest() {
-		u = new User(100, "first", null, "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
-	}
-	
 	@Test
 	public void emptyUserEmailTest() {
-		u = new User(100, "first", "last", "", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
-	}
-
-	@Test
-	public void nullUserEmailTest() {
-		u = new User(100, "first", "last", null, "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setEmail("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -145,21 +116,7 @@ public class UserTest {
 	
 	@Test
 	public void emptyUserPasswordTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
-	}
-	
-	@Test
-	public void nullUserPasswordTest() {
-		u = new User(100, "first", "last", "j@gmail.com", null, "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setPassword("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -173,7 +130,7 @@ public class UserTest {
 	
 	@Test
 	public void nullUserRoleTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "password", "test.jpg", "bio", true, null, new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setRole(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -187,7 +144,7 @@ public class UserTest {
 	
 	@Test
 	public void nullUserOfficeTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "password", "test.jpg", "bio", true, new UserRole(), null, "home", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setOffice(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -201,7 +158,7 @@ public class UserTest {
 	
 	@Test
 	public void emptyUserAddressTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "password", "test.jpg", "bio", true, new UserRole(), new Office(), "", new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
+		u.setAddress("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -213,23 +170,11 @@ public class UserTest {
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
-	@Test
-	public void nullUserAddressTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "password", "test.jpg", "bio", true, new UserRole(), new Office(), null, new Date(2018), new HashSet<Car>(), "venmo", new HashSet<ContactInfo>());
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
-	}
+
 	
 	@Test
 	public void nullUserCarsTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), null, "venmo", new HashSet<ContactInfo>());
+		u.setCars(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		
@@ -243,7 +188,7 @@ public class UserTest {
 	
 	@Test
 	public void nullUserContactInfoTest() {
-		u = new User(100, "first", "last", "j@gmail.com", "pass", "test.jpg", "bio", true, new UserRole(), new Office(), "home", new Date(2018), new HashSet<Car>(), "venmo", null);
+		u.setContactInfo(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
 		

@@ -79,6 +79,7 @@ public class Car implements Identifiable, Linkable {
 	 */
 	public Car() {
 		super();
+		this.owner = new User();
 	}
 
 	

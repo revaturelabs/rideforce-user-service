@@ -39,7 +39,7 @@ public class ContactInfoTest {
 		
 		for(ConstraintViolation<ContactInfo> v : violations) {
 			String propertyPath = v.getPropertyPath().toString();
-			System.out.println(propertyPath);
+			
 			if(propertyPath.contains("contactInfo.")) {
 				counter++;
 			}
