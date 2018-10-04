@@ -23,6 +23,15 @@ public class LinkWriter extends BeanPropertyWriter {
 		super(writer);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.fasterxml.jackson.databind.ser.BeanPropertyWriter#serializeAsField(java.lang.Object, com.fasterxml.jackson.core.JsonGenerator, com.fasterxml.jackson.databind.SerializerProvider)
+	 */
+	/**
+	 * Method called to access property that this bean stands for, from within given bean, and to serialize it as a JSON Object field using appropriate serializer.
+	 * <p>Changes the field/member object in question to a url link, then serializes the url into json(for display in the controller view's response body) 
+	 * @since Iteration1: 10/01/2018
+	 * @author clpeng
+	 */
 	@Override
 	public void serializeAsField(Object bean, JsonGenerator gen, SerializerProvider prov) throws Exception {
 		// The bean to be linked.
