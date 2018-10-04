@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
@@ -16,6 +18,7 @@ import com.revature.rideforce.user.repository.UserRepository;
 
 @Service
 public class UserService extends CrudService<User> {
+  private final static Logger logger = LoggerFactory.getLogger(UserService.class);
 	private UserRepository userRepository;
 	
 	@Autowired
@@ -54,6 +57,7 @@ public class UserService extends CrudService<User> {
 		}
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepository.save(user);
+    logger.info("user saved");
 	}
 
 	@Override
