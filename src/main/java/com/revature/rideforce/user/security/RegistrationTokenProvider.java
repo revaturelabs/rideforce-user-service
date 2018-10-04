@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * A provider for registration tokens, which can be used to create a new user.
+ * @since Iteration1 10/01/2018
  */
 @Service
 public class RegistrationTokenProvider extends JwtProvider {

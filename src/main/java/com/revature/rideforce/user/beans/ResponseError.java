@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
  * The error type that is returned in conjunction with an HTTP error status.
- * 
+ * <p>
  * This class is meant to be very easy to use in conjunction with controller
  * methods. For example, the code snippet below shows how one might use a
  * ResponseError in a controller method returning a

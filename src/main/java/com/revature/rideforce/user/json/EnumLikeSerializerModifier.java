@@ -12,8 +12,12 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
  * A {@link BeanSerializerModifier} that looks for {@link EnumLike} annotations
  * and marks any such fields for conversion to values using the
  * {@link EnumLikeWriter}.
+ * @since Iteration1: 10/01/2018
  */
 public class EnumLikeSerializerModifier extends BeanSerializerModifier {
+	/* (non-Javadoc)
+	 * @see com.fasterxml.jackson.databind.ser.BeanSerializerModifier#changeProperties(com.fasterxml.jackson.databind.SerializationConfig, com.fasterxml.jackson.databind.BeanDescription, java.util.List)
+	 */
 	@Override
 	public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc,
 			List<BeanPropertyWriter> beanProperties) {
