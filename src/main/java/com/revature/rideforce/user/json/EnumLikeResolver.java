@@ -5,6 +5,7 @@ package com.revature.rideforce.user.json;
  * instances of an {@link EnumLike} class.
  * 
  * @param <T> the type to which string values are resolved
+ * @since Iteration1: 10/01/2018
  */
 public interface EnumLikeResolver<T extends EnumLike> {
 	/**
