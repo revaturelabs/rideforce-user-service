@@ -30,9 +30,17 @@ public class OfficeService extends CrudService<Office> {
 		return true;
 	}
 	
+
+  /**
+    checks if User has permission to find the {@code Office}
+    @param User
+    @param Office
+    */
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.services.CrudService#canFindOne(com.revature.rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
 	 */
+
 	@Override
 	protected boolean canFindOne(User user, Office obj) {
 		return true;

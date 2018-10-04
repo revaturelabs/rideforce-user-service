@@ -32,12 +32,14 @@ public class UserRoleService extends CrudService<UserRole> {
 		this.userRoleRepository = userRoleRepository;
 	}
 
+
 	/**
 	 * verifies whether or not the user has access to the type, then finds the correct {@linkplain UserRole} from the database based on it
 	 * @param type <code>String</code> type of user to be searched for in the db. 
 	 * @return the found {@linkplain UserRole} from the inputted type
 	 * @throws PermissionDeniedException
 	 */
+
 	public UserRole findByType(String type) throws PermissionDeniedException {
 		UserRole found = userRoleRepository.findByTypeIgnoreCase(type);
 		if (!canFindOne(found)) {
@@ -45,6 +47,12 @@ public class UserRoleService extends CrudService<UserRole> {
 		}
 		return found;
 	}
+
+  /**
+    Exception that is thrown if attempt to persist duplicate UserRole
+    @param UserRole
+    @throws EntityConflictException
+    */
 
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.services.CrudService#throwOnConflict(com.revature.rideforce.user.beans.Identifiable)
@@ -57,17 +65,32 @@ public class UserRoleService extends CrudService<UserRole> {
 		}
 	}
 	
+
+  /**
+    Checks if User has permission to search for UserRoles. 
+    @param User
+    @return boolean true for now
+    */
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.services.CrudService#canFindAll(com.revature.rideforce.user.beans.User)
 	 */
+
 	@Override
 	protected boolean canFindAll(User user) {
 		return true;
 	}
 	
+  /**
+    Checks if User has permission to search for a UserRole
+    @param User
+    @return boolean true for now
+    */
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.services.CrudService#canFindOne(com.revature.rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
 	 */
+
 	@Override
 	protected boolean canFindOne(User user, UserRole obj) {
 		return true;
