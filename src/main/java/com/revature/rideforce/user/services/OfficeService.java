@@ -19,6 +19,11 @@ public class OfficeService extends CrudService<Office> {
 		return true;
 	}
 	
+  /**
+    checks if User has permission to find the {@code Office}
+    @param User
+    @param Office
+    */
 	@Override
 	protected boolean canFindOne(User user, Office obj) {
 		return true;

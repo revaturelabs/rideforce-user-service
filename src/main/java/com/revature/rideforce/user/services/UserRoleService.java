@@ -23,6 +23,12 @@ public class UserRoleService extends CrudService<UserRole> {
 		this.userRoleRepository = userRoleRepository;
 	}
 
+  /**
+    Searches for UserRose by type String 
+    @param String type to search repository
+    @throws PermissionDeniedException if user has no permission to view the UserRole
+    @return UserRole
+    */
 	public UserRole findByType(String type) throws PermissionDeniedException {
 		UserRole found = userRoleRepository.findByTypeIgnoreCase(type);
 		if (!canFindOne(found)) {
@@ -31,6 +37,11 @@ public class UserRoleService extends CrudService<UserRole> {
 		return found;
 	}
 
+  /**
+    Exception that is thrown if attempt to persist duplicate UserRole
+    @param UserRole
+    @throws EntityConflictException
+    */
 	@Override
 	protected void throwOnConflict(UserRole obj) throws EntityConflictException {
 		UserRole existing = userRoleRepository.findByTypeIgnoreCase(obj.getType());
@@ -39,11 +50,21 @@ public class UserRoleService extends CrudService<UserRole> {
 		}
 	}
 	
+  /**
+    Checks if User has permission to search for UserRoles. 
+    @param User
+    @return boolean true for now
+    */
 	@Override
 	protected boolean canFindAll(User user) {
 		return true;
 	}
 	
+  /**
+    Checks if User has permission to search for a UserRole
+    @param User
+    @return boolean true for now
+    */
 	@Override
 	protected boolean canFindOne(User user, UserRole obj) {
 		return true;
