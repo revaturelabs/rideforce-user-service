@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * The error type that is returned in conjunction with an HTTP error status.
  * <p>
@@ -25,6 +27,7 @@ import org.springframework.http.ResponseEntity;
  * </pre>
  */
 public class ResponseError {
+  private final static Logger logger = LoggerFactory.getLogger(ResponseError.class);
 	/**
 	 * The primary message describing the error.
 	 */
@@ -80,6 +83,7 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
+		logger.info(getMessage());
 		return new ResponseEntity<>(this, status);
 	}
 
