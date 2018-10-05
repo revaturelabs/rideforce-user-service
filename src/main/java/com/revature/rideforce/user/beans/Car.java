@@ -79,6 +79,7 @@ public class Car implements Identifiable, Linkable {
 	 */
 	public Car() {
 		super();
+		this.owner = new User();
 	}
 
 	//adding this constructor because the ID for it is actually generated auto...so even if u set it to 1, it'll be like 802...
