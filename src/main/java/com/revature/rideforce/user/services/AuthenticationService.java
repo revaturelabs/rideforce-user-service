@@ -1,4 +1,5 @@
 package com.revature.rideforce.user.services;
+import java.lang.invoke.MethodHandles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,7 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
  */
 @Service
 public class AuthenticationService {
-  private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
