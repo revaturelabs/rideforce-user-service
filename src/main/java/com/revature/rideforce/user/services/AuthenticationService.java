@@ -5,6 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
@@ -23,6 +25,7 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
  */
 @Service
 public class AuthenticationService {
+  private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -49,6 +52,9 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
+    logger.info("Authenticating user credentials");
+    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
+    logger.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
