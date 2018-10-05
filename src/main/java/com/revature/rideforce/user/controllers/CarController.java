@@ -18,5 +18,7 @@ public class CarController extends CrudController<Car> {
 	@Autowired
 	public CarController(CarService carService) {
 		super(carService);
+    logger.debug("CarController object created with CarService");
+    logger.debug("/cars endpoint reached");
 	}
 }
