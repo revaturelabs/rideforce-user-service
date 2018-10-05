@@ -35,6 +35,7 @@ public class UserRegistrationInfoTest {
 	@Test
 	public void allNullUserRegInfo() {
 		uri = new UserRegistrationInfo();
+		uri.setUser(null);
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<UserRegistrationInfo>> violations = validator.validate(uri);
 		Assertions.assertThat(violations.size()).isEqualTo(3);

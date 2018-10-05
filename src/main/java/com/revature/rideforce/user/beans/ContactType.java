@@ -91,18 +91,6 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	}
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((type == null) ? 0 : type.toUpperCase().hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.json.Linkable#toUri()
 	 */
 	@Override
@@ -113,6 +101,21 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+
+	@Override
+	public String toString() {
+		return "ContactType [id=" + id + ", type=" + type + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -127,8 +130,10 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 		if (type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!type.equalsIgnoreCase(other.type))
+		} else if (!type.equals(other.type))
 			return false;
 		return true;
 	}
+	
+	
 }

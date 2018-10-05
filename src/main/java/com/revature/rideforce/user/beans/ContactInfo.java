@@ -62,10 +62,10 @@ public class ContactInfo implements Identifiable, Linkable {
 	@NotEmpty
 	private String info;
 	
-	
-
 	public ContactInfo() {
 		super();
+		this.user = new User();
+		this.type = new ContactType();
 	}
 
 	public ContactInfo(@Min(1) int id, @NotNull @Valid User user, @NotNull @Valid ContactType type,
@@ -145,4 +145,51 @@ public class ContactInfo implements Identifiable, Linkable {
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/contact-info/{id}").buildAndExpand(id).toUri();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContactInfo other = (ContactInfo) obj;
+		if (id != other.id)
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ContactInfo [id=" + id + ", user=" + user + ", type=" + type + ", info=" + info + "]";
+	}
+	
+	
 }
