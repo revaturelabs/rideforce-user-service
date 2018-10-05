@@ -23,7 +23,7 @@ import com.revature.rideforce.user.beans.ResponseError;
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-	private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
+	final static Logger logger = LoggerFactory.getLogger(ErrorController.class);
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);

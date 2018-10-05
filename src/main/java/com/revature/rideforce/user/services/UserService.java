@@ -28,7 +28,7 @@ import com.revature.rideforce.user.repository.UserRoleRepository;
  */
 @Service
 public class UserService extends CrudService<User> {
-  private final static Logger logger = LoggerFactory.getLogger(UserService.class);
+  final static Logger logger = LoggerFactory.getLogger(UserService.class);
 	private UserRepository userRepository;
 	
 	@Autowired
@@ -42,6 +42,8 @@ public class UserService extends CrudService<User> {
 	public UserService(UserRepository userRepository) {
 		super(userRepository);
 		this.userRepository = userRepository;
+    logger.info("UserService created");
+    logger.debug("UserService.userRepository initialized to: {}", userRepository);
 	}
 
 	/**
@@ -51,7 +53,10 @@ public class UserService extends CrudService<User> {
 	 * @throws PermissionDeniedException
 	 */
 	public User findByEmail(String email) throws PermissionDeniedException {
+    logger.info("Attempting to retrieve user by email from userRepository");
+    logger.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);
+    logger.info("User {} found", found.toString());
 		if (!canFindOne(found)) {
 			throw new PermissionDeniedException("Permission denied to get user by email.");
 		}

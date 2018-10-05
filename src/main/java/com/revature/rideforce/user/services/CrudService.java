@@ -24,7 +24,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @since Iteration1 10/01/2018
  */
 public abstract class CrudService<T extends Identifiable> {
-  private final static Logger logger = LoggerFactory.getLogger(CrudService.class);
+  final static Logger logger = LoggerFactory.getLogger(CrudService.class);
 	@Autowired
 	protected AuthenticationService authenticationService;
 

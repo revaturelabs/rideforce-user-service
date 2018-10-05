@@ -25,7 +25,7 @@ import com.revature.rideforce.user.services.CrudService;
  * method implementations.
  */
 public abstract class CrudController<T extends Identifiable & Linkable> {
-  Logger logger = LoggerFactory.getLogger(CrudController.class);
+  final static Logger logger = LoggerFactory.getLogger(CrudController.class);
 	protected CrudService<T> service;
 
 	/**

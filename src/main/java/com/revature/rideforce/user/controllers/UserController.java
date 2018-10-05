@@ -35,7 +35,7 @@ import com.revature.rideforce.user.services.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-  Logger logger = LoggerFactory.getLogger(UserController.class);
+  final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	UserService userService;
 

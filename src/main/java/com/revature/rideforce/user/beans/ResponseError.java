@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class ResponseError {
-  private final static Logger logger = LoggerFactory.getLogger(ResponseError.class);
+  final static Logger logger = LoggerFactory.getLogger(ResponseError.class);
 	/**
 	 * The primary message describing the error.
 	 */
