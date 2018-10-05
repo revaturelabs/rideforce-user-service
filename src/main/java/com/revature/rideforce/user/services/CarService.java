@@ -23,6 +23,12 @@ public class CarService extends CrudService<Car> {
 		this.carRepository = carRepository;
 	}
 
+	/**
+	 * get the list of cars a specific user owns
+	 * @param owner the {@linkplain User} to be searched up
+	 * @return the List of Car objects belonging to a user
+	 * @throws PermissionDeniedException
+	 */
 	public List<Car> findByOwner(User owner) throws PermissionDeniedException {
 		// Make this more restrictive if necessary.
 		if (!canFindAll()) {
@@ -33,8 +39,8 @@ public class CarService extends CrudService<Car> {
 
   /**
     Checks if user can add a car 
-    @param User
-    @param Car
+    @param User the owner that is trying to access the cars
+    @param Car  the car object whose recorded user must be checked against the user trying to access
     @return true if user is admin or owner of car
     */
 	@Override

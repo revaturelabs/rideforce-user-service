@@ -53,12 +53,12 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
-    logger.info("Authenticating user credentials");
-    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
-    logger.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
+		logger.info("Authenticating user credentials");
+	    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
+	    logger.debug("credentials.password: {} ", credentials.getPassword());
 		if (!passwordEncoder.matches(credentials.getPassword(), found.getPassword())) {
 			throw new InvalidCredentialsException();
 		}
@@ -105,17 +105,15 @@ public class AuthenticationService {
 	 *         {@link SecurityContextHolder}
 	 */
 	public User getCurrentUser() {
-		logger.info("Getting current user from Authentication");
+	    logger.info("Getting current user from Authentication");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-    logger.debug("Authentication value: {}", auth);
-
+	    logger.debug("Authentication value: {}", auth.toString());
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
-			logger.debug("User is null"); 
-			return null;
+	      logger.debug("User is null");
+	      return null;
 		}
-    
+	    
 		logger.debug("User authenticated successfully");
-		return (User) auth.getPrincipal();
+			return (User) auth.getPrincipal();
 	}
 }
