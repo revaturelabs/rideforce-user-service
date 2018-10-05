@@ -54,13 +54,18 @@ public class UserService extends CrudService<User> {
 	 * @throws PermissionDeniedException
 	 */
 	public User findByEmail(String email) throws PermissionDeniedException {
-    logger.info("Attempting to retrieve user by email from userRepository");
-    logger.debug("User email: {}", email);
+		logger.info("Attempting to retrieve user by email from userRepository");
+		logger.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);
-    logger.info("User {} found", found.toString());
+		
+		if(found != null) {
+			logger.info("User {} found", found.toString());
+		}
+		
 		if (!canFindOne(found)) {
 			throw new PermissionDeniedException("Permission denied to get user by email.");
 		}
+		
 		return userRepository.findByEmail(email);
 	}
 
