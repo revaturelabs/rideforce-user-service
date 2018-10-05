@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,7 +50,7 @@ import com.revature.rideforce.user.json.UserRoleResolver;
 
 @Entity
 @Table(name = "USERS")
-public class User implements UserDetails, Identifiable, Linkable {
+public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -127,28 +128,7 @@ public class User implements UserDetails, Identifiable, Linkable {
 	public User() {
 		super();
 		this.role = new UserRole();
-	}
-
-	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
-			@Size(max = 200) String photoUrl, @Size(max = 200) String bio, boolean active,
-			@NotNull @Valid UserRole role, @NotNull @Valid Office office, @NotEmpty String address, Date batchEnd,
-			@NotNull @Valid Set<Car> cars, String venmo, @NotNull @Valid Set<ContactInfo> contactInfo) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.photoUrl = photoUrl;
-		this.bio = bio;
-		this.active = active;
-		this.role = role;
-		this.office = office;
-		this.address = address;
-		this.batchEnd = batchEnd;
-		this.cars = cars;
-		this.venmo = venmo;
-		this.contactInfo = contactInfo;
+		this.office = new Office();
 	}
 
 	@Override

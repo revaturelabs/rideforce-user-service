@@ -1,10 +1,13 @@
 package com.revature.rideforce.user.services;
+import java.lang.invoke.MethodHandles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
@@ -18,11 +21,12 @@ import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
 /**
- * The service used to handle authentication (i.e. logging in, creating new
- * users, getting information about the current user).
+ * The service used to handle authentication, that is, logging in, creating new
+ * users, getting information about the current user.
  */
 @Service
 public class AuthenticationService {
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -49,6 +53,9 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
+    logger.info("Authenticating user credentials");
+    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
+    logger.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -77,9 +84,14 @@ public class AuthenticationService {
 			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
+      logger.info("Attempting to register user");
+      logger.debug(info.getRegistrationKey());
 			throw new InvalidRegistrationKeyException();
 		}
+    logger.info("User registered successfully");
+    logger.info("Hashing password");
 		String passwordHash = passwordEncoder.encode(info.getPassword());
+    logger.debug("passwordHash: {}", passwordHash);
 		info.getUser().setPassword(passwordHash);
 		return userService.add(info.getUser());
 	}
@@ -93,10 +105,14 @@ public class AuthenticationService {
 	 *         {@link SecurityContextHolder}
 	 */
 	public User getCurrentUser() {
+    logger.info("Getting current user from Authentication");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    logger.debug("Authentication value: {}", auth.toString());
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
+      logger.debug("User is null"); //TODO: split if statements
 			return null;
 		}
+    logger.debug("User authenticated successfully");
 		return (User) auth.getPrincipal();
 	}
 }

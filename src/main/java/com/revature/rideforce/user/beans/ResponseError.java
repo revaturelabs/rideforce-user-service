@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.beans;
 
 import java.util.Arrays;
+import java.lang.invoke.MethodHandles;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -27,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class ResponseError {
-  private final static Logger logger = LoggerFactory.getLogger(ResponseError.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
 	 * The primary message describing the error.
 	 */
@@ -83,8 +84,8 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
-    logger.info(getMessage());
-		return new ResponseEntity<ResponseError>(this, status);
+		logger.info(getMessage());
+		return new ResponseEntity<>(this, status);
 	}
 
 	public String getMessage() {

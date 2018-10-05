@@ -1,5 +1,7 @@
 package com.revature.rideforce.user.controllers;
 
+import java.lang.invoke.MethodHandles;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -35,7 +37,7 @@ import com.revature.rideforce.user.services.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-  Logger logger = LoggerFactory.getLogger(UserController.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	UserService userService;
 
