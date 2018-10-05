@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories("com.revature.ridefore.user.repositories") //access the beans that are repos
 @EnableTransactionManagement
-@ComponentScan("com.revature") //access beans in our base class
+@ComponentScan(basePackages = "com.revature"/*, excludeFilters=filterType.REGEX, pattern="com\\.revature\\.repository\\config\\.ProdRepoConfig")*/) //access beans in our base class
 public class TestConfiguration {
 	
 }
