@@ -4,21 +4,25 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.repository.CarRepository;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = UserApplication.class)
+@SpringBootTest//(classes = UserApplication.class)
+//@ContextConfiguration(classes = TestConfiguration.class)
 @Transactional
+//@DataJpaTest
 public class CarRepositoryTest {
 
+//	@Autowired
+//	private TestEntityManager entityManager;
 	@Autowired
 	private CarRepository repository;
 	@Autowired
