@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.controllers;
 
 import java.util.Map;
+import java.lang.invoke.MethodHandles;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,7 +24,7 @@ import com.revature.rideforce.user.beans.ResponseError;
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-	private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);
@@ -33,12 +34,12 @@ public class ErrorController extends AbstractErrorController {
 	public ResponseEntity<ResponseError> handleError(HttpServletRequest request) {
 		Map<String, Object> errorAttributes = getErrorAttributes(request, true);
 		if (getStatus(request) == HttpStatus.INTERNAL_SERVER_ERROR) {
-			log.error("Handling unexpected error with attributes " + errorAttributes);
+			logger.error("Handling unexpected error with attributes " + errorAttributes);
 		}
 		String message = (String) errorAttributes.get("message");
 		if (message == null) {
 			Throwable error = (Throwable) errorAttributes.get("trace");
-			log.error("Handling error due to exception.", error);
+			logger.error("Handling error due to exception.", error);
 			message = error == null ? "Internal server error." : error.getMessage();
 		}
 		return new ResponseError(message).toResponseEntity(getStatus(request));

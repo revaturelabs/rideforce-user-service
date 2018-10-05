@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.services;
 
 import java.util.List;
+import java.lang.invoke.MethodHandles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +25,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @since Iteration1 10/01/2018
  */
 public abstract class CrudService<T extends Identifiable> {
-  private final static Logger logger = LoggerFactory.getLogger(CrudService.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	protected AuthenticationService authenticationService;
 
