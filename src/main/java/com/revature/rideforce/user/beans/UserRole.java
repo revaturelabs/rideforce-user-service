@@ -98,4 +98,12 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 			return false;
 		return true;
 	}
+
+
+	@Override
+	public String toString() {
+		return "UserRole [id=" + id + ", type=" + type + "]";
+	}
+	
+	
 }

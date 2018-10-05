@@ -50,7 +50,6 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 				JavaType propType = prop.getType();
 				LinkDeserializer<? extends Linkable> valueDeserializer = new LinkDeserializer<>(prop.getType(),
 						resolver);
-				// TODO: add support for collection types other than Set.
 				if (propType.isCollectionLikeType()) {
 					// All of this nonsense is needed to create a deserializer
 					// for a set based on the deserializer for its values.
