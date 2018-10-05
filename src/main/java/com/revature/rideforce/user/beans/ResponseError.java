@@ -83,8 +83,8 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
-    logger.info(getMessage());
-		return new ResponseEntity<ResponseError>(this, status);
+		logger.info(getMessage());
+		return new ResponseEntity<>(this, status);
 	}
 
 	public String getMessage() {
