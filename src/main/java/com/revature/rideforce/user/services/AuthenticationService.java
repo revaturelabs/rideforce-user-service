@@ -18,8 +18,8 @@ import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
 /**
- * The service used to handle authentication (i.e. logging in, creating new
- * users, getting information about the current user).
+ * The service used to handle authentication, that is, logging in, creating new
+ * users, getting information about the current user.
  */
 @Service
 public class AuthenticationService {
