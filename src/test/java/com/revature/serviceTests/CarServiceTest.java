@@ -66,12 +66,10 @@ public class CarServiceTest {
     public void findByOwnerTest() throws PermissionDeniedException
     {
     	User owner = new User();
-    	
     	//setting a user as logged in so that the user has permission to see the cars
     	SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(owner, "", owner.getAuthorities()));
-    	
+
 		Assertions.assertThat( carService.findByOwner(owner) ).hasSize(2);
-		
 		SecurityContextHolder.getContext().setAuthentication(null);
 	
     }

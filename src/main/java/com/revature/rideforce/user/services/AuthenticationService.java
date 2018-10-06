@@ -53,9 +53,9 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
-    logger.info("Authenticating user credentials");
-    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
-    logger.debug("credentials.password: {} ", credentials.getPassword());
+	    logger.info("Authenticating user credentials");
+	    logger.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
+	    logger.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -84,14 +84,14 @@ public class AuthenticationService {
 			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
-      logger.info("Attempting to register user");
-      logger.debug(info.getRegistrationKey());
-			throw new InvalidRegistrationKeyException();
+	      logger.info("Attempting to register user");
+	      logger.debug(info.getRegistrationKey());
+	      throw new InvalidRegistrationKeyException();
 		}
-    logger.info("User registered successfully");
-    logger.info("Hashing password");
+	    logger.info("User registered successfully");
+	    logger.info("Hashing password");
 		String passwordHash = passwordEncoder.encode(info.getPassword());
-    logger.debug("passwordHash: {}", passwordHash);
+		logger.debug("passwordHash: {}", passwordHash);
 		info.getUser().setPassword(passwordHash);
 		return userService.add(info.getUser());
 	}
