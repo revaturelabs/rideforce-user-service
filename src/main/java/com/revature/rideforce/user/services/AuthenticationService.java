@@ -80,6 +80,9 @@ public class AuthenticationService {
 	 */
 	public User register(UserRegistrationInfo info)
 			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
+		if(info == null) {
+			throw new InvalidRegistrationKeyException();
+		}
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
       log.info("Attempting to register user");
@@ -90,6 +93,7 @@ public class AuthenticationService {
     log.info("Hashing password");
 		String passwordHash = passwordEncoder.encode(info.getPassword());
     log.debug("passwordHash: {}", passwordHash);
+
 		info.getUser().setPassword(passwordHash);
 		return userService.add(info.getUser());
 	}
