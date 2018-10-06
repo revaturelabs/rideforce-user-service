@@ -46,19 +46,21 @@ public class CarServiceTest {
     @Autowired
     private CarService carService;
     
+    @Autowired
+    private UserRepository userRepo;
+    
     @MockBean
     private CarRepository carRepository;
     
     @Before
     public void setUp()  //set up the mock repo's behavior
     {
-    	User owner = new User();
+    	User user = userRepo.getOne(1);
     	List<Car> list = new ArrayList<>();
-    	list.add( new Car(1, owner, "make", "model", 2012) );
-        list.add( new Car(2, owner, "honda", "civic", 2016) );
-        
-        //Mockito is imported from org.mockito :)
-        Mockito.when( carRepository.findByOwner(any(User.class)) )
+        list.add( new Car(1, user, "make", "model", 2012) );
+        list.add( new Car(2, user, "honda", "civic", 2016) );
+
+        Mockito.when( carRepository.findByOwner(user) )
           .thenReturn(list);
     }
     
@@ -70,7 +72,7 @@ public class CarServiceTest {
     	//setting a user as logged in so that the user has permission to see the cars
     	SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(owner, "", owner.getAuthorities()));
     	
-		Assertions.assertThat( carService.findByOwner(owner) ).hasSize(2);
+		Assertions.assertThat( carService.findByOwner(owner) ).isNotNull();
 		
 		SecurityContextHolder.getContext().setAuthentication(null);
 	
