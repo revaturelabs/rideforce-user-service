@@ -85,9 +85,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 200)
 	private String bio;
 
-  /**
-    indicates if a 
-    */
 	private boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)

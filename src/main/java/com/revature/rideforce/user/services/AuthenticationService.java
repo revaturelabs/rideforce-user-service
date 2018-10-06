@@ -108,7 +108,7 @@ public class AuthenticationService {
 		logger.info("Getting current user from Authentication");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    logger.debug("Authentication value: {}", auth);
+		logger.debug("Authentication value: {}", auth);
 
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
 			logger.debug("User is null"); 
