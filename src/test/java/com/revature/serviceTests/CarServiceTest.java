@@ -40,7 +40,7 @@ public class CarServiceTest {
     @Autowired
     private CarService carService;
     @Autowired
-    private UserRepository userRepo;   //not sure if we need this :(
+    private UserRepository userRepo;
     @MockBean
     private CarRepository carRepository;
     
@@ -48,26 +48,20 @@ public class CarServiceTest {
     public void setUp()  //set up the mock repo's behavior
     {
     	User user = userRepo.getOne(1);
-//    	User user = new User();
-//    	user.setId(1);
     	List<Car> list = new ArrayList<>();
         list.add( new Car(1, user, "make", "model", 2012) );
         list.add( new Car(2, user, "honda", "civic", 2016) );
-        
-        //Mockito is imported from org.mockito :)
+
         Mockito.when( carRepository.findByOwner(user) )
           .thenReturn(list);
     }
     
-    @Test
-    public void findByOwnerTest() 
+    @Test(expected = PermissionDeniedException.class)
+    public void findByOwnerTest() throws PermissionDeniedException 
     {
     	User user = userRepo.getOne(1);
-    	try {
-			Assertions.assertThat( carService.findByOwner(user) ).hasSize(2);
-		} catch (PermissionDeniedException e) {
-			e.printStackTrace();
-		}
+    	carService.findByOwner(user);
+
     }
     
 }

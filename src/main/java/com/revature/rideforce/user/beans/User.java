@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -70,6 +71,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Column(unique = true, nullable = false, length = 40)
 	@NotEmpty
+	@Email
 	private String email;
 
 	@JsonIgnore
