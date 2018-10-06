@@ -1,6 +1,7 @@
 package com.revature.serviceTests;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -12,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import static org.mockito.ArgumentMatchers.any;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.Car;
@@ -25,6 +30,7 @@ import com.revature.rideforce.user.services.CarService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class) //need this for the Application Context
+@Transactional
 public class CarServiceTest {
 //	https://www.baeldung.com/spring-boot-testing
 	@TestConfiguration                                    //<-- this section is for making sure the service bean isn't considered the same as
@@ -39,35 +45,35 @@ public class CarServiceTest {
  
     @Autowired
     private CarService carService;
-    @Autowired
-    private UserRepository userRepo;   //not sure if we need this :(
+    
     @MockBean
     private CarRepository carRepository;
     
     @Before
     public void setUp()  //set up the mock repo's behavior
     {
-    	User user = userRepo.getOne(1);
-//    	User user = new User();
-//    	user.setId(1);
+    	User owner = new User();
     	List<Car> list = new ArrayList<>();
-        list.add( new Car(1, user, "make", "model", 2012) );
-        list.add( new Car(2, user, "honda", "civic", 2016) );
+    	list.add( new Car(1, owner, "make", "model", 2012) );
+        list.add( new Car(2, owner, "honda", "civic", 2016) );
         
         //Mockito is imported from org.mockito :)
-        Mockito.when( carRepository.findByOwner(user) )
+        Mockito.when( carRepository.findByOwner(any(User.class)) )
           .thenReturn(list);
     }
     
-    @Test
-    public void findByOwnerTest() 
+    @Test 
+    public void findByOwnerTest() throws PermissionDeniedException
     {
-    	User user = userRepo.getOne(1);
-    	try {
-			Assertions.assertThat( carService.findByOwner(user) ).hasSize(2);
-		} catch (PermissionDeniedException e) {
-			e.printStackTrace();
-		}
+    	User owner = new User();
+    	
+    	//setting a user as logged in so that the user has permission to see the cars
+    	SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(owner, "", owner.getAuthorities()));
+    	
+		Assertions.assertThat( carService.findByOwner(owner) ).hasSize(2);
+		
+		SecurityContextHolder.getContext().setAuthentication(null);
+	
     }
     
 }

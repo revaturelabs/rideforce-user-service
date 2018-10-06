@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Jwt filter (for now that's all I know :(( )<p>
+ * JWT filter for getting tokens and setting the SecurityContextHolder, setting a user as logged in<p>
  * <strong>Member Variables</strong><br>
  * {@linkplain LoginTokenProvider} tokenProvider
  * @author clpeng
