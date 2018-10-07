@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.PasswordChangeRequest;
 import com.revature.rideforce.user.beans.ResponseError;
@@ -34,10 +34,10 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	UserService userService;
 
@@ -106,7 +106,7 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
-      logger.info("Received Registration in RequestBody: {}", registration);
+      log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
