@@ -34,7 +34,7 @@ public class ContactInfoLinkResolver implements LinkResolver<ContactInfo> {
 		try {
 			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/contact-info/{id}", link).get("id"));
 			return contactInfoRepository.findById(id);
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid contact info link.");
 		}
 	}
