@@ -38,7 +38,7 @@ public class CarLinkResolver implements LinkResolver<Car> {
 		try {
 			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/cars/{id}", link).get("id"));
 			return carRepository.findById(id);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			throw new IllegalArgumentException(link + " is not a valid car link.");
 		}
 	}

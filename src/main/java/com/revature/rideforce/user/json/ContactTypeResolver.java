@@ -27,6 +27,11 @@ public class ContactTypeResolver implements EnumLikeResolver<ContactType> {
 	 */
 	@Override
 	public ContactType resolve(String value) {
+		
+		if(value == null) {
+			throw new IllegalArgumentException(value + " is not a valid contact type.");
+		}
+		
 		ContactType type = contactTypeService.findByType(value);
 		if (type == null) {
 			throw new IllegalArgumentException(value + " is not a valid contact type.");
