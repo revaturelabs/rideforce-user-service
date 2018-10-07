@@ -19,6 +19,6 @@ public class CarController extends CrudController<Car> {
 	public CarController(CarService carService) {
 		super(carService);
     logger.debug("CarController object created with CarService");
-    logger.debug("/cars endpoint reached");
+    logger.info("/cars endpoint reached");
 	}
 }

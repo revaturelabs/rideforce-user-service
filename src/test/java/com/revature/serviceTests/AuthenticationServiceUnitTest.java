@@ -11,6 +11,8 @@ import static org.mockito.ArgumentMatchers.any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,21 +29,29 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.UserService;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=UserApplication.class)   
 public class AuthenticationServiceUnitTest {
-	
+  
 	private User user;
+  
 	private UserCredentials userCredentials;
+  
 	private UserRegistrationInfo registrationInfo;
+  
 	@Autowired
 	private RegistrationTokenProvider registrationTokenProvider;
+  
 	@Autowired
 	private AuthenticationService authenticationService;
+  
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+  
 	@MockBean
 	private UserRepository userRepo;
+  
 	@MockBean
 	private UserService userService;
 	
@@ -110,24 +120,30 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test
-	public void registerWithInvalidRegistrationKey()
+	public void registerWithInvalidRegistrationKeyTest()
 	{
 		registrationInfo = new UserRegistrationInfo(this.user, "pally", "badkey");
 		Throwable caughtException = Assertions.catchThrowable( () -> authenticationService.register(registrationInfo) );
 		Assertions.assertThat(caughtException).isInstanceOf(InvalidRegistrationKeyException.class);
 	}
 	
-	@Test
-	public void registerWithNullPassword() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
+	@Test(expected = NullPointerException.class)
+	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
 	{
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
-		Throwable caughtException = Assertions.catchThrowable(() -> authenticationService.register(registrationInfo));
-		Assertions.assertThat(caughtException).isInstanceOf(NullPointerException.class);
+		authenticationService.register(registrationInfo);
+	}
+
+	@Test
+	public void getCurrentUserTest()
+	{
+		//when no session, getCurrentUser should return nulll
+		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+		//now set session and should not be null anymore
+		user.setPassword("password");
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, "password", user.getAuthorities()));
+		Assertions.assertThat(authenticationService.getCurrentUser()).isInstanceOf(User.class).isNotNull().hasFieldOrPropertyWithValue("id", 1);
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 	
-	@Test
-	public void getCurrentUser()
-	{
-		
-	}
 }
