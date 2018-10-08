@@ -34,7 +34,7 @@ public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T>
 	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
 	 */
 	@Override
-	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		return resolver.resolve(p.getValueAsString());
 	}
 }

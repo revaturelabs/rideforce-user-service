@@ -29,29 +29,24 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.UserService;
 
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes=UserApplication.class)   
+@RunWith(SpringRunner.class)   //springRunner class is part of spring, and it's in junit4 folder...so I guess a class set asside for Junit tests
+								//RunWith annotation is from JUnit, and I guess it accepts that SpringRunner.class from spring
+@SpringBootTest(classes=UserApplication.class)   //this annotation comes from spring boot starter test context.....Application Context
 public class AuthenticationServiceUnitTest {
-  
+//	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException
+//	public User register(UserRegistrationInfo info)
+//	public User getCurrentUser()
 	private User user;
-  
 	private UserCredentials userCredentials;
-  
 	private UserRegistrationInfo registrationInfo;
-  
 	@Autowired
 	private RegistrationTokenProvider registrationTokenProvider;
-  
 	@Autowired
 	private AuthenticationService authenticationService;
-  
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-  
 	@MockBean
 	private UserRepository userRepo;
-  
 	@MockBean
 	private UserService userService;
 	
