@@ -169,7 +169,7 @@ public class Car implements Identifiable, Linkable {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.json.Linkable#toUri()
 	 */
