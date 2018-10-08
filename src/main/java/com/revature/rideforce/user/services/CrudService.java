@@ -135,7 +135,8 @@ public abstract class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the given user can retrieve a list of all objects. The
-	 * default implementation is to allow access to all logged-in users.
+	 * default implementation is to allow access to all logged-in users.<br>
+	 * This is only the helper method though, should always be used within - {@linkplain #canFindAll()}
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
 	 *             unauthenticated)

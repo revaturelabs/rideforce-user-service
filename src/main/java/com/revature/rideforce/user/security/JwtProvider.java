@@ -25,7 +25,7 @@ public abstract class JwtProvider implements InitializingBean {
 	private String secret;
 	private Algorithm algorithm;
 	private JWTVerifier verifier;
-
+	
 	/* (non-Javadoc)
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
