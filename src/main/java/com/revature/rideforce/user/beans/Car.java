@@ -50,7 +50,7 @@ import com.revature.rideforce.user.json.UserLinkResolver;
 public class Car implements Identifiable, Linkable {
 	
 	@Id
-//	@Min(1)
+	@Min(1)
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
 	@GeneratedValue(generator = "carid", strategy = GenerationType.SEQUENCE)
