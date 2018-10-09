@@ -1,7 +1,5 @@
 package com.revature.rideforce.user.controllers;
 
-import java.lang.invoke.MethodHandles;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
@@ -17,15 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import lombok.extern.slf4j.Slf4j;
+
 import com.revature.rideforce.user.beans.Office;
-import com.revature.rideforce.user.beans.PasswordChangeRequest;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
@@ -33,6 +29,8 @@ import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -117,8 +115,10 @@ public class UserController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody @Valid User user) {
-		user.setId(id);
+	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
+		User user = userService.findById(id);
+		changedUserModel.changeUser(user);
+		
 		try {
 			return ResponseEntity.ok(userService.save(user));
 		} catch (EntityConflictException e) {
@@ -127,19 +127,6 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
+	
 
-	@PutMapping(value = "/{id}/password", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<ResponseError> updatePassword(@PathVariable("id") int id,
-			@RequestBody @Valid PasswordChangeRequest request) {
-		try {
-			User found = userService.findById(id);
-			if (found == null) {
-				return new ResponseError("User not found.").toResponseEntity(HttpStatus.NOT_FOUND);
-			}
-			userService.updatePassword(found, request.getOldPassword(), request.getNewPassword());
-			return ResponseEntity.ok().build();
-		} catch (PermissionDeniedException e) {
-			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
-		}
-	}
 }
