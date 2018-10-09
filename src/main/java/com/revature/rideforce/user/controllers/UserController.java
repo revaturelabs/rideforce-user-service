@@ -106,7 +106,7 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
-      log.info("Received Registration in RequestBody: {}", registration);
+			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
