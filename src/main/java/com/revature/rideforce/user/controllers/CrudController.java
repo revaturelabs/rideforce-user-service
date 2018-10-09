@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.controllers;
 
 import javax.validation.Valid;
+import java.lang.invoke.MethodHandles;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.ResponseError;
@@ -23,6 +26,7 @@ import com.revature.rideforce.user.services.CrudService;
  * method implementations.
  */
 public abstract class CrudController<T extends Identifiable & Linkable> {
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
 
 	/**
@@ -58,6 +62,7 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		try {
+    logger.info("Finding Id: " + id);
 		T found = service.findById(id);
 		return found == null
 				? new ResponseError("Instance with ID " + id + " not found.").toResponseEntity(HttpStatus.NOT_FOUND)
