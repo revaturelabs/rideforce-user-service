@@ -21,10 +21,12 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.services.CrudService;
 
+import lombok.extern.slf4j.Slf4j;
 /**
  * An abstract base class for CRUD controllers that takes care of common CRUD
  * method implementations.
  */
+@Slf4j
 public abstract class CrudController<T extends Identifiable & Linkable> {
   final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
@@ -62,7 +64,7 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		try {
-    logger.info("Finding Id: " + id);
+    log.info("Finding Id: " + id);
 		T found = service.findById(id);
 		return found == null
 				? new ResponseError("Instance with ID " + id + " not found.").toResponseEntity(HttpStatus.NOT_FOUND)

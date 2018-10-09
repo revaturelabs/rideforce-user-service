@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * The error type that is returned in conjunction with an HTTP error status.
  * <p>
@@ -27,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * }
  * </pre>
  */
+@Slf4j
 public class ResponseError {
   final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
@@ -84,7 +87,7 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
-		logger.info(getMessage());
+		log.info(getMessage());
 		return new ResponseEntity<>(this, status);
 	}
 

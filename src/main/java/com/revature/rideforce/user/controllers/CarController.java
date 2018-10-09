@@ -7,18 +7,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.services.CarService;
 
+import lombok.extern.slf4j.Slf4j;
 /**
  * 
  * responsible for intercepting the http request methods at the /cars endpoint
  * @author clpeng
  */
+
+@Slf4j
 @RestController
 @RequestMapping("/cars")
 public class CarController extends CrudController<Car> {
 	@Autowired
 	public CarController(CarService carService) {
 		super(carService);
-    logger.debug("CarController object created with CarService");
-    logger.info("/cars endpoint reached");
+    log.debug("CarController object created with CarService");
+    log.info("/cars endpoint reached");
 	}
 }
