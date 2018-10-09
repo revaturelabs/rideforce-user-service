@@ -1,7 +1,6 @@
 package com.revature.rideforce.user.beans;
 
 import java.util.Arrays;
-import java.lang.invoke.MethodHandles;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -9,11 +8,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 /**
  * The error type that is returned in conjunction with an HTTP error status.
- * <p>
+ * 
  * This class is meant to be very easy to use in conjunction with controller
  * methods. For example, the code snippet below shows how one might use a
  * ResponseError in a controller method returning a
@@ -28,7 +25,6 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class ResponseError {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
 	 * The primary message describing the error.
 	 */
@@ -84,8 +80,7 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
-		logger.info(getMessage());
-		return new ResponseEntity<>(this, status);
+		return new ResponseEntity<ResponseError>(this, status);
 	}
 
 	public String getMessage() {

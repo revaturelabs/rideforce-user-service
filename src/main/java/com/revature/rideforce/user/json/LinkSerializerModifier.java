@@ -11,12 +11,7 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 /**
  * A {@link BeanSerializerModifier} that looks for {@link JsonLink} annotations
  * and marks any such fields for conversion to links using the
- * {@link LinkWriter}.<p>
- * eg. say putting @JsonLink over User class' member field of Car list. Then that field is to be converted to a link
- * rather than pojo.
- * Allows for storing of less pojos and more accessing from database 
- * @since Iteration1: 10/01/2018
- * @author Iteration1, clpeng
+ * {@link LinkWriter}.
  */
 public class LinkSerializerModifier extends BeanSerializerModifier {
 	@Override
