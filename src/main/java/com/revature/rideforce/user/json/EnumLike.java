@@ -14,8 +14,6 @@ package com.revature.rideforce.user.json;
  * Implementors of this interface should also override {@link Object#hashCode()
  * hashCode} and {@link Object#equals(Object) equals} so that different objects
  * representing the same value should be treated as equal.
- * 
- * @since Iteration1: 10/01/2018
  */
 public interface EnumLike {
 	/**

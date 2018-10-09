@@ -7,14 +7,6 @@ import org.springframework.util.AntPathMatcher;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.repository.UserRepository;
 
-/**
- * Service layer class that returns the correct {@link User} object from a given link url. <p>
- * <strong>Members:</strong><br>
- * {@link org.springframework.util.AntPathMatcher AntPathMatcher} matcher - singleton path matcher<br>
- * {@link UserRepository} userRepository
- * @author clpeng
- * @since Iteration1: 10/01/2018
- */
 @Service
 public class UserLinkResolver implements LinkResolver<User> {
 	private static final AntPathMatcher matcher = new AntPathMatcher();
@@ -22,9 +14,6 @@ public class UserLinkResolver implements LinkResolver<User> {
 	@Autowired
 	private UserRepository userRepository;
 
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.json.LinkResolver#resolve(java.lang.String)
-	 */
 	@Override
 	public User resolve(String link) {
 		try {

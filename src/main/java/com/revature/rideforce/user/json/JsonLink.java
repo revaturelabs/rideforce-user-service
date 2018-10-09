@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
  * 
  * This annotation can also be applied to a collection of object values to
  * represent each item in the collection as a link.
- * @since Iteration1: 10/01/2018
  */
 @Retention(RUNTIME)
 @Target(FIELD)

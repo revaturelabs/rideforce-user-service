@@ -16,7 +16,6 @@ import com.revature.rideforce.user.repository.UserRepository;
  * A class for generating and parsing JSON Web Tokens.
  * 
  * @author Ian Johnson, Vien Ly
- * @since Iteration1 10/01/2018
  */
 @Service
 public class LoginTokenProvider extends JwtProvider {

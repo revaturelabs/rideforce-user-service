@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideforce.user.beans.Office;
+import com.revature.rideforce.user.beans.PasswordChangeRequest;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
-import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
@@ -30,9 +30,6 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -61,7 +58,6 @@ public class UserController {
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		try {
 			User user = userService.findByEmail(email);
-
 			return user == null ? new ResponseError("User with email " + email + " does not exist.")
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
@@ -104,7 +100,6 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
-      log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
@@ -115,10 +110,8 @@ public class UserController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
-		User user = userService.findById(id);
-		changedUserModel.changeUser(user);
-		
+	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody @Valid User user) {
+		user.setId(id);
 		try {
 			return ResponseEntity.ok(userService.save(user));
 		} catch (EntityConflictException e) {
@@ -127,6 +120,19 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
-	
 
+	@PutMapping(value = "/{id}/password", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<ResponseError> updatePassword(@PathVariable("id") int id,
+			@RequestBody @Valid PasswordChangeRequest request) {
+		try {
+			User found = userService.findById(id);
+			if (found == null) {
+				return new ResponseError("User not found.").toResponseEntity(HttpStatus.NOT_FOUND);
+			}
+			userService.updatePassword(found, request.getOldPassword(), request.getNewPassword());
+			return ResponseEntity.ok().build();
+		} catch (PermissionDeniedException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		}
+	}
 }
