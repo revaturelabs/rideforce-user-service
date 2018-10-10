@@ -17,6 +17,7 @@ import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.repository.UserRoleRepository;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * inherits methods from {@linkplain CrudService} but adds methods more specific to the {@linkplain User} model 
@@ -27,6 +28,7 @@ import com.revature.rideforce.user.repository.UserRoleRepository;
  * @author clpeng
  * @since Iteration1 10/01/2018
  */
+@Slf4j
 @Service
 public class UserService extends CrudService<User> {
   final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -43,8 +45,8 @@ public class UserService extends CrudService<User> {
 	public UserService(UserRepository userRepository) {
 		super(userRepository);
 		this.userRepository = userRepository;
-    logger.info("UserService created");
-    logger.debug("UserService.userRepository initialized to: {}", userRepository);
+    log.info("UserService created");
+    log.debug("UserService.userRepository initialized to: {}", userRepository);
 	}
 
 	/**
@@ -54,11 +56,11 @@ public class UserService extends CrudService<User> {
 	 * @throws PermissionDeniedException
 	 */
 	public User findByEmail(String email) throws PermissionDeniedException {
-		logger.info("Attempting to retrieve user by email from userRepository");
-		logger.debug("User email: {}", email);
+		log.info("Attempting to retrieve user by email from userRepository");
+		log.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);
 
-    logger.info("User {} found", found);
+    log.info("User {} found", found);
 
 		if (!canFindOne(found)) {
 			throw new PermissionDeniedException("Permission denied to get user by email.");
@@ -99,7 +101,7 @@ public class UserService extends CrudService<User> {
 		}
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepository.save(user);
-    logger.info("updated user: " + user);
+    log.info("updated user: " + user);
 	}
 
 	/* (non-Javadoc)

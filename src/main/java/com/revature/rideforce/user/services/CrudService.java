@@ -13,6 +13,7 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.controllers.CrudController;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An abstract class implementing the basic methods of a CRUD service. The
@@ -24,6 +25,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @param <T> the type of object on which this service acts
  * @since Iteration1 10/01/2018
  */
+@Slf4j
 public abstract class CrudService<T extends Identifiable> {
   final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
@@ -51,7 +53,7 @@ public abstract class CrudService<T extends Identifiable> {
 	public List<T> findAll() throws PermissionDeniedException {
 		if (!canFindAll()) {
       String msg = "Permission denied to find all objects";
-      logger.info("User found by authenticationService.getCurrentUser(): {}", authenticationService.getCurrentUser());
+      log.info("User found by authenticationService.getCurrentUser(): {}", authenticationService.getCurrentUser());
 			throw new PermissionDeniedException(msg);
 		}
 		return repository.findAll();

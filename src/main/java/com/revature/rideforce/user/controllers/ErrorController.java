@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.revature.rideforce.user.beans.ResponseError;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
@@ -34,12 +37,12 @@ public class ErrorController extends AbstractErrorController {
 	public ResponseEntity<ResponseError> handleError(HttpServletRequest request) {
 		Map<String, Object> errorAttributes = getErrorAttributes(request, true);
 		if (getStatus(request) == HttpStatus.INTERNAL_SERVER_ERROR) {
-			logger.error("Handling unexpected error with attributes " + errorAttributes);
+			log.error("Handling unexpected error with attributes " + errorAttributes);
 		}
 		String message = (String) errorAttributes.get("message");
 		if (message == null) {
 			Throwable error = (Throwable) errorAttributes.get("trace");
-			logger.error("Handling error due to exception.", error);
+			log.error("Handling error due to exception.", error);
 			message = error == null ? "Internal server error." : error.getMessage();
 		}
 		return new ResponseError(message).toResponseEntity(getStatus(request));
