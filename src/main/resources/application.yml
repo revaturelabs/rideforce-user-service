@@ -11,8 +11,7 @@ spring:
     driver-class-name: oracle.jdbc.driver.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: validate
-
+      ddl-auto: update
 eureka:
   client:
     service-url:
