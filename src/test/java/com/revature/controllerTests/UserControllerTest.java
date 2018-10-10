@@ -112,4 +112,10 @@ public class UserControllerTest {
 	public void loggedOutUserBadRequestGetByStringId() throws Exception {
 		this.mockMvc.perform(get("/users/a")).andExpect(status().isBadRequest());
 	}
+	
+	@Test
+	public void loggedOutUserFindByWeirdCaseEmailShouldWork() throws Exception
+	{ 							//so to put parameters in get request url, it's a ? not a /   !!!!
+		this.mockMvc.perform(get("/users?email=adMIN@REVature.com")).andExpect(status().is2xxSuccessful());
+	}
 }
