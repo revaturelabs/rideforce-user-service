@@ -107,6 +107,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@NotEmpty
 	private String address;
 
+//	@Column(nullable = false)
+//	@NotEmpty
+//	private 
+	
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
