@@ -35,6 +35,7 @@ public class LoginController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> login(@RequestBody @Valid UserCredentials credentials) {
 		try {
+			credentials.setEmail(credentials.getEmail().toLowerCase());  //email case shouldnt matter during login
 			return ResponseEntity.ok('"' + authenticationService.authenticate(credentials) + '"');
 		} catch (InvalidCredentialsException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);

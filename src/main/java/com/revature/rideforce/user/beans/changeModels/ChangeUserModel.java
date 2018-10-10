@@ -18,6 +18,7 @@ public class ChangeUserModel {
 	private Office office;
 	private Date batchEnd;
 	private UserRole role;
+	private Boolean active;
 	
 	public int getId() {
 		return id;
@@ -82,15 +83,7 @@ public class ChangeUserModel {
 	public void setBatchEnd(Date batchEnd) {
 		this.batchEnd = batchEnd;
 	}
-	
-	public String getPassword() {
-		return password;
-	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
 	public UserRole getRole() {
 		return role;
 	}
@@ -99,6 +92,21 @@ public class ChangeUserModel {
 		this.role = role;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
+
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -183,7 +191,7 @@ public class ChangeUserModel {
 		if(lastName != null)
 			original.setLastName(lastName);
 		if(email != null)
-			original.setEmail(email);
+			original.setEmail(email.toLowerCase());
 		if(photoUrl != null)
 			original.setPhotoUrl(photoUrl);
 		if(address != null)
@@ -194,6 +202,8 @@ public class ChangeUserModel {
 			original.setBatchEnd(batchEnd);
 		if(role != null)
 			original.setRole(role);
+		if(active != null)
+			original.setActive(active);
 		if(password != null)
 			original.setPassword(password);
 	}
