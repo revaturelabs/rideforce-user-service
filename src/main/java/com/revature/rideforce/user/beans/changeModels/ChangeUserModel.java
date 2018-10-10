@@ -16,6 +16,7 @@ public class ChangeUserModel {
 	private String photoUrl;
 	private String address;
 	private Office office;
+	private Date startTime;
 	private Date batchEnd;
 	private UserRole role;
 	private Boolean active;
@@ -107,75 +108,13 @@ public class ChangeUserModel {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-    
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((office == null) ? 0 : office.hashCode());
-		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		return result;
+	
+	public Date getStartTime() {
+		return startTime;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ChangeUserModel other = (ChangeUserModel) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (batchEnd == null) {
-			if (other.batchEnd != null)
-				return false;
-		} else if (!batchEnd.equals(other.batchEnd))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id != other.id)
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (office == null) {
-			if (other.office != null)
-				return false;
-		} else if (!office.equals(other.office))
-			return false;
-		if (photoUrl == null) {
-			if (other.photoUrl != null)
-				return false;
-		} else if (!photoUrl.equals(other.photoUrl))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		return true;
+	
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
 	@Override
@@ -207,6 +146,8 @@ public class ChangeUserModel {
 			original.setActive(active);
 		if(password != null)
 			original.setPassword(password);
+		if(startTime != null)
+			original.setStartTime(startTime);
 	}
 	
 	

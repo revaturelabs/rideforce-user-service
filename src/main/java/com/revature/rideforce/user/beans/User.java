@@ -107,6 +107,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@NotEmpty
 	private String address;
 
+	@Column()
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	private Date startTime;    			//when the class starts every day
+	
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
@@ -231,6 +236,14 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.venmo = venmo;
 	}
 
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
 	@JsonIgnore
 	public boolean isAdmin() {
 		return getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase("admin")).findAny()
@@ -304,28 +317,29 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
 
-@Override
-public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + (active ? 1231 : 1237);
-	result = prime * result + ((address == null) ? 0 : address.hashCode());
-	result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
-	result = prime * result + ((bio == null) ? 0 : bio.hashCode());
-	result = prime * result + ((cars == null) ? 0 : cars.hashCode());
-	result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-	result = prime * result + id;
-	result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-	result = prime * result + ((office == null) ? 0 : office.hashCode());
-	result = prime * result + ((password == null) ? 0 : password.hashCode());
-	result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
-	result = prime * result + ((role == null) ? 0 : role.hashCode());
-	result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
-	return result;
-}
-
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (active ? 1231 : 1237);
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((cars == null) ? 0 : cars.hashCode());
+		result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((office == null) ? 0 : office.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
+		return result;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -399,6 +413,11 @@ public int hashCode() {
 				return false;
 		} else if (!role.equals(other.role))
 			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
+				return false;
+		} else if (!startTime.equals(other.startTime))
+			return false;
 		if (venmo == null) {
 			if (other.venmo != null)
 				return false;
@@ -410,10 +429,11 @@ public int hashCode() {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active + ", role=" + role
-			+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars + ", venmo="
-			+ venmo + ", contactInfo=" + contactInfo + "]";
+				+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active + ", role=" + role
+				+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
+				+ ", cars=" + cars + ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
 	}
+
 	
 	
 }
