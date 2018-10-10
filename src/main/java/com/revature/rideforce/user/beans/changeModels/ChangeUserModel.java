@@ -83,7 +83,7 @@ public class ChangeUserModel {
 	public void setBatchEnd(Date batchEnd) {
 		this.batchEnd = batchEnd;
 	}
-	
+
 	public UserRole getRole() {
 		return role;
 	}
@@ -106,7 +106,7 @@ public class ChangeUserModel {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;
