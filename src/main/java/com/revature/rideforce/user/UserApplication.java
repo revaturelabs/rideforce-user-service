@@ -1,5 +1,6 @@
 package com.revature.rideforce.user;
 
+import java.sql.Date;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -94,6 +95,7 @@ public class UserApplication implements InitializingBean {
 			admin.setActive(true);
 			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
 			admin.setPassword(passwordEncoder.encode("password"));
+//			admin.setStartTime(new Date(0, 0, 0));
 			userRepository.save(admin);
 		}
 	}
