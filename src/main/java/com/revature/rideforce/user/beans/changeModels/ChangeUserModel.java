@@ -98,6 +98,7 @@ public class ChangeUserModel {
 	
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
 
     public String getPassword() {
 		return password;
