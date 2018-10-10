@@ -87,7 +87,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 200)
 	private String bio;
 
-	private boolean active;
+	private boolean active = true; //default 
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
@@ -183,7 +183,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.photoUrl = photoURL;
 	}
 
-	public boolean isActive() {
+	public boolean isActive() {  //getter..... lol bad naming
 		return active;
 	}
 

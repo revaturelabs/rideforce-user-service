@@ -115,7 +115,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void loggedOutUserFindByWeirdCaseEmailShouldWork() throws Exception
-	{
+	{ 							//so to put parameters in get request url, it's a ? not a /   !!!!
 		this.mockMvc.perform(get("/users?email=adMIN@REVature.com")).andExpect(status().is2xxSuccessful());
 	}
 }
