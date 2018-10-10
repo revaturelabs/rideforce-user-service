@@ -53,7 +53,7 @@ public class UserService extends CrudService<User> {
 	 * @return {@link User} that email belongs to
 	 * @throws PermissionDeniedException
 	 */
-	public User findByEmail(String email) throws PermissionDeniedException {
+	public User findByEmail(String email) throws PermissionDeniedException { 	//will already be lower cased cuz we save them as lowercase in db
 		logger.info("Attempting to retrieve user by email from userRepository");
 		logger.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);

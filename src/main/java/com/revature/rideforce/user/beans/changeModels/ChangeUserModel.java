@@ -176,7 +176,7 @@ public class ChangeUserModel {
 		if(lastName != null)
 			original.setLastName(lastName);
 		if(email != null)
-			original.setEmail(email);
+			original.setEmail(email.toLowerCase());
 		if(photoUrl != null)
 			original.setPhotoUrl(photoUrl);
 		if(address != null)

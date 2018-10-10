@@ -46,4 +46,13 @@ public class LoginControllerTest {
 		this.mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(userCredJson)).andExpect(status().isForbidden());
 	}
 	
+	@Test
+	public void validUserCredentialDifferentCaseEmailShouldntMatterTest() throws Exception {
+		UserCredentials userCred = new UserCredentials("adMIN@revATure.com", "password");
+		//turn object into JSON string for the body
+		ObjectMapper om = new ObjectMapper();
+		String userCredJson = om.writeValueAsString(userCred);
+		this.mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(userCredJson)).andExpect(status().is2xxSuccessful()); //expect 200 status code from response
+	}
+	
 }
