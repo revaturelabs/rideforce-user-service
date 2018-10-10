@@ -11,6 +11,7 @@ public class ChangeUserModel {
 	private int id;
 	private String firstName;
 	private String lastName;
+	private String password;
 	private String email;
 	private String photoUrl;
 	private String address;
@@ -88,6 +89,14 @@ public class ChangeUserModel {
 	
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
@@ -169,8 +178,6 @@ public class ChangeUserModel {
 	
 	public void changeUser(User original)
 	{
-//		
-//		private String firstName;
 		if(firstName != null)
 			original.setFirstName(firstName);
 		if(lastName != null)
@@ -187,6 +194,8 @@ public class ChangeUserModel {
 			original.setBatchEnd(batchEnd);
 		if(role != null)
 			original.setRole(role);
+		if(password != null)
+			original.setPassword(password);
 	}
 	
 	
