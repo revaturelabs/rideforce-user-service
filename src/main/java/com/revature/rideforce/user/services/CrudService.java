@@ -1,12 +1,9 @@
 package com.revature.rideforce.user.services;
 
 import java.util.List;
-import java.lang.invoke.MethodHandles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.User;
@@ -23,11 +20,9 @@ import lombok.extern.slf4j.Slf4j;
  * with {@link CrudController} to simplify construction of controller classes.
  * 
  * @param <T> the type of object on which this service acts
- * @since Iteration1 10/01/2018
  */
 @Slf4j
 public abstract class CrudService<T extends Identifiable> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	protected AuthenticationService authenticationService;
 
@@ -137,8 +132,7 @@ public abstract class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the given user can retrieve a list of all objects. The
-	 * default implementation is to allow access to all logged-in users.<br>
-	 * This is only the helper method though, should always be used within - {@linkplain #canFindAll()}
+	 * default implementation is to allow access to all logged-in users.
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
 	 *             unauthenticated)

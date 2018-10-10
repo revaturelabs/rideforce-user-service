@@ -1,7 +1,6 @@
 package com.revature.rideforce.user.controllers;
 
 import javax.validation.Valid;
-import java.lang.invoke.MethodHandles;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.ResponseError;
@@ -28,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class CrudController<T extends Identifiable & Linkable> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
 
 	/**

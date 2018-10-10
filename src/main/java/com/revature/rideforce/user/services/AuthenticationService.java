@@ -1,12 +1,11 @@
 package com.revature.rideforce.user.services;
-import java.lang.invoke.MethodHandles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
+
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
@@ -19,10 +18,9 @@ import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
 /**
- * The service used to handle authentication, that is, logging in, creating new
- * users, getting information about the current user.
+ * The service used to handle authentication (i.e. logging in, creating new
+ * users, getting information about the current user).
  */
-@Slf4j
 @Service
 public class AuthenticationService {
 	@Autowired
@@ -51,9 +49,6 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
-    log.info("Authenticating user credentials");
-    log.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
-    log.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -80,20 +75,11 @@ public class AuthenticationService {
 	 */
 	public User register(UserRegistrationInfo info)
 			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
-		if(info == null) {
-			throw new InvalidRegistrationKeyException();
-		}
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
-      log.info("Attempting to register user");
-      log.debug(info.getRegistrationKey());
 			throw new InvalidRegistrationKeyException();
 		}
-    log.info("User registered successfully");
-    log.info("Hashing password");
 		String passwordHash = passwordEncoder.encode(info.getPassword());
-    log.debug("passwordHash: {}", passwordHash);
-
 		info.getUser().setPassword(passwordHash);
 		return userService.add(info.getUser());
 	}
@@ -107,17 +93,10 @@ public class AuthenticationService {
 	 *         {@link SecurityContextHolder}
 	 */
 	public User getCurrentUser() {
-		log.info("Getting current user from Authentication");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		log.debug("Authentication value: {}", auth);
-
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
-			log.debug("User is null"); 
 			return null;
 		}
-    
-		log.debug("User authenticated successfully");
 		return (User) auth.getPrincipal();
 	}
 }

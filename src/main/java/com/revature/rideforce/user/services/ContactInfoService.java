@@ -23,12 +23,6 @@ public class ContactInfoService extends CrudService<ContactInfo> {
 		return contactInfoRepository.findByUserId(user.getId());
 	}
 	
-  /**
-    Checks if a user can add ContactInfo
-    @param User
-    @param ContactInfo
-    @return true if user is admin or owner of ContactInfo
-    */
 	@Override
 	protected boolean canAdd(User user, ContactInfo obj) {
 		// Users can only add their own contact info, except for admins who can
@@ -36,12 +30,6 @@ public class ContactInfoService extends CrudService<ContactInfo> {
 		return user != null && (user.isAdmin() || user.getId() == obj.getUser().getId());
 	}
 	
-  /**
-    Checks if a user can save ContactInfo
-    @param User
-    @param ContactInfo
-    @return true if user is admin or owner of ContactInfo
-    */
 	@Override
 	protected boolean canSave(User user, ContactInfo obj) {
 		// Users can only save their own contact info, except for admins who can

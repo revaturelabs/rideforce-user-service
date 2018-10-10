@@ -12,11 +12,10 @@ import java.lang.annotation.Target;
  * 
  * This annotation can also be applied to a collection of objects to represent
  * each item by its value.
- * @since Iteration1: 10/01/2018
  */
 @Retention(RUNTIME)
-@Target(FIELD)  
-public @interface JsonEnumLike {   //'@interface' keyword makes it an annotation 
+@Target(FIELD)
+public @interface JsonEnumLike {
 	/**
 	 * The {@link EnumLikeResolver} to be used to resolve string values in JSON
 	 * data. An instance of this class must be available as a bean.
