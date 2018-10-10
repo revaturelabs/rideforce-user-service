@@ -14,8 +14,7 @@ import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 /**
  * A {@link BeanDeserializerModifier} that looks for {@link JsonEnumLike}
  * annotations and marks corresponding fields for conversion using the
- * {@link EnumLikeDeserializer}.<p>
- * @since Iteration1: 10/01/2018
+ * {@link EnumLikeDeserializer}.
  */
 public class EnumLikeDeserializerModifier extends BeanDeserializerModifier {
 	private ApplicationContext context;
@@ -31,9 +30,6 @@ public class EnumLikeDeserializerModifier extends BeanDeserializerModifier {
 		this.context = context;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.deser.BeanDeserializerModifier#updateBuilder(com.fasterxml.jackson.databind.DeserializationConfig, com.fasterxml.jackson.databind.BeanDescription, com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder)
-	 */
 	@Override
 	public BeanDeserializerBuilder updateBuilder(DeserializationConfig config, BeanDescription beanDesc,
 			BeanDeserializerBuilder builder) {

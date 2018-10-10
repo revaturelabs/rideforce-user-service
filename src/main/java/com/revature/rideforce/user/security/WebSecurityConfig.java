@@ -10,13 +10,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-/**
- * configures the {@linkplain HttpSecurity} - authorizes requests, adds session management, adds filters<p>
- * <strong>Member Variables</strong><br>
- * {@linkplain LoginTokenProvider} tokenProvider
- * @author clpeng
- * @since Iteration1 10/01/2018
- */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,9 +18,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    @Autowired
 //    private ErrorController errorController;
 
-	/* (non-Javadoc)
-	 * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#configure(org.springframework.security.config.annotation.web.builders.HttpSecurity)
-	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Matchers for routes that can be accessed without authentication.

@@ -16,7 +16,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 /**
  * The abstract base class for token providers, providing the basic
  * functionality needed to create and verify tokens.
- * @since Iteration1 10/01/2018
  */
 public abstract class JwtProvider implements InitializingBean {
 	private static final String ISSUER = "revature";
@@ -25,10 +24,7 @@ public abstract class JwtProvider implements InitializingBean {
 	private String secret;
 	private Algorithm algorithm;
 	private JWTVerifier verifier;
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-	 */
+
 	@Override
 	public void afterPropertiesSet() {
 		algorithm = Algorithm.HMAC256(secret);

@@ -1,7 +1,6 @@
 package com.revature.rideforce.user.controllers;
 
 import java.util.Map;
-import java.lang.invoke.MethodHandles;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);
