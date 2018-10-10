@@ -1,5 +1,6 @@
 package com.revature.rideforce.user;
 
+import java.sql.Date;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -30,6 +31,8 @@ import com.revature.rideforce.user.repository.UserRoleRepository;
 @EnableDiscoveryClient
 @EnableJpaRepositories
 public class UserApplication implements InitializingBean {
+	
+	private static final String ADMIN = "ADMIN";
 	@Autowired
 	private ApplicationContext context;
 
@@ -45,7 +48,12 @@ public class UserApplication implements InitializingBean {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public static void main(String[] args) throws Exception {
+	/**
+	 * Just starts the Spring Application
+	 * @param 	args 		String[]
+	 * @throws 	Exception 	will just throw any exception I guess
+	 */
+	public static void main(String[] args) {
 		SpringApplication.run(UserApplication.class, args);
 	}
 
@@ -56,9 +64,7 @@ public class UserApplication implements InitializingBean {
 		Module jsonEnumLike = new SimpleModule("json-enum-like").setSerializerModifier(new EnumLikeSerializerModifier())
 				.setDeserializerModifier(new EnumLikeDeserializerModifier(context));
 
-		return builder -> {
-			builder.modules(jsonLinks, jsonEnumLike);
-		};
+		return builder -> builder.modules(jsonLinks, jsonEnumLike);
 	}
 
 	@Override
@@ -72,23 +78,24 @@ public class UserApplication implements InitializingBean {
 				officeRepository.save(reston);
 			}
 
-			if (userRoleRepository.findByTypeIgnoreCase("ADMIN") == null) {
+			if (userRoleRepository.findByTypeIgnoreCase(ADMIN) == null) {
 				UserRole adminRole = new UserRole();
-				adminRole.setType("ADMIN");
-				adminRole = userRoleRepository.save(adminRole);
+				adminRole.setType(ADMIN);
+				userRoleRepository.save(adminRole);
 			}
 
 			User admin = new User();
-			admin.setFirstName("Admin");
-			admin.setLastName("Admin");
+			admin.setFirstName("admin");
+			admin.setLastName("admin");
 			admin.setEmail("admin@revature.com");
 			admin.setAddress("11730 Plaza America Dr. Reston, VA");
 			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
 			admin.setContactInfo(new HashSet<>());
 			admin.setActive(true);
-			admin.setRole(userRoleRepository.findByTypeIgnoreCase("ADMIN"));
+			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
 			admin.setPassword(passwordEncoder.encode("password"));
+//			admin.setStartTime(new Date(0, 0, 0));
 			userRepository.save(admin);
 		}
 	}

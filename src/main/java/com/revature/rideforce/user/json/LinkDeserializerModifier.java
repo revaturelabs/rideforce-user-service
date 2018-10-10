@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdValueInstantiator;
  * A {@link BeanDeserializerModifier} that looks for {@link JsonLink}
  * annotations and marks corresponding fields for conversion using the
  * {@link LinkDeserializer}.
+ * @since Iteration1: 10/01/2018
  */
 public class LinkDeserializerModifier extends BeanDeserializerModifier {
 	private ApplicationContext context;
@@ -49,7 +50,6 @@ public class LinkDeserializerModifier extends BeanDeserializerModifier {
 				JavaType propType = prop.getType();
 				LinkDeserializer<? extends Linkable> valueDeserializer = new LinkDeserializer<>(prop.getType(),
 						resolver);
-				// TODO: add support for collection types other than Set.
 				if (propType.isCollectionLikeType()) {
 					// All of this nonsense is needed to create a deserializer
 					// for a set based on the deserializer for its values.

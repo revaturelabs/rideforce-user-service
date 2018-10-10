@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.controllers;
 
 import java.util.Map;
+import java.lang.invoke.MethodHandles;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.revature.rideforce.user.beans.ResponseError;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-	private static final Logger log = LoggerFactory.getLogger(ErrorController.class);
+  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);
