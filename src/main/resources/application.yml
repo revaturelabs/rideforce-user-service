@@ -14,7 +14,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.Oracle10gDialect
+        dialect: org.hibernate.dialect.Oracle12cDialect
+
 
 eureka:
   client:
