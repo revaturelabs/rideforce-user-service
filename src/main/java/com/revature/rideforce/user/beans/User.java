@@ -21,6 +21,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -107,7 +108,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@NotEmpty
 	private String address;
 
+//	@Column(nullable = false)
+//	@NotEmpty
+//	private
+	
 	@Column()
+	@Transient
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	private Date startTime;    			//when the class starts every day

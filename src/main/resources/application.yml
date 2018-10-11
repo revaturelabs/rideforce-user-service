@@ -12,6 +12,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle12cDialect
+
+
 eureka:
   client:
     service-url:
