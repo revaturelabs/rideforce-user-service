@@ -1,19 +1,20 @@
 package com.revature.serviceTests;
 
-import static org.hamcrest.CoreMatchers.any;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import static org.mockito.ArgumentMatchers.any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideforce.user.UserApplication;
@@ -29,6 +30,7 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.UserService;
 
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @RunWith(SpringRunner.class)   //springRunner class is part of spring, and it's in junit4 folder...so I guess a class set asside for Junit tests
 								//RunWith annotation is from JUnit, and I guess it accepts that SpringRunner.class from spring
 @SpringBootTest(classes=UserApplication.class)   //this annotation comes from spring boot starter test context.....Application Context
