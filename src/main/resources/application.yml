@@ -12,7 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.Oracle12cDialect
+    database-platform: org.hibernate.dialect.OracleDialect
     
 eureka:
   client:
