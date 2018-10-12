@@ -32,8 +32,11 @@ public class ContactInfoTest {
 
 	@Test
 	public void testCreationOfAValidContactInfo() {
-		ContactInfo contactInfo = new ContactInfo(1, new User(),
-				new ContactType(), "info");
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(1);
+		contactInfo.setInfo("info");
+		contactInfo.setType(new ContactType());
+		contactInfo.setUser(new User());
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
