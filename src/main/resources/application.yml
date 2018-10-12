@@ -11,10 +11,10 @@ spring:
     driver-class-name: oracle.jdbc.driver.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.OracleDialect
+        dialect: org.hibernate.dialect.Oracle10gDialect
 
 eureka:
   client:
