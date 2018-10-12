@@ -84,8 +84,8 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 200)
 	private String photoUrl;
 
-	@Column(length = 200)
-	@Size(max = 200)
+	@Column
+	@Size(max = 255)
 	private String bio;
 
 	private boolean active = true; //default 

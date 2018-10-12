@@ -54,8 +54,11 @@ public class ContactInfoTest {
 	
 	@Test
 	public void testViolationWithInvalidIdOnContactInfo() {
-		ContactInfo contactInfo = new ContactInfo(0, new User(),
-				new ContactType(), "info");
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		contactInfo.setUser(new User());
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -72,8 +75,11 @@ public class ContactInfoTest {
 	
 	@Test
 	public void testViolationWithInvalidUser() {
-		ContactInfo contactInfo = new ContactInfo(0, null,
-				new ContactType(), "info");
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		contactInfo.setUser(null);
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -90,8 +96,11 @@ public class ContactInfoTest {
 	
 	@Test
 	public void testViolationWithInvalidContactType() {
-		ContactInfo contactInfo = new ContactInfo(0, new User(),
-				null, "info");
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		contactInfo.setUser(new User());
+		contactInfo.setType(null);
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -108,8 +117,11 @@ public class ContactInfoTest {
 	
 	@Test
 	public void testViolationWithEmptyInfo() {
-		ContactInfo contactInfo = new ContactInfo(0, new User(),
-				new ContactType(), "");
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		contactInfo.setUser(new User());
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
