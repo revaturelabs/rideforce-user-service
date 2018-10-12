@@ -1,23 +1,18 @@
 package com.revature.beanTests;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.beans.ContactType;
-import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserRole;
 
 public class ContactInfoTest {
 	
@@ -56,9 +51,9 @@ public class ContactInfoTest {
 	public void testViolationWithInvalidIdOnContactInfo() {
 		ContactInfo contactInfo = new ContactInfo();
 		contactInfo.setId(0);
-		contactInfo.setInfo("info");
-		contactInfo.setType(new ContactType());
 		contactInfo.setUser(new User());
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -77,9 +72,9 @@ public class ContactInfoTest {
 	public void testViolationWithInvalidUser() {
 		ContactInfo contactInfo = new ContactInfo();
 		contactInfo.setId(0);
-		contactInfo.setInfo("info");
-		contactInfo.setType(new ContactType());
 		contactInfo.setUser(null);
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -98,9 +93,9 @@ public class ContactInfoTest {
 	public void testViolationWithInvalidContactType() {
 		ContactInfo contactInfo = new ContactInfo();
 		contactInfo.setId(0);
-		contactInfo.setInfo("info");
-		contactInfo.setType(null);
 		contactInfo.setUser(new User());
+		contactInfo.setType(null);
+		contactInfo.setInfo("info");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
@@ -119,9 +114,9 @@ public class ContactInfoTest {
 	public void testViolationWithEmptyInfo() {
 		ContactInfo contactInfo = new ContactInfo();
 		contactInfo.setId(0);
-		contactInfo.setInfo("");
-		contactInfo.setType(new ContactType());
 		contactInfo.setUser(new User());
+		contactInfo.setType(new ContactType());
+		contactInfo.setInfo("");
 		Set<ConstraintViolation<ContactInfo>> violations = localValidatorFactory.validate(contactInfo);
 		int counter = 0;
 		
