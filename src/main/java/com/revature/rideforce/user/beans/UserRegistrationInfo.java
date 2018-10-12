@@ -7,11 +7,14 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 public class UserRegistrationInfo {
+	
 	@Valid
 	@NotNull
 	private User user;
+	
 	@NotEmpty
 	private String password;
+	
 	@NotEmpty
 	private String registrationKey;
 	
