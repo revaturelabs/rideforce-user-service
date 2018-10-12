@@ -2,6 +2,7 @@ package com.revature.rideforce.user.beans;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.sql.Time;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -84,11 +85,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 200)
 	private String photoUrl;
 
-	@Column(length = 200)
-	@Size(max = 200)
+	@Column(length = 255)   //255 size as requested by angular team ;)
+	@Size(max = 255)
 	private String bio;
 
-	private boolean active = true; //default 
+	@Column(name="ACTIVE")
+	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
@@ -107,16 +109,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Column(nullable = false)
 	@NotEmpty
 	private String address;
-
-//	@Column(nullable = false)
-//	@NotEmpty
-//	private
 	
 	@Column()
-	@Transient
-	@Temporal(TemporalType.DATE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-	private Date startTime;    			//when the class starts every day
+//	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.TIMESTAMP)   //  If this is put on, will say @Temporal should only be put on a Date or Calendar thing
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	private Time startTime = Time.valueOf("09:00:00");    			//when the class starts every day
 	
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
@@ -194,11 +192,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.photoUrl = photoURL;
 	}
 
-	public boolean isActive() {  //getter..... lol bad naming
+	public String isActive() {  //getter..... lol bad naming
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
@@ -242,11 +240,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.venmo = venmo;
 	}
 
-	public Date getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Time startTime) {   //to provide a time, can do Time.valueOf("hh:mm:ss");
 		this.startTime = startTime;
 	}
 
@@ -293,12 +291,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		return true;
 	}
 
-	@Override
-	@JsonIgnore
-	public boolean isEnabled() {
-		return active;
-	}
-
 	public Set<Car> getCars() {
 		return cars;
 	}
@@ -323,122 +315,135 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
-		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
-		result = prime * result + ((cars == null) ? 0 : cars.hashCode());
-		result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((office == null) ? 0 : office.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
-		result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
-		return result;
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (active != other.active)
-			return false;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (batchEnd == null) {
-			if (other.batchEnd != null)
-				return false;
-		} else if (!batchEnd.equals(other.batchEnd))
-			return false;
-		if (bio == null) {
-			if (other.bio != null)
-				return false;
-		} else if (!bio.equals(other.bio))
-			return false;
-		if (cars == null) {
-			if (other.cars != null)
-				return false;
-		} else if (!cars.equals(other.cars))
-			return false;
-		if (contactInfo == null) {
-			if (other.contactInfo != null)
-				return false;
-		} else if (!contactInfo.equals(other.contactInfo))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id != other.id)
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (office == null) {
-			if (other.office != null)
-				return false;
-		} else if (!office.equals(other.office))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (photoUrl == null) {
-			if (other.photoUrl != null)
-				return false;
-		} else if (!photoUrl.equals(other.photoUrl))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		if (startTime == null) {
-			if (other.startTime != null)
-				return false;
-		} else if (!startTime.equals(other.startTime))
-			return false;
-		if (venmo == null) {
-			if (other.venmo != null)
-				return false;
-		} else if (!venmo.equals(other.venmo))
-			return false;
-		return true;
-	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-				+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active + ", role=" + role
-				+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
-				+ ", cars=" + cars + ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
-	}
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((active == null) ? 0 : active.hashCode());
+	result = prime * result + ((address == null) ? 0 : address.hashCode());
+	result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
+	result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+	result = prime * result + ((cars == null) ? 0 : cars.hashCode());
+	result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
+	result = prime * result + ((email == null) ? 0 : email.hashCode());
+	result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+	result = prime * result + id;
+	result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+	result = prime * result + ((office == null) ? 0 : office.hashCode());
+	result = prime * result + ((password == null) ? 0 : password.hashCode());
+	result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
+	result = prime * result + ((role == null) ? 0 : role.hashCode());
+	result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+	result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
+	return result;
+}
+
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	User other = (User) obj;
+	if (active == null) {
+		if (other.active != null)
+			return false;
+	} else if (!active.equals(other.active))
+		return false;
+	if (address == null) {
+		if (other.address != null)
+			return false;
+	} else if (!address.equals(other.address))
+		return false;
+	if (batchEnd == null) {
+		if (other.batchEnd != null)
+			return false;
+	} else if (!batchEnd.equals(other.batchEnd))
+		return false;
+	if (bio == null) {
+		if (other.bio != null)
+			return false;
+	} else if (!bio.equals(other.bio))
+		return false;
+	if (cars == null) {
+		if (other.cars != null)
+			return false;
+	} else if (!cars.equals(other.cars))
+		return false;
+	if (contactInfo == null) {
+		if (other.contactInfo != null)
+			return false;
+	} else if (!contactInfo.equals(other.contactInfo))
+		return false;
+	if (email == null) {
+		if (other.email != null)
+			return false;
+	} else if (!email.equals(other.email))
+		return false;
+	if (firstName == null) {
+		if (other.firstName != null)
+			return false;
+	} else if (!firstName.equals(other.firstName))
+		return false;
+	if (id != other.id)
+		return false;
+	if (lastName == null) {
+		if (other.lastName != null)
+			return false;
+	} else if (!lastName.equals(other.lastName))
+		return false;
+	if (office == null) {
+		if (other.office != null)
+			return false;
+	} else if (!office.equals(other.office))
+		return false;
+	if (password == null) {
+		if (other.password != null)
+			return false;
+	} else if (!password.equals(other.password))
+		return false;
+	if (photoUrl == null) {
+		if (other.photoUrl != null)
+			return false;
+	} else if (!photoUrl.equals(other.photoUrl))
+		return false;
+	if (role == null) {
+		if (other.role != null)
+			return false;
+	} else if (!role.equals(other.role))
+		return false;
+	if (startTime == null) {
+		if (other.startTime != null)
+			return false;
+	} else if (!startTime.equals(other.startTime))
+		return false;
+	if (venmo == null) {
+		if (other.venmo != null)
+			return false;
+	} else if (!venmo.equals(other.venmo))
+		return false;
+	return true;
+}
+
+@Override
+public String toString() {
+	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
+			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active + ", role=" + role
+			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
+			+ ", cars=" + cars + ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
+}
+
+@Override
+public boolean isEnabled() {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+	
 
 	
 	
