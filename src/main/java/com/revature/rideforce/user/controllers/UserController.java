@@ -25,6 +25,7 @@ import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.OfficeService;
@@ -115,6 +116,8 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (PasswordRequirementsException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 

@@ -14,6 +14,7 @@ import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
@@ -44,7 +45,7 @@ public class AuthenticationServiceTest {
 	}
 	
 	@Test(expected = InvalidRegistrationKeyException.class)
-	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
+	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, PasswordRequirementsException {
 		authenticationService.register(null);
 	}
 	
