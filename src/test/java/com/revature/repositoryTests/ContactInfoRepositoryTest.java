@@ -14,7 +14,6 @@ import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.beans.ContactType;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.repository.ContactInfoRepository;
-import com.revature.rideforce.user.repository.ContactTypeRepository;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
