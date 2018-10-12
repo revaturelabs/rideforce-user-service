@@ -103,6 +103,20 @@ public class UserService extends CrudService<User> {
 		userRepository.save(user);
     log.info("updated user: " + user);
 	}
+	
+	/**
+	 * delete the User object if there is someone logged in, and that person is either the same User or an admin user
+	 * @param user User to be deleted from db
+	 * @throws PermissionDeniedException for user that is not allowed to do the transaction
+	 */
+	public void deleteUser(User user) throws PermissionDeniedException
+	{
+		User loggedInUser = authenticationService.getCurrentUser();
+		if (loggedInUser == null || (!loggedInUser.isAdmin() && loggedInUser.getId() != user.getId())) 
+			throw new PermissionDeniedException("Cannot delete this user's account.");
+		userRepository.delete(user);
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.services.CrudService#throwOnConflict(com.revature.rideforce.user.beans.Identifiable)

@@ -132,8 +132,17 @@ public class UserController {
 		}
 	}
 	
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<?> delete(){
-//		
-//	}
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") int id) throws PermissionDeniedException {
+		User userToDelete = userService.findById(id); //throw permission denied exception if not logged in
+		if(userToDelete != null)
+			try {
+				userService.deleteUser(userToDelete);
+				return (ResponseEntity<?>) ResponseEntity.ok(userToDelete);
+			} catch (PermissionDeniedException e) {
+				return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+			}
+		else {
+			return (ResponseEntity<?>) ResponseEntity.notFound();}
+	}
 }
