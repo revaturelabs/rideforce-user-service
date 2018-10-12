@@ -10,9 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
-import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
-import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
