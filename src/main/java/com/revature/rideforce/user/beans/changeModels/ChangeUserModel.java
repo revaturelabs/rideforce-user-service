@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans.changeModels;
 
+import java.sql.Time;
 import java.util.Date;
 
 import com.revature.rideforce.user.beans.Office;
@@ -16,10 +17,10 @@ public class ChangeUserModel {
 	private String photoUrl;
 	private String address;
 	private Office office;
-	private Date startTime;
+	private Time startTime;
 	private Date batchEnd;
 	private UserRole role;
-	private Boolean active;
+	private String active;
 	
 	public int getId() {
 		return id;
@@ -93,11 +94,11 @@ public class ChangeUserModel {
 		this.role = role;
 	}
 	
-	public Boolean getActive() {
+	public String getActive() {
 		return active;
 	}
 	
-	public void setActive(Boolean active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
@@ -109,11 +110,11 @@ public class ChangeUserModel {
 		this.password = password;
 	}
 	
-	public Date getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
 

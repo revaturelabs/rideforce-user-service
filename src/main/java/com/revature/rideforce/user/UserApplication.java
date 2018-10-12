@@ -1,6 +1,7 @@
 package com.revature.rideforce.user;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -92,10 +93,10 @@ public class UserApplication implements InitializingBean {
 			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
 			admin.setContactInfo(new HashSet<>());
-			admin.setActive(true);
+			admin.setActive("ACTIVE");
 			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
 			admin.setPassword(passwordEncoder.encode("password"));
-//			admin.setStartTime(new Date(0, 0, 0));
+			admin.setStartTime(Time.valueOf("09:00:00"));
 			userRepository.save(admin);
 		}
 	}
