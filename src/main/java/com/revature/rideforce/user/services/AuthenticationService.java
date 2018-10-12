@@ -51,9 +51,9 @@ public class AuthenticationService {
 	 */
 	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
 		User found = userRepository.findByEmail(credentials.getEmail());
-    log.info("Authenticating user credentials");
-    log.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
-    log.debug("credentials.password: {} ", credentials.getPassword());
+		log.info("Authenticating user credentials");
+		log.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
+		log.debug("credentials.password: {} ", credentials.getPassword());
 		if (found == null) {
 			throw new InvalidCredentialsException();
 		}
@@ -85,14 +85,14 @@ public class AuthenticationService {
 		}
 		// Make sure that the registration key is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
-      log.info("Attempting to register user");
-      log.debug(info.getRegistrationKey());
+			log.info("Attempting to register user");
+			log.debug(info.getRegistrationKey());
 			throw new InvalidRegistrationKeyException();
 		}
-    log.info("User registered successfully");
-    log.info("Hashing password");
+		log.info("User registered successfully");
+		log.info("Hashing password");
 		String passwordHash = passwordEncoder.encode(info.getPassword());
-    log.debug("passwordHash: {}", passwordHash);
+		log.info("passwordHash: {}", passwordHash);
 
 		info.getUser().setPassword(passwordHash);
 		return userService.add(info.getUser());

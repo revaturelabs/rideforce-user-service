@@ -36,6 +36,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.revature.rideforce.user.json.CarLinkResolver;
 import com.revature.rideforce.user.json.ContactInfoLinkResolver;
 import com.revature.rideforce.user.json.JsonEnumLike;
@@ -76,7 +78,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Email
 	private String email;
 
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(nullable = false, length = 70)
 	@NotEmpty
 	private String password;
