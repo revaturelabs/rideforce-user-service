@@ -21,6 +21,7 @@ import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -67,11 +68,11 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Before
-	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException
+	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException, EmptyPasswordException
 	{
 		User user = new User();
 		user.setEmail("admin@revature.com");
-		user.setPassword(passwordEncoder.encode("password"));
+		user.setPassword("password");
 		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
 		
 		Mockito.when( userService.add(any()) ).then( i -> i.getArgument(0) ); //return the user it was given
@@ -109,7 +110,7 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test
-	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
+	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
 	{
 		String token = registrationTokenProvider.generateToken();
 		registrationInfo = new UserRegistrationInfo(this.user, "pally", token);
@@ -125,14 +126,14 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
+	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
 	{
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
 		authenticationService.register(registrationInfo);
 	}
 
 	@Test
-	public void getCurrentUserTest()
+	public void getCurrentUserTest() throws EmptyPasswordException
 	{
 		//when no session, getCurrentUser should return nulll
 		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();

@@ -1,22 +1,23 @@
 package com.revature.rideforce.user.services;
 
-import java.util.List;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
-import com.revature.rideforce.user.repository.UserRoleRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -62,7 +63,7 @@ public class UserService extends CrudService<User> {
 
     log.info("User {} found", found);
 
-		if (!canFindOne(found)) {
+		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
 			throw new PermissionDeniedException("Permission denied to get user by email.");
 		}
 		
@@ -88,8 +89,9 @@ public class UserService extends CrudService<User> {
 	 * @param oldPassword <code>String</code> current password user inputs
 	 * @param newPassword <code>String</code> new password to be set
 	 * @throws PermissionDeniedException if the user inputs the wrong <strong> oldPassword</strong>
+	 * @throws EmptyPasswordException if the user inputs a new password but it's empty
 	 */
-	public void updatePassword(User user, String oldPassword, String newPassword) throws PermissionDeniedException {
+	public void updatePassword(User user, String oldPassword, String newPassword) throws PermissionDeniedException, EmptyPasswordException {
 		User loggedIn = authenticationService.getCurrentUser();
 		// Check permission to update password. Admins can update anyone's
 		// password, provided they know the old password.
@@ -99,7 +101,10 @@ public class UserService extends CrudService<User> {
 		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
 			throw new PermissionDeniedException("Old password is incorrect.");
 		}
-		user.setPassword(passwordEncoder.encode(newPassword));
+		if(newPassword.equals(""))
+			throw new EmptyPasswordException();
+		
+		user.setPassword(newPassword);   //will encode in the setter
 		userRepository.save(user);
     log.info("updated user: " + user);
 	}

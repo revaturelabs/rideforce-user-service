@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -77,13 +78,14 @@ public class AuthenticationService {
 	 *                                         desired user (e.g. if an
 	 *                                         unauthenticated user attempts to
 	 *                                         create an admin)
+	 * @throws EmptyPasswordException          Password in the {@linkplain UserRegistrationInfo} must be non empty
 	 */
 	public User register(UserRegistrationInfo info)
-			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
+			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException {
 		if(info == null) {
 			throw new InvalidRegistrationKeyException();
 		}
-		// Make sure that the registration key is valid.
+		// Make sure that the registration key token is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			log.info("Attempting to register user");
 			log.debug(info.getRegistrationKey());
@@ -91,10 +93,7 @@ public class AuthenticationService {
 		}
 		log.info("User registered successfully");
 		log.info("Hashing password");
-		String passwordHash = passwordEncoder.encode(info.getPassword());
-		log.info("passwordHash: {}", passwordHash);
-
-		info.getUser().setPassword(passwordHash);
+		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
 		return userService.add(info.getUser());
 	}
 
