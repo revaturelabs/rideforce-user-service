@@ -23,17 +23,169 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-	<!--
-			<dependency>
-				<groupId>io.spring.platform</groupId>
-				<artifactId>platform-bom</artifactId>
-				<version>Brussels-SR10</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-				  -->
 		</dependencies>
 	</dependencyManagement>
+	
+	<!--
+        Determines to which repository releases of the project are deployed.
+        In this example, artifacts are deployed to a directory on the
+        same computer on which the Jenkins build server is run.
+        Note that this is just the minimal configuration required in order
+        to be able to perform a Maven release, not recommended for production.
+        Reference: http://maven.apache.org/pom.html#Distribution_Management
+    -->
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>home1</id>
+            <name>Home Repository</name>
+            <url>file://C:/MyProjectDeployDirectory/</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+    
+    <!--
+        SCM configuration is necessary in order to enable Maven to manage
+        the version of the project when releasing a new version on the
+        Jenkins build server.
+        The configuration varies depending on which provider is used
+        (for example, Git, Subversion, etc).
+        In this example, Git is used.
+        Reference: http://maven.apache.org/pom.html#SCM
+    -->
+    <scm>
+       <connection>scm:git:file://localhost/C:/GitRepo/MyProject/</connection>
+       <developerConnection>scm:git:file://localhost/C:/GitRepo/MyProject/</developerConnection>
+       <tag>HEAD</tag>
+    </scm>
+    
+    <properties>
+        <!--
+            Path to the root directory of the documentation web application.
+            This example assumes that the documentation web application
+            is located in the same Tomcat instance as the Jenkins build
+            server runs.
+        -->
+        <release.javadoc.root.path>[path to Tomcat home]/webapps/api-documentation/</release.javadoc.root.path>
+    </properties>
+    
+    <profiles>
+        <!--
+            Profile for generation and publishing of release JavaDoc
+            documentation.
+            Use: mvn -P releaseDocumentation site
+            References: http://maven.apache.org/guides/introduction/introduction-to-profiles.html
+        -->
+        <profile>
+            <!-- 
+                Name of the Maven build profile.
+                Used in project's Jenkins job configuration.
+            -->
+            <id>releaseDocumentation</id>
+            <build>
+                <plugins>
+                    <!--
+                        In preparation of site generation, extract the release
+                        version number to a maven property.
+                        Performed during pre-site phase.
+                    -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>pre-site</phase>
+                                <id>regex-property</id>
+                                <goals>
+                                    <goal>regex-property</goal>
+                                </goals>
+                                <configuration>
+                                    <name>release_version</name>
+                                    <value>${project.version}</value>
+                                    <regex>-SNAPSHOT</regex>
+                                    <replacement />
+                                    <failIfNoMatch>false</failIfNoMatch>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--
+                        JavaDoc generation.
+                        JavaDoc is generated during pre-site phase.
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <phase>pre-site</phase>
+                                <goals>
+                                    <goal>javadoc</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <show>private</show>
+                        </configuration>
+                    </plugin>
+                    <!--
+                        Copy JavaDoc to publish directory.
+                        Performed during the site phase.
+                        If changing the phase, make sure that copying the
+                        documentation is performed after having generated
+                        the JavaDoc.
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>site</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <generateProjectInfo>false</generateProjectInfo>
+                                    <generateReports>false</generateReports>
+                                    <outputDirectory>${release.javadoc.root.path}${project.artifactId}-${release_version}/</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/site/</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <!--
+                Include this section to disable, or configure, generation
+                of project info report(s).
+                In this case, all project info reports have been disabled.
+            -->
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>2.7</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+    </profiles>
 
 
 	<dependencies>
@@ -201,6 +353,48 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+				
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.3-SNAPSHOT</version>
+					<executions>
+						<execution>
+							<id>default-prepare-agent</id>
+							<goals>
+								<goal>prepare-agent</goal>
+								</goals>
+								</execution>
+								<execution>
+								<id>default-report</id>
+								<goals>
+								<goal>report</goal>
+								</goals>
+								</execution>
+								<execution>
+								<id>default-check</id>
+								<goals>
+								<goal>check</goal>
+							</goals>
+							<configuration>
+								<rules>
+								 <!--  implementation is needed only for Maven 2  -->
+								<rule implementation="org.jacoco.maven.RuleConfiguration">
+								<element>BUNDLE</element>
+								<limits>
+								 <!--  implementation is needed only for Maven 2  -->
+								<limit implementation="org.jacoco.report.check.Limit">
+								<counter>COMPLEXITY</counter>
+								<value>COVEREDRATIO</value>
+								<minimum>0.60</minimum>
+								</limit>
+								</limits>
+								</rule>
+								</rules>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
