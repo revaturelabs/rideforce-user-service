@@ -92,6 +92,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	private String bio;
 
 	@Column(name="ACTIVE")
+	@JsonProperty
 	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
 
 	@ManyToOne(fetch = FetchType.EAGER)
