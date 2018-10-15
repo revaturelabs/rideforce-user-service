@@ -128,6 +128,7 @@ public class UserController {
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
+		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
 		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
@@ -137,6 +138,7 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
+	
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") int id) throws PermissionDeniedException {
