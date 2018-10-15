@@ -19,7 +19,7 @@ public class ChangeUserModel {
 	private Office office;
 	private Time startTime;
 	private Date batchEnd;
-	private UserRole role;
+	private String role;
 	private String active;
 	
 	public int getId() {
@@ -86,11 +86,11 @@ public class ChangeUserModel {
 		this.batchEnd = batchEnd;
 	}
 
-	public UserRole getRole() {
+	public String getRole() {
 		return role;
 	}
 	
-	public void setRole(UserRole role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	
@@ -141,8 +141,6 @@ public class ChangeUserModel {
 			original.setOffice(office);
 		if(batchEnd != null)
 			original.setBatchEnd(batchEnd);
-		if(role != null)
-			original.setRole(role);
 		if(active != null)
 			original.setActive(active);
 		if(password != null)
