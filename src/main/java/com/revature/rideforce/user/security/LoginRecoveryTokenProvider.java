@@ -4,7 +4,6 @@ import java.time.Duration;
 
 import org.springframework.stereotype.Service;
 
-
 /**
  * use in AuthenticationService to make the specific login recovery token
  * @author clpeng

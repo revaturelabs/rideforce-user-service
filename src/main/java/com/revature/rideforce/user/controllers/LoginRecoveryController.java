@@ -81,12 +81,8 @@ public class LoginRecoveryController {  							//once tests work, make the token
 				userService.save(user);
 			}
 			
-			return user;
-		} catch (PermissionDeniedException e) {     //for findbyid, if no user is "logged in"
-			return null;
-		} catch (EntityConflictException e) { 		//if during save() the newPassword makes the User object identical to another
-			return null;
-		} catch (EmptyPasswordException e) {
+			return user;                     //if during save() the newPassword makes the User object identical to another
+		} catch (PermissionDeniedException | EntityConflictException | EmptyPasswordException e) {     //for findbyid, if no user is "logged in"
 			return null;
 		} 
 	}
