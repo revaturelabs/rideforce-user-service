@@ -1,6 +1,5 @@
 package com.revature.beanTests;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -12,12 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.revature.rideforce.user.beans.Car;
-import com.revature.rideforce.user.beans.ContactInfo;
-import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.beans.UserRole;
 
 public class UserRegistrationInfoTest {
 

@@ -1,11 +1,7 @@
 package com.revature.rideforce.user.security;
 
 import java.time.Duration;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.revature.rideforce.user.services.UserService;
 
 /**
  * use in AuthenticationService to make the specific login recovery token
