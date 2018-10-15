@@ -31,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ResponseError {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
 	 * The primary message describing the error.
 	 */
@@ -130,8 +129,9 @@ public class ResponseError {
 		if (message == null) {
 			if (other.message != null)
 				return false;
-		} else if (!message.equals(other.message))
+		} else if (!message.equals(other.message)) {
 			return false;
+		}
 		return true;
 	}
 

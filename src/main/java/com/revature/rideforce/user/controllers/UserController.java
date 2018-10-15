@@ -108,7 +108,7 @@ public class UserController {
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
 			User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
-			user.setEmail(user.getEmail().toLowerCase());
+			user.setEmail(user.getUsername().toLowerCase());
 			registration.setUser(user);
 			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
@@ -129,7 +129,6 @@ public class UserController {
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
 		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
-		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {

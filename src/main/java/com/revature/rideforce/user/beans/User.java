@@ -3,48 +3,21 @@ package com.revature.rideforce.user.beans;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
-import com.revature.rideforce.user.json.CarLinkResolver;
-import com.revature.rideforce.user.json.ContactInfoLinkResolver;
-import com.revature.rideforce.user.json.JsonEnumLike;
-import com.revature.rideforce.user.json.JsonLink;
-import com.revature.rideforce.user.json.Linkable;
-import com.revature.rideforce.user.json.OfficeLinkResolver;
-import com.revature.rideforce.user.json.UserRoleResolver;
-import com.revature.rideforce.user.security.PasswordSecurityUtil;
+import com.revature.rideforce.user.json.*;
+import com.revature.rideforce.user.security.*;
 
 /**
 
@@ -169,10 +142,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
 	public void setEmail(String email) {
 		this.email = email.toLowerCase();
 	}
@@ -254,14 +223,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@JsonIgnore
 	public boolean isAdmin() {
-		return getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase("admin")).findAny()
-				.isPresent();
+		return getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equalsIgnoreCase("admin"));
 	}
 
 	@JsonIgnore
 	public boolean isTrainer() {
-		return getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase("trainer")).findAny()
-				.isPresent();
+		return getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equalsIgnoreCase("trainer"));
 	}
 
 	@Override
@@ -355,18 +322,21 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		if (active == null) {
 			if (other.active != null)
 				return false;
-		} else if (!active.equals(other.active))
+		} else if (!active.equals(other.active)) {
 			return false;
+		}
 		if (address == null) {
 			if (other.address != null)
 				return false;
-		} else if (!address.equals(other.address))
+		} else if (!address.equals(other.address)) {
 			return false;
+		}
 		if (batchEnd == null) {
 			if (other.batchEnd != null)
 				return false;
-		} else if (!batchEnd.equals(other.batchEnd))
+		} else if (!batchEnd.equals(other.batchEnd)) {
 			return false;
+		}
 		if (bio == null) {
 			if (other.bio != null)
 				return false;
@@ -380,52 +350,61 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		if (contactInfo == null) {
 			if (other.contactInfo != null)
 				return false;
-		} else if (!contactInfo.equals(other.contactInfo))
+		} else if (!contactInfo.equals(other.contactInfo)) {
 			return false;
+		}
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		} else if (!email.equals(other.email))
+		} else if (!email.equals(other.email)) {
 			return false;
+		}
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
-		} else if (!firstName.equals(other.firstName))
+		} else if (!firstName.equals(other.firstName)) {
 			return false;
+		}
 		if (id != other.id)
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
-		} else if (!lastName.equals(other.lastName))
+		} else if (!lastName.equals(other.lastName)) {
 			return false;
+		}
 		if (office == null) {
 			if (other.office != null)
 				return false;
-		} else if (!office.equals(other.office))
+		} else if (!office.equals(other.office)) {
 			return false;
+		}
 		if (password == null) {
 			if (other.password != null)
 				return false;
-		} else if (!password.equals(other.password))
+		} else if (!password.equals(other.password)) {
 			return false;
+		}
 		if (photoUrl == null) {
 			if (other.photoUrl != null)
 				return false;
-		} else if (!photoUrl.equals(other.photoUrl))
+		} else if (!photoUrl.equals(other.photoUrl)) {
 			return false;
+		}
 		if (role == null) {
 			if (other.role != null)
 				return false;
-		} else if (!role.equals(other.role))
+		} else if (!role.equals(other.role)) {
 			return false;
+		}
 		if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime))
 			return false;
 		if (venmo == null) {
 			if (other.venmo != null)
 				return false;
-		} else if (!venmo.equals(other.venmo))
+		} else if (!venmo.equals(other.venmo)) {
 			return false;
+		}
 		return true;
 	}
 	
@@ -439,6 +418,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isEnabled() {
 		return false;
 	}
