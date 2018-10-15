@@ -44,6 +44,7 @@ public class UserTest {
 		u.setCars(new HashSet<Car>());
 		u.setContactInfo(new HashSet<ContactInfo>());
 		u.setVenmo("venmo");
+		u.setStartTime((float) 9.0);
     }
 	
 	@Test

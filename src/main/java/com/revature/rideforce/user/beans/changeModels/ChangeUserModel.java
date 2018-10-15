@@ -1,6 +1,5 @@
 package com.revature.rideforce.user.beans.changeModels;
 
-import java.sql.Time;
 import java.util.Date;
 
 import com.revature.rideforce.user.beans.Office;
@@ -18,9 +17,9 @@ public class ChangeUserModel {
 	private String photoUrl;
 	private String address;
 	private Office office;
-	private Time startTime;
+	private float startTime;
 	private Date batchEnd;
-	private UserRole role;
+	private String role;
 	private String active;
 	
 	public int getId() {
@@ -87,11 +86,11 @@ public class ChangeUserModel {
 		this.batchEnd = batchEnd;
 	}
 
-	public UserRole getRole() {
+	public String getRole() {
 		return role;
 	}
 	
-	public void setRole(UserRole role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	
@@ -111,11 +110,11 @@ public class ChangeUserModel {
 		this.password = password;
 	}
 	
-	public Time getStartTime() {
+	public float getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(Time startTime) {
+	public void setStartTime(float startTime) {
 		this.startTime = startTime;
 	}
 
@@ -142,8 +141,6 @@ public class ChangeUserModel {
 			original.setOffice(office);
 		if(batchEnd != null)
 			original.setBatchEnd(batchEnd);
-		if(role != null)
-			original.setRole(role);
 		if(active != null)
 			original.setActive(active);
 		if(password != null)
@@ -152,7 +149,7 @@ public class ChangeUserModel {
 			} catch (EmptyPasswordException e) {
 				//don't change the password if it's empty ""
 			}
-		if(startTime != null)
+		if(startTime < 0.0)
 			original.setStartTime(startTime);
 	}
 	
