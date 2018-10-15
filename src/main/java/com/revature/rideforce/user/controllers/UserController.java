@@ -23,8 +23,10 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.services.AuthenticationService;
 import com.revature.rideforce.user.services.OfficeService;
@@ -115,6 +117,10 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (EmptyPasswordException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.LENGTH_REQUIRED);
+		} catch (PasswordRequirementsException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 
@@ -132,8 +138,17 @@ public class UserController {
 		}
 	}
 	
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<?> delete(){
-//		
-//	}
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") int id) throws PermissionDeniedException {
+		User userToDelete = userService.findById(id); //throw permission denied exception if not logged in
+		if(userToDelete != null)
+			try {
+				userService.deleteUser(userToDelete);
+				return (ResponseEntity<?>) ResponseEntity.ok(userToDelete);
+			} catch (PermissionDeniedException e) {
+				return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+			}
+		else {
+			return (ResponseEntity<?>) ResponseEntity.notFound();}
+	}
 }
