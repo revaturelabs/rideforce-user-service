@@ -68,13 +68,15 @@ public class PasswordChangeRequest {
 		if (newPassword == null) {
 			if (other.newPassword != null)
 				return false;
-		} else if (!newPassword.equals(other.newPassword))
+		} else if (!newPassword.equals(other.newPassword)) {
 			return false;
+		}
 		if (oldPassword == null) {
 			if (other.oldPassword != null)
 				return false;
-		} else if (!oldPassword.equals(other.oldPassword))
+		} else if (!oldPassword.equals(other.oldPassword)) {
 			return false;
+		}
 		return true;
 	}
 

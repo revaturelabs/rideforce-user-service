@@ -108,7 +108,7 @@ public class UserController {
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
 			User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
-			user.setEmail(user.getEmail().toLowerCase());
+			user.setEmail(user.getUsername().toLowerCase());
 			registration.setUser(user);
 			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);

@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -19,7 +20,7 @@ import com.revature.rideforce.user.json.Linkable;
 
 @Entity
 @Table(name = "ROLE")
-public class UserRole implements EnumLike, Identifiable, Linkable {
+public class UserRole implements EnumLike, Identifiable, Linkable, Serializable {
 	@Id
 	@Min(1)
 	@Column(name = "ROLE_ID")
