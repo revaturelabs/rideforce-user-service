@@ -129,7 +129,6 @@ public class UserController {
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
 		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
-		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {
