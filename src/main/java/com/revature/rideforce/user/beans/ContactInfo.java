@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.CascadeType;
@@ -26,7 +27,7 @@ import com.revature.rideforce.user.json.Linkable;
 
 @Entity
 @Table(name = "CONTACT_INFO")
-public class ContactInfo implements Identifiable, Linkable {
+public class ContactInfo implements Identifiable, Linkable, Serializable {
 	@Id
 	@Min(1)
 	@Column(name = "CONTACT_INFO_ID")

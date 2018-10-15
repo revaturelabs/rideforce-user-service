@@ -128,9 +128,9 @@ public class UserService extends CrudService<User> {
 	 */
 	@Override
 	protected void throwOnConflict(User obj) throws EntityConflictException {
-		User existing = userRepository.findByEmail(obj.getEmail());
+		User existing = userRepository.findByEmail(obj.getUsername());
 		if (existing != null && existing.getId() != obj.getId()) {
-			throw new EmailAlreadyUsedException(obj.getEmail());
+			throw new EmailAlreadyUsedException(obj.getUsername());
 		}
 	}
 	
