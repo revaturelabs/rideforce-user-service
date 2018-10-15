@@ -1,11 +1,11 @@
 package com.revature.rideforce.user.beans.changeModels;
 
-import java.sql.Time;
 import java.util.Date;
 
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
 public class ChangeUserModel {
 
@@ -17,7 +17,7 @@ public class ChangeUserModel {
 	private String photoUrl;
 	private String address;
 	private Office office;
-	private Time startTime;
+	private float startTime;
 	private Date batchEnd;
 	private String role;
 	private String active;
@@ -110,11 +110,11 @@ public class ChangeUserModel {
 		this.password = password;
 	}
 	
-	public Time getStartTime() {
+	public float getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(Time startTime) {
+	public void setStartTime(float startTime) {
 		this.startTime = startTime;
 	}
 
@@ -144,8 +144,12 @@ public class ChangeUserModel {
 		if(active != null)
 			original.setActive(active);
 		if(password != null)
-			original.setPassword(password);
-		if(startTime != null)
+			try {
+				original.setPassword(password);
+			} catch (EmptyPasswordException e) {
+				//don't change the password if it's empty ""
+			}
+		if(startTime < 0.0)
 			original.setStartTime(startTime);
 	}
 	

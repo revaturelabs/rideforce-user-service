@@ -1,22 +1,24 @@
 package com.revature.rideforce.user.services;
-import java.lang.invoke.MethodHandles;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
+
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
@@ -77,24 +79,29 @@ public class AuthenticationService {
 	 *                                         desired user (e.g. if an
 	 *                                         unauthenticated user attempts to
 	 *                                         create an admin)
+	 * @throws EmptyPasswordException          Password in the {@linkplain UserRegistrationInfo} must be non empty
+	 * @throws PasswordRequirementsException   if the password entered does not
+	 * 										   meet the requirements specified
 	 */
 	public User register(UserRegistrationInfo info)
-			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException {
+			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
 		if(info == null) {
 			throw new InvalidRegistrationKeyException();
 		}
-		// Make sure that the registration key is valid.
+		// Make sure that the registration key token is valid.
 		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
 			log.info("Attempting to register user");
 			log.debug(info.getRegistrationKey());
 			throw new InvalidRegistrationKeyException();
 		}
+		// Make sure password meets requirements.
+		if(!passwordIsValid(info.getPassword())) {
+			log.info("Password length violation");
+			throw new PasswordRequirementsException();
+		}
 		log.info("User registered successfully");
 		log.info("Hashing password");
-		String passwordHash = passwordEncoder.encode(info.getPassword());
-		log.info("passwordHash: {}", passwordHash);
-
-		info.getUser().setPassword(passwordHash);
+		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
 		return userService.add(info.getUser());
 	}
 
@@ -119,5 +126,14 @@ public class AuthenticationService {
     
 		log.debug("User authenticated successfully");
 		return (User) auth.getPrincipal();
+	}
+	
+	/**
+	 * Validates password
+	 * @param password
+	 * @return
+	 */
+	private boolean passwordIsValid(String password) {
+		return (password.length() < 8 || password.length() > 16) ? false : true;
 	}
 }

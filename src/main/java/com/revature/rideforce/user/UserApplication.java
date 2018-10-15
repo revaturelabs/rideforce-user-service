@@ -1,6 +1,5 @@
 package com.revature.rideforce.user;
 
-import java.sql.Time;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -94,8 +93,8 @@ public class UserApplication implements InitializingBean {
 			admin.setContactInfo(new HashSet<>());
 			admin.setActive("ACTIVE");
 			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
-			admin.setPassword(passwordEncoder.encode("password"));
-			admin.setStartTime(Time.valueOf("09:00:00"));
+			admin.setPassword("password"); 							//within setPassword is where we can encode it (more modular)
+			admin.setStartTime((float) 9.0);
 			userRepository.save(admin);
 		}
 	}

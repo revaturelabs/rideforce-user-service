@@ -21,9 +21,11 @@ import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
@@ -67,11 +69,11 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Before
-	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException
+	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException, EmptyPasswordException
 	{
 		User user = new User();
 		user.setEmail("admin@revature.com");
-		user.setPassword(passwordEncoder.encode("password"));
+		user.setPassword("password");
 		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
 		
 		Mockito.when( userService.add(any()) ).then( i -> i.getArgument(0) ); //return the user it was given
@@ -109,32 +111,32 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test
-	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
+	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
+                                    , PasswordRequirementsException
 	{
 		String token = registrationTokenProvider.generateToken();
-		registrationInfo = new UserRegistrationInfo(this.user, "pally", token);
+		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", token);
 		Assertions.assertThat( authenticationService.register(registrationInfo) ).isInstanceOf(User.class).isNotNull();
 	}
 	
 	@Test
 	public void registerWithInvalidRegistrationKeyTest()
 	{
-		registrationInfo = new UserRegistrationInfo(this.user, "pally", "badkey");
+		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", "badkey");
 		Throwable caughtException = Assertions.catchThrowable( () -> authenticationService.register(registrationInfo) );
 		Assertions.assertThat(caughtException).isInstanceOf(InvalidRegistrationKeyException.class);
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException
-	{
+	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
 		authenticationService.register(registrationInfo);
 	}
 
 	@Test
-	public void getCurrentUserTest()
+	public void getCurrentUserTest() throws EmptyPasswordException
 	{
-		//when no session, getCurrentUser should return nulll
+		//when no session, getCurrentUser should return null
 		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
 		//now set session and should not be null anymore
 		user.setPassword("password");
