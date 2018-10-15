@@ -135,6 +135,6 @@ public class AuthenticationService {
 	 * @return true if valid password
 	 */
 	private boolean passwordIsValid(String password) {
-		return (password.length() < 8 || password.length() > 16) ? false : true;
+		return (password.length() < 8 || password.length() > 16);
 	}
 }

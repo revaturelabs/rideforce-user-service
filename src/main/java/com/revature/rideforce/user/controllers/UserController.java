@@ -146,7 +146,7 @@ public class UserController {
 		if(userToDelete != null)
 			try {
 				userService.deleteUser(userToDelete);
-				return (ResponseEntity<?>) ResponseEntity.ok(userToDelete);
+				return ResponseEntity.ok(userToDelete);
 			} catch (PermissionDeniedException e) {
 				return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 			}

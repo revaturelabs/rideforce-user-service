@@ -28,7 +28,7 @@ public class CarTest {
 	@Test
 	public void testCreationOfAValidCar() {
 		Car car = new Car(101, new User(), "Honda", "Accord", 2001);
-		Assert.assertEquals(car.getId(), 101);
+		Assert.assertEquals(101, car.getId());
 		Assertions.assertThat(car.getMake()).isEqualTo("Honda");
 		Assertions.assertThat(car.getModel()).isEqualTo("Accord");
 		Assertions.assertThat(car.getYear()).isEqualTo(2001);
