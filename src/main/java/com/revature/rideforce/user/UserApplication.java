@@ -11,7 +11,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -44,13 +43,10 @@ public class UserApplication implements InitializingBean {
 	@Autowired
 	private UserRoleRepository userRoleRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	/**
-	 * Just starts the Spring Application
+	 * Starts the Spring Application
 	 * @param 	args 		String[]
-	 * @throws 	Exception 	will just throw any exception I guess
+	 * @throws 	Exception 	throws any exception
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(UserApplication.class, args);

@@ -3,7 +3,6 @@ package com.revature.rideforce.user.controllers;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,12 +81,8 @@ public class LoginRecoveryController {  							//once tests work, make the token
 				userService.save(user);
 			}
 			
-			return user;
-		} catch (PermissionDeniedException e) {     //for findbyid, if no user is "logged in"
-			return null;
-		} catch (EntityConflictException e) { 		//if during save() the newPassword makes the User object identical to another
-			return null;
-		} catch (EmptyPasswordException e) {
+			return user;                     //if during save() the newPassword makes the User object identical to another
+		} catch (PermissionDeniedException | EntityConflictException | EmptyPasswordException e) {     //for findbyid, if no user is "logged in"
 			return null;
 		} 
 	}
