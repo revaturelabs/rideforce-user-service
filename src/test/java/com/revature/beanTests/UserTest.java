@@ -10,13 +10,15 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
 public class UserTest {
 
@@ -25,7 +27,7 @@ public class UserTest {
 	private User u;
 
 	@Before
-    public void setupValidatorFactory () {
+    public void setupValidatorFactory () throws EmptyPasswordException {
         localValidatorFactory = new LocalValidatorFactoryBean();
         localValidatorFactory.setProviderClass(HibernateValidator.class);
         localValidatorFactory.afterPropertiesSet();
@@ -114,18 +116,17 @@ public class UserTest {
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
-	@Test
-	public void emptyUserPasswordTest() {
+	@Test(expected = EmptyPasswordException.class)
+	public void emptyUserPasswordTest() throws EmptyPasswordException {
 		u.setPassword("");
-		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
-			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
-			}
-		}
-		Assertions.assertThat(counter).isEqualTo(1);
+//		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
+//		int counter = 0;
+//		for(ConstraintViolation<User> v: violations) {
+//			if (!v.getPropertyPath().toString().contains(".")) {
+//				counter++;
+//			}
+//		}
+//		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
 	@Test

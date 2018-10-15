@@ -22,6 +22,11 @@ public class RegistrationKeyController {
 	@Autowired
 	private AuthenticationService authenticationService;
 
+	/**
+	 * the link where you can get a registration token. Only admins and trainers should be able to generate the token for 
+	 * someone to register
+	 * @return <code>String</code> from {@linkplain RegistrationTokenProvider#generateToken()}
+	 */
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> get() {
 		// Only trainers and admins can get registration tokens.

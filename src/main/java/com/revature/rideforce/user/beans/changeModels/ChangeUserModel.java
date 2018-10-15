@@ -6,6 +6,7 @@ import java.util.Date;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
 public class ChangeUserModel {
 
@@ -146,7 +147,11 @@ public class ChangeUserModel {
 		if(active != null)
 			original.setActive(active);
 		if(password != null)
-			original.setPassword(password);
+			try {
+				original.setPassword(password);
+			} catch (EmptyPasswordException e) {
+				//don't change the password if it's empty ""
+			}
 		if(startTime != null)
 			original.setStartTime(startTime);
 	}

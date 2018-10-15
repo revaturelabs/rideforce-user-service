@@ -94,7 +94,7 @@ public class UserApplication implements InitializingBean {
 			admin.setContactInfo(new HashSet<>());
 			admin.setActive("ACTIVE");
 			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
-			admin.setPassword(passwordEncoder.encode("password"));
+			admin.setPassword("password"); 							//within setPassword is where we can encode it (more modular)
 			admin.setStartTime(Time.valueOf("09:00:00"));
 			userRepository.save(admin);
 		}

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.UserCredentials;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -45,7 +46,9 @@ public class AuthenticationServiceTest {
 	}
 	
 	@Test(expected = InvalidRegistrationKeyException.class)
-	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, PasswordRequirementsException {
+	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, 
+                                                                    EmptyPasswordException, PasswordRequirementsException 
+  {
 		authenticationService.register(null);
 	}
 	

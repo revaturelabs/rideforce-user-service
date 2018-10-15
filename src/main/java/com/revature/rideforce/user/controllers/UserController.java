@@ -23,6 +23,7 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
@@ -116,6 +117,8 @@ public class UserController {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
+		} catch (EmptyPasswordException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.LENGTH_REQUIRED);
 		} catch (PasswordRequirementsException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 		}

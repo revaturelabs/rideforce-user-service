@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * configures password by encoding it
+ * dependency for PasswordEncoder uses BCryptPasswordEncoder
  * @author clpeng
  * @since Iteration1 10/01/2018
  *
