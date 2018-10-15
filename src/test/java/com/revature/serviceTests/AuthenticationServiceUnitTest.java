@@ -128,8 +128,8 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
-                                                    , PasswordRequirementsException
+	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
+	{
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
 		authenticationService.register(registrationInfo);
 	}

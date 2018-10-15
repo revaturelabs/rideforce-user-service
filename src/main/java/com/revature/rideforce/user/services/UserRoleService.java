@@ -8,7 +8,6 @@ import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.DuplicateRoleException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import com.revature.rideforce.user.repository.OfficeRepository;
 import com.revature.rideforce.user.repository.UserRoleRepository;
 
 /**

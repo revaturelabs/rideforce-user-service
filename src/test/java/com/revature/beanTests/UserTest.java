@@ -10,8 +10,6 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.Car;
@@ -119,14 +117,6 @@ public class UserTest {
 	@Test(expected = EmptyPasswordException.class)
 	public void emptyUserPasswordTest() throws EmptyPasswordException {
 		u.setPassword("");
-//		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
-//		int counter = 0;
-//		for(ConstraintViolation<User> v: violations) {
-//			if (!v.getPropertyPath().toString().contains(".")) {
-//				counter++;
-//			}
-//		}
-//		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
 	@Test

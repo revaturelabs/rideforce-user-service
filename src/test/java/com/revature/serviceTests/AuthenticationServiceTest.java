@@ -17,7 +17,6 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RunWith(SpringRunner.class)
@@ -27,11 +26,6 @@ public class AuthenticationServiceTest {
 	
 	@Autowired
 	private AuthenticationService authenticationService;
-	
-	@Autowired
-	private RegistrationTokenProvider tokenProvider;
-	
-	
 	
 	@Before
 	public void validate() {
