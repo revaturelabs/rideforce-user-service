@@ -129,9 +129,10 @@ public class AuthenticationService {
 	}
 	
 	/**
-	 * Validates password
-	 * @param password
-	 * @return
+	 * Method for password requirements validation. Can be adjusted to accommodate future requirements.
+	 * 
+	 * @param password to be validated
+	 * @return true if valid password
 	 */
 	private boolean passwordIsValid(String password) {
 		return (password.length() < 8 || password.length() > 16) ? false : true;
