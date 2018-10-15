@@ -39,6 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+	static final String DNE = " does not exist.";
+	
 	@Autowired
 	UserService userService;
 
@@ -65,7 +67,7 @@ public class UserController {
 		try {
 			User user = userService.findByEmail(email.toLowerCase());  //make the email to be looked for lower case to match the case of our db
 
-			return user == null ? new ResponseError("User with email " + email + " does not exist.")
+			return user == null ? new ResponseError("User with email " + email + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
@@ -78,7 +80,7 @@ public class UserController {
 		try {
 			Office office = officeService.findById(officeId);
 			if (office == null) {
-				return new ResponseError("Office with ID " + officeId + " does not exist.")
+				return new ResponseError("Office with ID " + officeId + DNE)
 						.toResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 			UserRole role = userRoleService.findByType(roleString);
@@ -97,7 +99,7 @@ public class UserController {
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		try {
 			User user = userService.findById(id);
-			return user == null ? new ResponseError("User with ID " + id + " does not exist.")
+			return user == null ? new ResponseError("User with ID " + id + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
