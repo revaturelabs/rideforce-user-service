@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);

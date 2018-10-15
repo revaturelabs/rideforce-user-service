@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.changeModels.LoginRecoveryProcessForm;
+import com.revature.rideforce.user.beans.forms.LoginRecoveryProcessForm;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginRecoveryTokenProvider;

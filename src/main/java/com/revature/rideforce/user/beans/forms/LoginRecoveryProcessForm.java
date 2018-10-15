@@ -1,4 +1,4 @@
-package com.revature.rideforce.user.beans.changeModels;
+package com.revature.rideforce.user.beans.forms;
 
 /**
  * Just holds the String token and String new password to be processed in put {@linkplain LoginRecoveryController}
@@ -52,12 +52,14 @@ public class LoginRecoveryProcessForm {
 		if (newPassword == null) {
 			if (other.newPassword != null)
 				return false;
-		} else if (!newPassword.equals(other.newPassword))
+		} 
+		else if (!newPassword.equals(other.newPassword))
 			return false;
 		if (token == null) {
 			if (other.token != null)
 				return false;
-		} else if (!token.equals(other.token))
+		} 
+		else if (!token.equals(other.token))
 			return false;
 		return true;
 	}

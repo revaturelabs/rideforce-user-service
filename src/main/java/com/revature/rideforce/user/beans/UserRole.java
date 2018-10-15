@@ -37,7 +37,6 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 
 
 	public UserRole(int id, @NotEmpty String type) {
-		super();
 		this.id = id;
 		this.type = type;
 	}
@@ -94,7 +93,8 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 		if (type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!type.equalsIgnoreCase(other.type))
+		} 
+		else if (!type.equalsIgnoreCase(other.type))
 			return false;
 		return true;
 	}

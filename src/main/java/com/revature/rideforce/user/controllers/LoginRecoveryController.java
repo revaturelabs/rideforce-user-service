@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.changeModels.LoginRecoveryProcessForm;
+import com.revature.rideforce.user.beans.forms.LoginRecoveryProcessForm;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;

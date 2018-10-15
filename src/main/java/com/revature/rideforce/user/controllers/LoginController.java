@@ -2,7 +2,6 @@ package com.revature.rideforce.user.controllers;
 
 import javax.validation.Valid;
 
-//import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
