@@ -3,13 +3,9 @@ package com.revature.rideforce.user.controllers;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +29,6 @@ public class LoginRecoveryController {  							//once tests work, make the token
 	private UserService userService;
 	@Autowired
 	private LoginRecoveryTokenProvider loginRecoveryTokenProvider;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping(consumes= "application/json", produces = MediaType.APPLICATION_JSON)
 	public User postSendEmail(@RequestBody String email) throws PermissionDeniedException
