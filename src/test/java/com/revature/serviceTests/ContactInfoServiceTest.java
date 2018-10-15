@@ -22,10 +22,8 @@ public class ContactInfoServiceTest {
 
 	@TestConfiguration                                    //<-- this section is for making sure the service bean isn't considered the same as
     static class ContactInfoServiceTestContextConfiguration {    //other beans used for actual application during component-scan
-        private ContactInfoRepository contactInfoRepository;
 		@Bean
         public ContactInfoService contactInfoService(ContactInfoRepository contactInfoRepository) {
-    		this.contactInfoRepository = contactInfoRepository;
     		return new ContactInfoService(contactInfoRepository);
         }
     }
