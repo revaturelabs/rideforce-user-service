@@ -64,17 +64,4 @@ public class LoginTokenProviderTest {
 		assertThat(testToken).matches(header + "." + payload + "." + signature);
 		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
 	}
-
-  @Test
-  public void testTokenNotNull() {
-    assertThat(loginTokenProvider.generateToken(USER_ID)).isNotNull();
-  }
-  Consumer<String> jwtPropertyRequirements = jwt -> {
-    boolean isValidFormat = jwt.matches("^[a-zA-Z0-9]+?.[a-zA-Z0-9]+?.([a-zA-Z0-9]+)?$");
-    assertThat(isValidFormat).isTrue();
-  };
-  @Test
-  public void testTokenValidFormat() {
-    assertThat(loginTokenProvider.generateToken(USER_ID)).isInstanceOfSatisfying(String.class, jwtPropertyRequirements); 
-  }
 }
