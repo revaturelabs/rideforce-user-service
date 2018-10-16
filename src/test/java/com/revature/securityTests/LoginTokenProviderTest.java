@@ -5,7 +5,9 @@ import org.junit.Test;
 import org.junit.Before;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifier.BaseVerification;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.Verification;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -33,6 +35,7 @@ public class LoginTokenProviderTest {
   private Algorithm algorithm;	
 	private static final String ISSUER = "revature";
 	private JWTVerifier verifier;
+  private BaseVerification verification;
   private String testToken;
 	@Autowired
 	private LoginTokenProvider loginTokenProvider;
@@ -41,6 +44,7 @@ public class LoginTokenProviderTest {
   public void setupJwt() {
     algorithm = Algorithm.HMAC256("SECRET");
 		verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
+		verification = (BaseVerification)JWT.require(algorithm).withIssuer(ISSUER).acceptLeeway(1);
     testToken = loginTokenProvider.generateToken(USER_ID); 
   }
 
@@ -53,11 +57,6 @@ public class LoginTokenProviderTest {
   }
 
   @Test
-  public void testTokenString() {
-    assertThat(testToken).isInstanceOf(String.class);
-  }
-
-  @Test
   public void testTokenValidFormat() {
     Pattern regex = Pattern.compile("^[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)?$");
     assertThat(testToken).matches(regex);
@@ -65,7 +64,7 @@ public class LoginTokenProviderTest {
 
   @Test
   public void verifyToken() {
-    DecodedJWT decodedJwt = verifier.verify(testToken);
+    DecodedJWT decodedJwt = verification.build().verify(testToken);
     String header = decodedJwt.getHeader();
     String payload = decodedJwt.getPayload();
     String signature = decodedJwt.getSignature();
