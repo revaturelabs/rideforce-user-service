@@ -17,7 +17,6 @@ import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
-import com.revature.rideforce.user.security.LoginRecoveryTokenProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,9 +37,6 @@ public class UserService extends CrudService<User> {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	LoginRecoveryTokenProvider loginRecoveryTokenProvider;
 	
 	/**
 	 * constructor injects repository dependency
@@ -75,42 +71,6 @@ public class UserService extends CrudService<User> {
 		return userRepository.findByEmail(email);
 	}
 	
-	/**
-	 * Only use this method for an account recovery. May not be best option, just chose because they're not logged in
-	 * during this time, and there's no token yet
-	 * @param email
-	 * @return
-	 */
-	public User findByEmailDuringRecovery(String email)
-	{
-		return userRepository.findByEmail(email);
-	}
-	
-	/**
-	 * Also for account recovery
-	 * @param id
-	 * @param token
-	 * @return
-	 */
-	public User findByIdDuringRecovery(int id, String recoveryToken) 
-	{
-		if(loginRecoveryTokenProvider.checkTokenForUser(recoveryToken) != null) 
-			return userRepository.findById(id);
-		return null;
-	}
-	
-	/**
-	 * for account recovery
-	 * @param user
-	 * @param recoveryToken
-	 * @return
-	 */
-	public User saveDuringRecovery(User user, String recoveryToken)
-	{
-		if(loginRecoveryTokenProvider.checkTokenForUser(recoveryToken) != null) 
-			return userRepository.save(user);
-		return null;
-	}
 
 	/**
 	 * find the correct {@linkplain User} after being provided the user's office and role

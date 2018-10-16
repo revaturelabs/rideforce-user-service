@@ -33,8 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				new AntPathRequestMatcher("/users/**", "GET"), new AntPathRequestMatcher("/users", "POST"),
 				new AntPathRequestMatcher("/offices", "GET"), new AntPathRequestMatcher("/contact-types", "GET"),
 				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS"),
-				new AntPathRequestMatcher("/recovery/**", "GET"), new AntPathRequestMatcher("/recovery", "PUT"), 
-				new AntPathRequestMatcher("/recovery", "POST") };
+				 };
 
 		http.csrf().disable();
 		http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();

@@ -6,6 +6,7 @@ import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
+//
 public class ChangeUserModel {
 
 	private int id;
