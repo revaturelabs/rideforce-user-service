@@ -40,7 +40,8 @@ public class SendEmailService {
 		String sender = "smtp.gmail.com"; 		
 		String username = "rideforce.reset@gmail.com";     //dummy email: birthday - 01/01/1996; gender - rather not say
 		String credential2 = "revaturecode123";
-		String url = "http://whateverthefrontendendpointislol.com";
+		String url = "http://rideforce.s3-website-us-east-1.amazonaws.com/recoverycomponent";    
+		//FIXME Next batch: make sure Angular has a component dealing with recovery, and replace the above
 		
 		Properties properties = System.getProperties();  //import java.util for "Properties"
 		properties.setProperty("mail.smtp.host", sender);  
@@ -63,7 +64,7 @@ public class SendEmailService {
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
 			
 			message.setSubject("Password Reset Link from RevatureRideForce");
-			message.setContent("<a href= "+"'"+url+"?token="+token+"'>Click here to reset password</a>", "text/html");
+			message.setContent("<a href= "+"'"+url+"/"+token+"'>Click here to reset password</a>", "text/html");
 			
 			Transport.send(message);
 			
