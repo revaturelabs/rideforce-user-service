@@ -38,7 +38,7 @@ public class SendEmailService {
 		//https://kinsta.com/knowledgebase/free-smtp-server/
 		//https://myaccount.google.com/lesssecureapps     <----Go here and turn it on so gmail doesnt block this app's access to the account
 		String sender = "smtp.gmail.com"; 		
-		String username = "rideforce.reset@gmail.com";     //dummy email: birthday - 01/01/1996; gender - rather not say 
+		String username = "rideforce.reset@gmail.com";     //dummy email: birthday - 01/01/1996; gender - rather not say
 		String credential2 = "revaturecode123";
 		String url = "http://whateverthefrontendendpointislol.com";
 		

@@ -32,6 +32,8 @@ import com.revature.rideforce.user.json.Linkable;
 @Table(name = "CONTACT_TYPE")
 public class ContactType implements EnumLike, Identifiable, Linkable, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "CONTACT_TYPE_ID")

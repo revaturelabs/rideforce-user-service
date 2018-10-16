@@ -49,7 +49,8 @@ import com.revature.rideforce.user.json.UserLinkResolver;
  */
 @Entity
 public class Car implements Identifiable, Linkable, Serializable {
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "CAR_ID")
