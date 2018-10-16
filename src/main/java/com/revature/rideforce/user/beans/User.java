@@ -49,6 +49,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Column(unique = true, nullable = false, length = 40)
 	@NotEmpty
 	@Email
+	@JsonProperty
 	private String email;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
@@ -114,6 +115,9 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		super();
 		this.role = new UserRole();
 		this.office = new Office();
+		this.startTime = (float) 9.0;
+		this.cars = new HashSet<>();
+		this.contactInfo = new HashSet<>();
 	}
 
 	@Override
@@ -217,7 +221,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		return startTime;
 	}
 
-	public void setStartTime(float startTime) {   //to provide a time, can do Time.valueOf("hh:mm:ss");
+	public void setStartTime(float startTime) {
 		this.startTime = startTime;
 	}
 
@@ -239,7 +243,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	@Override
-	@JsonIgnore
 	public String getUsername() {
 		return email;
 	}
@@ -340,13 +343,15 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		if (bio == null) {
 			if (other.bio != null)
 				return false;
-		} else if (!bio.equals(other.bio))
+		} else if (!bio.equals(other.bio)) {
 			return false;
+		}
 		if (cars == null) {
 			if (other.cars != null)
 				return false;
-		} else if (!cars.equals(other.cars))
+		} else if (!cars.equals(other.cars)) {
 			return false;
+		}
 		if (contactInfo == null) {
 			if (other.contactInfo != null)
 				return false;

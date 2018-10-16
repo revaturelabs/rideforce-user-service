@@ -27,7 +27,8 @@ import com.revature.rideforce.user.json.Linkable;
  */
 @Entity
 public class Office implements Identifiable, Linkable, Serializable {
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "OFFICE_ID")

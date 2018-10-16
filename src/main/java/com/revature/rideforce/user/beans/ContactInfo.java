@@ -28,6 +28,8 @@ import com.revature.rideforce.user.json.Linkable;
 @Entity
 @Table(name = "CONTACT_INFO")
 public class ContactInfo implements Identifiable, Linkable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "CONTACT_INFO_ID")
