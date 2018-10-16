@@ -32,6 +32,6 @@ public class RegistrationTokenProvider extends JwtProvider {
 	 */
 	public boolean isValid(String token) {
 		String subject = getSubject(token);
-		return subject.equals(SUBJECT);
+		return subject != null;
 	}
 }
