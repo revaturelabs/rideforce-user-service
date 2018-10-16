@@ -49,6 +49,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Column(unique = true, nullable = false, length = 40)
 	@NotEmpty
 	@Email
+	@JsonProperty
 	private String email;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
@@ -239,7 +240,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	@Override
-	@JsonIgnore
 	public String getUsername() {
 		return email;
 	}
