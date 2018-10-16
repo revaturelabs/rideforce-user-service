@@ -37,9 +37,6 @@ import com.revature.rideforce.user.services.UserService;
 								//RunWith annotation is from JUnit, and I guess it accepts that SpringRunner.class from spring
 @SpringBootTest(classes=UserApplication.class)   //this annotation comes from spring boot starter test context.....Application Context
 public class AuthenticationServiceUnitTest {
-//	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException
-//	public User register(UserRegistrationInfo info)
-//	public User getCurrentUser()
 	private User user;
 	private UserCredentials userCredentials;
 	private UserRegistrationInfo registrationInfo;
@@ -53,20 +50,6 @@ public class AuthenticationServiceUnitTest {
 	private UserRepository userRepo;
 	@MockBean
 	private UserService userService;
-	
-//	@Before 
-//	public void setUp()
-//	{
-//		Assertions.assertThat(authenticationService).isNotNull();
-//		Assertions.assertThat(userRepo).isNotNull();
-//		this.userCredentials = new UserCredentials();
-//		Assertions.assertThat(userCredentials).isNotNull();
-//		this.user = new User();
-//		user.setId(1);
-//		Assertions.assertThat(user).isNotNull();
-//		Assertions.assertThat(passwordEncoder).isNotNull();
-//		Assertions.assertThat(userService).isNotNull();
-//	}
 	
 	@Before
 	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException, EmptyPasswordException
@@ -121,22 +104,20 @@ public class AuthenticationServiceUnitTest {
 		Assertions.assertThat(thrown).isInstanceOf(InvalidCredentialsException.class);
 	}
 	
-//	@Test
-//	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
-//                                    , PasswordRequirementsException
-//	{
-//		String token = registrationTokenProvider.generateToken();
-//		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", token);
-//		Assertions.assertThat( authenticationService.register(registrationInfo) ).isInstanceOf(User.class).isNotNull();
-//	}
+	@Test
+	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
+                                   , PasswordRequirementsException
+	{
+		String token = registrationTokenProvider.generateToken();
+		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", token);
+		Assertions.assertThat( authenticationService.register(registrationInfo) ).isInstanceOf(User.class).isNotNull();
+	}
 	
 	@Test(expected = InvalidRegistrationKeyException.class)
 	public void registerWithInvalidRegistrationKeyTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
 	{
 		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", "badkey");
 		authenticationService.register(registrationInfo);
-//		Throwable caughtException = Assertions.catchThrowable( () -> authenticationService.register(registrationInfo) );
-//		Assertions.assertThat(caughtException).isInstanceOf(InvalidRegistrationKeyException.class);
 	}
 	
 	@Test(expected = NullPointerException.class)
