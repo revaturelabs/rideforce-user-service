@@ -65,7 +65,6 @@ public class AuthenticationServiceUnitTest {
 		Assertions.assertThat(user).isNotNull();
 		Assertions.assertThat(passwordEncoder).isNotNull();
 		Assertions.assertThat(userService).isNotNull();
-//		User user = new User();
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
 		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
