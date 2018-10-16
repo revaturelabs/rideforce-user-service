@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class CrudController<T extends Identifiable & Linkable> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
 
 	/**

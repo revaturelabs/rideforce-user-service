@@ -51,7 +51,7 @@ public class LoginTokenProvider extends JwtProvider {
 			return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
 		} catch (NumberFormatException e) {
 			return null;
-		}
+		} 
 	}
 
 	/**

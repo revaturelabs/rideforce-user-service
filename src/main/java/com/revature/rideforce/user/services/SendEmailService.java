@@ -10,14 +10,21 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * for the LoginRecoveryController for modularizing sending the email
  * @author clpeng
  * @since Iteration 2 10/20/2018
  */
+@Slf4j
 public class SendEmailService {
 
-	final static int GMAIL_SMTP_PORT = 587;
+	static final int GMAIL_SMTP_PORT = 587;
+	
+	private SendEmailService() {
+		super();
+	}
 	/**
 	 * send an email with a link to the front end's reset password page with a token in the url parameter. Sender email is specified within the method 
 	 * instead of in the parameters
@@ -31,8 +38,8 @@ public class SendEmailService {
 		//https://kinsta.com/knowledgebase/free-smtp-server/
 		//https://myaccount.google.com/lesssecureapps     <----Go here and turn it on so gmail doesnt block this app's access to the account
 		String sender = "smtp.gmail.com"; 		
-		String username = "rideforce.reset@gmail.com";     //dummy email: birthday - 01/01/1996; gender - rather not say; 
-		String password = "revaturecode123";
+		String username = "rideforce.reset@gmail.com";     //dummy email: birthday - 01/01/1996; gender - rather not say
+		String credential2 = "revaturecode123";
 		String url = "http://whateverthefrontendendpointislol.com";
 		
 		Properties properties = System.getProperties();  //import java.util for "Properties"
@@ -42,11 +49,13 @@ public class SendEmailService {
 		properties.put("mail.smtp.starttls.enable", true);
 		
 		Session session = Session.getDefaultInstance(properties,     					//Session and MimeMessage from javax.mail
-			    new javax.mail.Authenticator() {  
-			     protected PasswordAuthentication getPasswordAuthentication() {  
-			      return new PasswordAuthentication(username, password);  
-			     }  
-		});  
+			new javax.mail.Authenticator() {  
+				@Override
+		     	protected PasswordAuthentication getPasswordAuthentication() {  
+		     		return new PasswordAuthentication(username, credential2);
+		     	}  
+			}
+		);  
 		
 		MimeMessage message = new MimeMessage(session);
 		try {
@@ -59,7 +68,7 @@ public class SendEmailService {
 			Transport.send(message);
 			
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			log.error("Email could not be sent");
 		}
 	}
 }

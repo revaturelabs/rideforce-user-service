@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -29,8 +30,10 @@ import com.revature.rideforce.user.json.Linkable;
  */
 @Entity
 @Table(name = "CONTACT_TYPE")
-public class ContactType implements EnumLike, Identifiable, Linkable {
+public class ContactType implements EnumLike, Identifiable, Linkable, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "CONTACT_TYPE_ID")
@@ -130,8 +133,9 @@ public class ContactType implements EnumLike, Identifiable, Linkable {
 		if (type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!type.equals(other.type)) {
 			return false;
+		}
 		return true;
 	}
 	

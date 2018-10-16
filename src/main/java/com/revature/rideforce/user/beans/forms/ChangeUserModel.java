@@ -1,10 +1,9 @@
-package com.revature.rideforce.user.beans.changeModels;
+package com.revature.rideforce.user.beans.forms;
 
 import java.util.Date;
 
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
 public class ChangeUserModel {
