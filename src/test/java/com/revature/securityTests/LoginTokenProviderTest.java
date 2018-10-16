@@ -69,5 +69,7 @@ public class LoginTokenProviderTest {
     String payload = decodedJwt.getPayload();
     String signature = decodedJwt.getSignature();
     assertThat(testToken).matches(header + "." +  payload + "." + signature); 
+    assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
   }
+
 }
