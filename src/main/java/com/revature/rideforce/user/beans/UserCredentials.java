@@ -55,12 +55,14 @@ public class UserCredentials {
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		} else if (!email.equals(other.email))
-			return false;
+		} 
+		else if (!email.equals(other.email)) 
+				return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
-		} else if (!password.equals(other.password))
+		}
+		else if (!password.equals(other.password))
 			return false;
 		return true;
 	}

@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
-@Slf4j
 @Transactional
 public class LoginTokenProviderTest {
   private static final int USER_ID = 1;
