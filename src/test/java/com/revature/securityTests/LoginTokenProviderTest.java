@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.UserApplication;
-import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -35,7 +34,6 @@ public class LoginTokenProviderTest {
   };
   @Test
   public void testTokenValidFormat() {
-    Object token = loginTokenProvider.generateToken(USER_ID);
     assertThat(loginTokenProvider.generateToken(USER_ID)).isInstanceOfSatisfying(String.class, jwtPropertyRequirements); 
   }
 }
