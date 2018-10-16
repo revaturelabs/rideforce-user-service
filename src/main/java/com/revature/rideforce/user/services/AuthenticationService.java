@@ -101,6 +101,7 @@ public class AuthenticationService {
 		}
 		log.info("User registered successfully");
 		log.info("Hashing password");
+		System.out.println(("\n\nbefore the problem area\n\n\n\n"));
 		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
 		return userService.add(info.getUser());
 	}
@@ -135,6 +136,6 @@ public class AuthenticationService {
 	 * @return true if valid password
 	 */
 	private boolean passwordIsValid(String password) {
-		return (password.length() < 8 || password.length() > 16);
+		return (password.length() >= 8 && password.length() <= 16);
 	}
 }

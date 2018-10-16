@@ -14,9 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,56 +70,40 @@ public class LoginRecoveryControllerTest {
 	{
 		userRepository.save(this.temp);  //just temporarily making admin's email the test email so it sends to an email we can check
 		
-		Authentication auth = new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()); 	//FIXME this is problem. The endpoint inaccessible less logged in
-		SecurityContextHolder.getContext().setAuthentication(auth);  										//gotta make endpt under WebCofiguration accessible w/o login, just with a token
-		
-		String jsonResponseBody = this.mockMvc.perform(post("/recovery").contentType("application/json").content(TEST_EMAIL))
+		String response = this.mockMvc.perform(post("/recovery").contentType("application/json").content(TEST_EMAIL))
 									.andExpect(status().is2xxSuccessful())
 									.andReturn().getResponse().getContentAsString();
-		Assertions.assertThat(jsonResponseBody).contains(TEST_EMAIL);      //json body contains information different from the User object
+		Assertions.assertThat(response).isEqualTo("Successful");      //json body contains information different from the User object
 																			//because of the json link resolver... so just gonna see if it's not null is all
-		SecurityContextHolder.getContext().setAuthentication(null); 
 	}
 	
 	@Test 											//tbh, no way to check if an email unsuccessfully sent, it's just there's no "admin@revature.com" email
 	public void postSendEmailNonexistentEmailShouldReturnNullUserAndNotSendEmailTest() throws Exception
 	{
-		Authentication auth = new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()); 	//FIXME this is problem. The endpoint inaccessible less logged in
-		SecurityContextHolder.getContext().setAuthentication(auth);  										//gotta make endpt under WebCofiguration accessible w/o login, just with a token
-		
 		String jsonResponseBody = this.mockMvc.perform(post("/recovery").contentType("application/json").content(NOT_IN_DB_EMAIL))
-									.andExpect(status().is2xxSuccessful())
+									.andExpect(status().isBadRequest())
 									.andReturn().getResponse().getContentAsString();
 	
-		Assertions.assertThat(jsonResponseBody).isEmpty();             //The User returned should be null, not found   
-		SecurityContextHolder.getContext().setAuthentication(null); 
+		Assertions.assertThat(jsonResponseBody).contains("No user with this email");             //The User returned should be null, not found   
 	}
 	
 	@Test
 	public void processResetPasswordTokenGoodTokenTest() throws UnsupportedEncodingException, Exception
 	{
-		Authentication auth = new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()); 	//FIXME this is problem. The endpoint inaccessible less logged in
-		SecurityContextHolder.getContext().setAuthentication(auth);  										//gotta make endpt under WebCofiguration accessible w/o login, just with a token
-		
 		String token = this.adminsRecoveryToken;
 		String responseBody = this.mockMvc.perform(get("/recovery?token="+token)).andExpect(status().isOk())
 																				 .andReturn().getResponse().getContentAsString();
-		Assertions.assertThat(responseBody).isEqualTo("1");
-		SecurityContextHolder.getContext().setAuthentication(null); 
+		Assertions.assertThat(responseBody).contains("1");
 	}
 	
 	
 	@Test
 	public void processResetPasswordTokenBadTokenTest() throws UnsupportedEncodingException, Exception
 	{
-		Authentication auth = new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()); 	//FIXME this is problem. The endpoint inaccessible less logged in
-		SecurityContextHolder.getContext().setAuthentication(auth);  										//gotta make endpt under WebCofiguration accessible w/o login, just with a token
-		
 		String token = "badtoken";
-		String responseBody = this.mockMvc.perform(get("/recovery?token="+token)).andExpect(status().isOk())
+		String responseBody = this.mockMvc.perform(get("/recovery?token="+token)).andExpect(status().is4xxClientError())
 																				 .andReturn().getResponse().getContentAsString();
-		Assertions.assertThat(responseBody).isEmpty();
-		SecurityContextHolder.getContext().setAuthentication(null); 
+		Assertions.assertThat(responseBody).contains("Token expired or is invalid");
 	}
 	
 	
@@ -131,9 +112,6 @@ public class LoginRecoveryControllerTest {
 	@Test
 	public void processResetPasswordRequestTest() throws UnsupportedEncodingException, Exception
 	{
-		//FIXME gotta make endpt under WebCofiguration accessible w/o login, just with a token
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()));				
-		
 		//to set content of requestbody, gotta turn into json string first
 		String requestBody =  this.objectMapper.writeValueAsString( new LoginRecoveryProcessForm(this.adminsRecoveryToken, "password2") );
 		
@@ -141,21 +119,15 @@ public class LoginRecoveryControllerTest {
 											.andExpect(status().isOk())
 											.andReturn().getResponse().getContentAsString();
 		Assertions.assertThat(responseBody).contains("id", "admin", "lastName"); //vs contains "" would be null response body
-
-		SecurityContextHolder.getContext().setAuthentication(null); 
 	}
 	
 	@Test
 	public void processResetPasswordRequestBadTokenShouldGiveNullTest() throws UnsupportedEncodingException, Exception
 	{
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(temp, "", temp.getAuthorities()));	
-		
 		String requestBody =  this.objectMapper.writeValueAsString( new LoginRecoveryProcessForm("badtoken", "password2") );
 		String responseBody = this.mockMvc.perform(put("/recovery").contentType("application/json").content(requestBody))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		Assertions.assertThat(responseBody).isEmpty(); //vs contains "" would be null response body
-
-		SecurityContextHolder.getContext().setAuthentication(null); 
 	}
 }
