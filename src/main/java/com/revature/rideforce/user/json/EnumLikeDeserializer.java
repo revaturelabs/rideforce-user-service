@@ -3,7 +3,6 @@ package com.revature.rideforce.user.json;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T> {
 	private static final long serialVersionUID = 1L;
 
-	private EnumLikeResolver<T> resolver;
+	private transient EnumLikeResolver<T> resolver;
 
 	
 	/**Constructor for EnumLikeDeserializer class
@@ -34,7 +33,7 @@ public class EnumLikeDeserializer<T extends EnumLike> extends StdDeserializer<T>
 	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
 	 */
 	@Override
-	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 		return resolver.resolve(p.getValueAsString());
 	}
 }

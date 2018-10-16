@@ -1,6 +1,7 @@
 package com.revature.rideforce.user.security;
 
 import java.time.Duration;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,10 +12,7 @@ import org.springframework.stereotype.Service;
 @Service  																
 public class LoginRecoveryTokenProvider extends JwtProvider{
 	//similar to the registration token
-	
-	//subject to pass into JwtProvider's generateToken(subject, duration)
-//	public static final String SUBJECT_RECOVERY = "RECOVERY";
-	
+		
 	public String generateToken(Integer id)
 	{
 		//make a token for recovery. User can reset password within 30 min, and token information/subject is just the user Id

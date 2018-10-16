@@ -20,7 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SendEmailService {
 
-	final static int GMAIL_SMTP_PORT = 587;
+	static final int GMAIL_SMTP_PORT = 587;
+	
+	private SendEmailService() {
+		super();
+	}
 	/**
 	 * send an email with a link to the front end's reset password page with a token in the url parameter. Sender email is specified within the method 
 	 * instead of in the parameters
@@ -45,11 +49,13 @@ public class SendEmailService {
 		properties.put("mail.smtp.starttls.enable", true);
 		
 		Session session = Session.getDefaultInstance(properties,     					//Session and MimeMessage from javax.mail
-			    new javax.mail.Authenticator() {  
-			     protected PasswordAuthentication getPasswordAuthentication() {  
-			      return new PasswordAuthentication(username, credential2);  
-			     }  
-		});  
+			new javax.mail.Authenticator() {  
+				@Override
+		     	protected PasswordAuthentication getPasswordAuthentication() {  
+		     		return new PasswordAuthentication(username, password);
+		     	}  
+			}
+		);  
 		
 		MimeMessage message = new MimeMessage(session);
 		try {
