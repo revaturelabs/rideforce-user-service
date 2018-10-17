@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -22,14 +23,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.revature.rideforce.user.beans.ResponseError;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @Lazy(true)
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
-  static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public ErrorController(ErrorAttributes errorAttributes) {
 		super(errorAttributes);

@@ -35,13 +35,15 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import lombok.extern.slf4j.Slf4j;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/users")
 public class UserController {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	static final String DNE = " does not exist.";
 	
 	@Autowired
