@@ -46,7 +46,7 @@ server:
 
  
 amazonProperties:
-  endpointUrl: http://s3-website-us-east-1.amazonaws.com
+  endpointUrl: http://rideshare-photos.s3-website-us-east-1.amazonaws.com
   accessKey: ${ACCESS}
   secretKey: ${SECRET}
   bucketName: rideshare-photos
