@@ -24,7 +24,7 @@ public class AmazonClientService {
 
     private AmazonS3 s3client;
 
-    @Value("http://s3-website-us-east-1.amazonaws.com")
+    @Value("http://rideshare-photos.s3-website-us-east-1.amazonaws.com")
     private String endpointUrl;
 
     @Value("rideshare-photos")

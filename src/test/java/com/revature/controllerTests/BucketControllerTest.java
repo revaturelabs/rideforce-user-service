@@ -1,6 +1,11 @@
 package com.revature.controllerTests;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,12 +40,16 @@ public class BucketControllerTest {
 	//https://stackoverflow.com/questions/21800726/using-spring-mvc-test-to-unit-test-multipart-post-request
 	@Test
 	public void uploadFileTest() throws Exception {
-		
-		MockMultipartFile file = new MockMultipartFile("file", "very_sad_cat.png", "image/png" , "very_sad_cat.png".getBytes());
+//		final byte[] imageData = Files.readAllBytes(new File("C:\\Program Files\\Git\\Documents\\1808-Aug13-Java\\p3-rideforce\\rideshare-user-service\\src\\test\\java\\com\\revature\\controllerTests\\very_sad_cat.png").toPath());
+		File file1 = new File("./src/test/java/com/revature/controllerTests/taggCat.png");
+		FileInputStream fis = new FileInputStream(file1);
+		MockMultipartFile file = new MockMultipartFile("file", "taggCat.png", "image/png" , fis);
 		
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	       mockMvc.perform(MockMvcRequestBuilders.multipart("/storage/uploadFile")
 	                       .file(file))
-	                   .andExpect(status().is(200));
+	                   .andExpect(status().is(200))
+	                   .andExpect(content().string("success"));
 	}
+	 
 }
