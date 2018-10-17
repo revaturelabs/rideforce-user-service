@@ -37,7 +37,7 @@ public class UserService extends CrudService<User> {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	/**
 	 * constructor injects repository dependency
 	 * @param userRepository {@linkplain UserRepository} object that will be injected as the service's dao layer
@@ -61,14 +61,16 @@ public class UserService extends CrudService<User> {
 		log.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);
 
-    log.info("User {} found", found);
+		log.info("User {} found", found);
 
+		
 		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
 			throw new PermissionDeniedException("Permission denied to get user by email.");
 		}
 		
 		return userRepository.findByEmail(email);
 	}
+	
 
 	/**
 	 * find the correct {@linkplain User} after being provided the user's office and role

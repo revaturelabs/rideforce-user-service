@@ -6,6 +6,7 @@ import java.lang.invoke.MethodHandles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * method implementations.
  */
 @Slf4j
+@PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public abstract class CrudController<T extends Identifiable & Linkable> {
 	static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
