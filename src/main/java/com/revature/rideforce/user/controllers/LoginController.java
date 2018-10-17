@@ -3,6 +3,7 @@ package com.revature.rideforce.user.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RestController
+@Lazy(true)
 @RequestMapping("/login")
 public class LoginController {
 	@Autowired
