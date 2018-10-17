@@ -61,13 +61,12 @@ public class LoginTokenProviderTest {
 	public void verifyToken() {
     Clock rightNow = Clock.fixed(Instant.now(), ZoneId.systemDefault());
 
-		DecodedJWT decodedJwt = verification.build(rightNow).verify(testToken);
+		DecodedJWT decodedJwt = verification.build((com.auth0.jwt.interfaces.Clock) rightNow).verify(testToken);
 		String header = decodedJwt.getHeader();
 		String payload = decodedJwt.getPayload();
 		String signature = decodedJwt.getSignature();
 		assertThat(testToken).matches(header + "." + payload + "." + signature);
 		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
     
-    //assertThat(decodedJwt.getIssuedAt()).isEqualTo();
 	}
 }
