@@ -61,7 +61,7 @@ public class LoginTokenProviderTest {
 	public void verifyToken() {
     Clock rightNow = Clock.fixed(Instant.now(), ZoneId.systemDefault());
 
-		DecodedJWT decodedJwt = verification.build(rightNow).verify(testToken);
+		DecodedJWT decodedJwt = verification.build((com.auth0.jwt.interfaces.Clock) rightNow).verify(testToken);
 		String header = decodedJwt.getHeader();
 		String payload = decodedJwt.getPayload();
 		String signature = decodedJwt.getSignature();
