@@ -1,7 +1,6 @@
 # RideForce User Service
 
-This service handles the following endpoints (see the API documentation in
-the gateway service repo for all endpoints and their explanations):
+This service handles the following endpoints (see the API documentation in the gateway service repo for all endpoints and their explanations):
 
 - `/registration-key`
 - `/login`
@@ -14,13 +13,25 @@ the gateway service repo for all endpoints and their explanations):
 
 ## Environment variables
 
-Environment variables are used for sensitive data that should not be exposed
-in the public Git repository. The following is a comprehensive list of all
-environment variables that are necessary for proper program execution:
+Environment variables are used for sensitive data that should not be exposed in the public Git repository. The following is a comprehensive list of all environment variables that are necessary for proper program execution:
 
 - `JDBC_URL`: the database url
 - `JDBC_USERNAME`: the database username
 - `JDBC_PASSWORD`: the database password
+
+In Windows, open `cmd` as administrator and enter the command substituting the appropriate values for each:
+
+```
+setx JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword
+```
+Verify the correct values have been set by opening a new command prompt and entering, for example:
+```
+echo %JDBC_URL%
+```
+For *nix users, modify `.bashrc` (or for whatever shell you use):
+```bash
+echo export JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword >> .bashrc && exec bash 
+```
 
 ## Logging
 Logging is done by logback, through the slfj interface. [lombok](https://projectlombok.org/download) dependency is required to use `@Slf4j`, which reduces code duplication.
