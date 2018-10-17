@@ -40,11 +40,11 @@ spring:
 ```
 If the sql script is missing the create statements, change `ddl-auto` to `create` and change it to `validate` once all the script has completed successfully. 
 
-In SQL Developer, click on the file menu and open a new file. Select locate `user.rds.script.sql`. Once it's loaded, run the script by pressing the play button.  
+In SQL Developer, click on the file menu and open a new file. Select locate `OfficialDbSQL.sql`. Once it's loaded, run the script by pressing the play button.  
 
 In SQLCl or SQL*Plus: 
 ```bash
-sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @user.rds.script.sql
+sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @OfficialDbSQL.sql
 ```
 ## Logging
 Logging is done by logback, through the slfj interface. [lombok](https://projectlombok.org/download) dependency is required to use `@Slf4j`, which reduces code duplication.
