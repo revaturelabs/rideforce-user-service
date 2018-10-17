@@ -24,10 +24,10 @@ public class AmazonClientService {
 
     private AmazonS3 s3client;
 
-    @Value("http://rideshare-photos.s3-website-us-east-1.amazonaws.com")
+    @Value("http://s3-website-us-east-1.amazonaws.com")
     private String endpointUrl;
 
-    @Value("")
+    @Value("rideshare-photos")
     private String bucketName;
 
     @Value("${ACCESS}")
@@ -67,13 +67,16 @@ public class AmazonClientService {
     public String uploadFile(MultipartFile multipartFile) {
       String fileUrl = "";
       try {
-        File file = convertMultiPartToFile(multipartFile);
-        String fileName = generateFileName(multipartFile);
-        fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
-        uploadFileTos3bucket(fileName, file);
-        file.delete();
+    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+    	  File file = convertMultiPartToFile(multipartFile);
+    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+    	  String fileName = generateFileName(multipartFile);
+    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+    	  fileUrl = endpointUrl + "/" + fileName;
+    	  uploadFileTos3bucket(fileName, file);
+    	  file.delete();
       } catch (Exception e) {
-        e.printStackTrace();
+    	  e.printStackTrace();
       }
       return fileUrl;
     }
