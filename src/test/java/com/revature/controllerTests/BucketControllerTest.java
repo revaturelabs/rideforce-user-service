@@ -36,6 +36,7 @@ public class BucketControllerTest {
 	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
+	private String url;
 	
 	//https://stackoverflow.com/questions/21800726/using-spring-mvc-test-to-unit-test-multipart-post-request
 	@Test
@@ -46,10 +47,15 @@ public class BucketControllerTest {
 		MockMultipartFile file = new MockMultipartFile("file", "taggCat.png", "image/png" , fis);
 		
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	       mockMvc.perform(MockMvcRequestBuilders.multipart("/storage/uploadFile")
+	    url = mockMvc.perform(MockMvcRequestBuilders.multipart("/storage/uploadFile")
 	                       .file(file))
 	                   .andExpect(status().is(200))
-	                   .andExpect(content().string("success"));
+	                   .andReturn().getResponse().getContentAsString();
+	    System.out.println("\n\n\n"+url);
 	}
 	 
+	@Test
+	public void printUrl() {
+		System.out.println("\n\n\n" + url);
+	}
 }
