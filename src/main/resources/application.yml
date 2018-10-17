@@ -17,6 +17,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.Oracle10gDialect
+  devtools:
+    restart:
+      enabled: false
 
 eureka:
   client:

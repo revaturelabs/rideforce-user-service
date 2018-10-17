@@ -19,17 +19,15 @@ import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
  * users, getting information about the current user.
  */
+@Slf4j
 @Service
 public class AuthenticationService {
-  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 

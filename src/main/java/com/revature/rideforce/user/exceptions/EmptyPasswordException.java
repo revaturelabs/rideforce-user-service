@@ -1,6 +1,6 @@
 package com.revature.rideforce.user.exceptions;
 
-public class EmptyPasswordException extends CustomException {
+public class EmptyPasswordException extends Exception{
 	private static final long serialVersionUID = 1L;
 
 	public EmptyPasswordException() {
