@@ -1,5 +1,7 @@
 package com.revature.beanTests;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -17,12 +19,18 @@ import com.revature.rideforce.user.beans.User;
 public class CarTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
+	private Car testCar;
 	
 	@Before
 	public void setupValidatorFactory () {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
+		
+		testCar = new Car();
+		testCar.setYear(1996);
+		testCar.setOwner(new User());
+		testCar.setId(33);
 	}
 	
 	@Test
@@ -68,6 +76,10 @@ public class CarTest {
 		Set<ConstraintViolation<Car>> violations = localValidatorFactory.validate(car);
 		// the violations of a null owner and an empty make
 		Assert.assertTrue(violations.size() == 2);
+	}
+	@Test
+	public void toUriTest() throws URISyntaxException {
+		Assert.assertTrue(this.testCar.toUri().equals(new URI("/cars/"+testCar.getId())));
 	}
 	
 	
