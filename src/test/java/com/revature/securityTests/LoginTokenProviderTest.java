@@ -2,7 +2,8 @@ package com.revature.securityTests;
 
 import java.util.regex.Pattern;
 import java.time.ZoneId;
-import java.time.Clock;
+import java.util.Date;
+import com.auth0.jwt.interfaces.Clock;
 import java.time.Instant;
 import org.junit.Test;
 import org.junit.Before;
@@ -59,7 +60,12 @@ public class LoginTokenProviderTest {
 
 	@Test
 	public void verifyToken() {
-    Clock rightNow = Clock.fixed(Instant.now(), ZoneId.systemDefault());
+    class RightNow implements Clock {
+      public Date getToday() {
+        return Date.from(Instant.now());
+      }
+    }
+    Clock rightNow = new RightNow(); 
 
 		DecodedJWT decodedJwt = verification.build(rightNow).verify(testToken);
 		String header = decodedJwt.getHeader();
@@ -67,7 +73,6 @@ public class LoginTokenProviderTest {
 		String signature = decodedJwt.getSignature();
 		assertThat(testToken).matches(header + "." + payload + "." + signature);
 		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
-    
-    //assertThat(decodedJwt.getIssuedAt()).isEqualTo();
+    assertThat(decodedJwt.getIssuedAt()).isCloseTo(rightNow.getToday(), 1000); //checks if issued date and verifier build date are close
 	}
 }
