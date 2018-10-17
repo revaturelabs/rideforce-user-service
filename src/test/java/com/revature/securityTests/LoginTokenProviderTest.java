@@ -1,9 +1,6 @@
 package com.revature.securityTests;
 
 import java.util.regex.Pattern;
-import java.time.ZoneId;
-import java.time.Clock;
-import java.time.Instant;
 import org.junit.Test;
 import org.junit.Before;
 import com.auth0.jwt.JWT;
@@ -58,15 +55,12 @@ public class LoginTokenProviderTest {
 	}
 
 	@Test
-	public void verifyToken() {
-    Clock rightNow = Clock.fixed(Instant.now(), ZoneId.systemDefault());
-
-		DecodedJWT decodedJwt = verification.build((com.auth0.jwt.interfaces.Clock) rightNow).verify(testToken);
-		String header = decodedJwt.getHeader();
-		String payload = decodedJwt.getPayload();
-		String signature = decodedJwt.getSignature();
-		assertThat(testToken).matches(header + "." + payload + "." + signature);
-		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
-    
+	  public void verifyToken() {
+	    DecodedJWT decodedJwt = verification.build().verify(testToken);
+	    String header = decodedJwt.getHeader();
+	    String payload = decodedJwt.getPayload();
+	    String signature = decodedJwt.getSignature();
+	    assertThat(testToken).matches(header + "." +  payload + "." + signature); 
+	    assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
 	}
 }
