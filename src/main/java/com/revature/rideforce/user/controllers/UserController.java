@@ -35,13 +35,15 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import lombok.extern.slf4j.Slf4j;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/users")
 public class UserController {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	static final String DNE = " does not exist.";
 	
 	@Autowired
@@ -131,9 +133,15 @@ public class UserController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
+		
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
-		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
+		UserRole role = userRoleService.findByType(changedUserModel.getRole());
+
+		if(role != null) {
+			user.setRole(role);
+		}
+		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.services.CarService;
 
-import lombok.extern.slf4j.Slf4j;
 
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * 
  * responsible for intercepting the http request methods at the /cars endpoint
@@ -18,12 +20,12 @@ import lombok.extern.slf4j.Slf4j;
  * @author clpeng
  */
 
-@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/cars")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public class CarController extends CrudController<Car> {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	public CarController(CarService carService) {
 		super(carService);
