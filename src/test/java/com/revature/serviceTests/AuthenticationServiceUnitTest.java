@@ -21,7 +21,7 @@ import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.exceptions.DisabledUserException;
+import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
@@ -78,10 +78,10 @@ public class AuthenticationServiceUnitTest {
 	/**
 	 * Test the logic of the authentication service layer is sound
 	 * @throws InvalidCredentialsException 
-	 * @throws DisabledUserException 
+	 * @throws DisabledAccountException 
 	 */
 	@Test
-	public void authenticateWithGoodCredentialsTest() throws InvalidCredentialsException, DisabledUserException
+	public void authenticateWithGoodCredentialsTest() throws InvalidCredentialsException, DisabledAccountException
 	{
 		userCredentials.setEmail("admin@revature.com");
 		userCredentials.setPassword("password"); 									//ultimately the token returned by LoginTokenProvider is just a string

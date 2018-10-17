@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.UserCredentials;
-import com.revature.rideforce.user.exceptions.DisabledUserException;
+import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
@@ -34,7 +34,7 @@ public class AuthenticationServiceIntegrationTest {
 	}
 	
 	@Test(expected = InvalidCredentialsException.class)
-	public void invalidCredentialsThrowsException() throws InvalidCredentialsException, DisabledUserException {
+	public void invalidCredentialsThrowsException() throws InvalidCredentialsException, DisabledAccountException {
 		UserCredentials userCred = new UserCredentials();
 		userCred.setEmail("bobby@gmail.com");
 		authenticationService.authenticate(new UserCredentials());
