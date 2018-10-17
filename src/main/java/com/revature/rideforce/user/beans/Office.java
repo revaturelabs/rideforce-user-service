@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -25,8 +26,9 @@ import com.revature.rideforce.user.json.Linkable;
  *
  */
 @Entity
-public class Office implements Identifiable, Linkable {
-	
+public class Office implements Identifiable, Linkable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "OFFICE_ID")
@@ -127,15 +129,17 @@ public class Office implements Identifiable, Linkable {
 		if (address == null) {
 			if (other.address != null)
 				return false;
-		} else if (!address.equals(other.address))
+		} else if (!address.equals(other.address)) {
 			return false;
+		}
 		if (id != other.id)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

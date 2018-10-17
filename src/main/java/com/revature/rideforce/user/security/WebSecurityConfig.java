@@ -22,8 +22,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginTokenProvider tokenProvider;
-//    @Autowired
-//    private ErrorController errorController;
 
 	/* (non-Javadoc)
 	 * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#configure(org.springframework.security.config.annotation.web.builders.HttpSecurity)
@@ -34,12 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		RequestMatcher[] allowable = { new AntPathRequestMatcher("/login", "POST"),
 				new AntPathRequestMatcher("/users/**", "GET"), new AntPathRequestMatcher("/users", "POST"),
 				new AntPathRequestMatcher("/offices", "GET"), new AntPathRequestMatcher("/contact-types", "GET"),
-				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS") };
+				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS") ,
+				new AntPathRequestMatcher("/storage/**", "POST"), new AntPathRequestMatcher("/storage/**", "DELETE")};
 
 		http.csrf().disable();
 		http.authorizeRequests().requestMatchers(allowable).permitAll().anyRequest().authenticated();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
-//        http.exceptionHandling().accessDeniedHandler(errorController).authenticationEntryPoint(errorController);
 	}
 }

@@ -11,27 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.UserCredentials;
+import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
 @Transactional
-public class AuthenticationServiceTest {
+public class AuthenticationServiceIntegrationTest {
 	
 	@Autowired
 	private AuthenticationService authenticationService;
-	
-	@Autowired
-	private RegistrationTokenProvider tokenProvider;
-	
-	
 	
 	@Before
 	public void validate() {
@@ -39,7 +34,7 @@ public class AuthenticationServiceTest {
 	}
 	
 	@Test(expected = InvalidCredentialsException.class)
-	public void invalidCredentialsThrowsException() throws InvalidCredentialsException {
+	public void invalidCredentialsThrowsException() throws InvalidCredentialsException, DisabledAccountException {
 		UserCredentials userCred = new UserCredentials();
 		userCred.setEmail("bobby@gmail.com");
 		authenticationService.authenticate(new UserCredentials());

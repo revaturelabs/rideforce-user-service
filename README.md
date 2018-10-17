@@ -1,7 +1,6 @@
 # RideForce User Service
 
-This service handles the following endpoints (see the API documentation in
-the gateway service repo for all endpoints and their explanations):
+This service handles the following endpoints (see the API documentation in the gateway service repo for all endpoints and their explanations):
 
 - `/registration-key`
 - `/login`
@@ -12,12 +11,58 @@ the gateway service repo for all endpoints and their explanations):
 - `/roles`
 - `/contact-types`
 
-## Environment variables
-
-Environment variables are used for sensitive data that should not be exposed
-in the public Git repository. The following is a comprehensive list of all
-environment variables that are necessary for proper program execution:
+## Configuring the database
+Environment variables are used for sensitive data that should not be exposed in the public Git repository. The following is a comprehensive list of all environment variables that are necessary for proper program execution:
 
 - `JDBC_URL`: the database url
 - `JDBC_USERNAME`: the database username
 - `JDBC_PASSWORD`: the database password
+
+In Windows, open `cmd` as administrator and enter the command substituting the appropriate values for each:
+
+```
+setx JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword
+```
+Verify the correct values have been set by opening a new command prompt and entering, for example:
+```
+echo %JDBC_URL%
+```
+For *nix users, modify `.bashrc` (or for whatever shell you use):
+```bash
+echo export JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword >> .bashrc && exec bash 
+```
+Set `ddl-auto` property to `validate` in the configuration file, located under `src/main/resources/`. For yaml:
+```yaml
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+```
+If the sql script is missing the create statements, change `ddl-auto` to `create` and change it to `validate` once all the script has completed successfully. 
+
+In SQL Developer, click on the file menu and open a new file. Select locate `OfficialDbSQL.sql`. Once it's loaded, run the script by pressing the play button.  
+
+In SQLCl or SQL*Plus: 
+```bash
+sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @OfficialDbSQL.sql
+```
+## Logging
+Logging is done by logback, through the slfj interface. [lombok](https://projectlombok.org/download) dependency is required to use `@Slf4j`, which reduces code duplication.
+```diff
++ import lombok.extern.slf4j.Slf4j;
+...
++ @Slf4j
+  public class SomeClass {
+-   static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+```
+`@Slf4j` implicitly declares a variable named `log` of type `Logger`. `log` is initialized using logback's `LoggerFactory` and takes as its name the fully qualified name (package + class name) of the class in which it is declared. 
+
+### Lombok & Spring Tool Suite
+Spring Tool Suite does not automatically recognize the lombok annotation and will have Sonar Lint flag it as an error. To install lombok, locate the jar (in your .m2 folder or by downloading it from the link above). Execute by double clicking or with the command `java -jar lombok.jar`. In the wizard, locate the STS executable and hit install. If on Windows, run as administrator if necessary. Open `CMD` as administrator and run lombok as a jar:
+```bash
+java -jar path/to/lombok.jar
+```
+![Alt Text](src/main/resources/lombok-install.gif)
+Lombok was not tested on MacOS.
+
+

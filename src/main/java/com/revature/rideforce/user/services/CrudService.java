@@ -13,8 +13,9 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.controllers.CrudController;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import lombok.extern.slf4j.Slf4j;
-
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * An abstract class implementing the basic methods of a CRUD service. The
  * purpose of this class is to enforce consistency in naming and method
@@ -25,9 +26,8 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T> the type of object on which this service acts
  * @since Iteration1 10/01/2018
  */
-@Slf4j
 public abstract class CrudService<T extends Identifiable> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	protected AuthenticationService authenticationService;
 

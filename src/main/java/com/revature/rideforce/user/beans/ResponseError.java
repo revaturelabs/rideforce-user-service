@@ -1,17 +1,15 @@
 package com.revature.rideforce.user.beans;
 
 import java.util.Arrays;
-import java.lang.invoke.MethodHandles;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The error type that is returned in conjunction with an HTTP error status.
@@ -29,9 +27,9 @@ import lombok.extern.slf4j.Slf4j;
  * }
  * </pre>
  */
-@Slf4j
+
 public class ResponseError {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
 	 * The primary message describing the error.
 	 */
@@ -130,8 +128,9 @@ public class ResponseError {
 		if (message == null) {
 			if (other.message != null)
 				return false;
-		} else if (!message.equals(other.message))
+		} else if (!message.equals(other.message)) {
 			return false;
+		}
 		return true;
 	}
 

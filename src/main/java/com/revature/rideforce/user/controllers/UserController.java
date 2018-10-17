@@ -4,9 +4,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,7 @@ import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.beans.UserRole;
-import com.revature.rideforce.user.beans.changeModels.ChangeUserModel;
+import com.revature.rideforce.user.beans.forms.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -33,12 +35,17 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import lombok.extern.slf4j.Slf4j;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @RestController
+@Lazy(true)
 @RequestMapping("/users")
 public class UserController {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final String DNE = " does not exist.";
+	
 	@Autowired
 	UserService userService;
 
@@ -65,7 +72,7 @@ public class UserController {
 		try {
 			User user = userService.findByEmail(email.toLowerCase());  //make the email to be looked for lower case to match the case of our db
 
-			return user == null ? new ResponseError("User with email " + email + " does not exist.")
+			return user == null ? new ResponseError("User with email " + email + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
@@ -78,7 +85,7 @@ public class UserController {
 		try {
 			Office office = officeService.findById(officeId);
 			if (office == null) {
-				return new ResponseError("Office with ID " + officeId + " does not exist.")
+				return new ResponseError("Office with ID " + officeId + DNE)
 						.toResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 			UserRole role = userRoleService.findByType(roleString);
@@ -97,7 +104,7 @@ public class UserController {
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		try {
 			User user = userService.findById(id);
-			return user == null ? new ResponseError("User with ID " + id + " does not exist.")
+			return user == null ? new ResponseError("User with ID " + id + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
@@ -108,7 +115,7 @@ public class UserController {
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
 			User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
-			user.setEmail(user.getEmail().toLowerCase());
+			user.setEmail(user.getUsername().toLowerCase());
 			registration.setUser(user);
 			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
@@ -126,9 +133,14 @@ public class UserController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
+		
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
-		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
+		UserRole role = userRoleService.findByType(changedUserModel.getRole());
+
+		if(role != null) {
+			user.setRole(role);
+		}
 		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
@@ -139,14 +151,14 @@ public class UserController {
 		}
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") int id) throws PermissionDeniedException {
 		User userToDelete = userService.findById(id); //throw permission denied exception if not logged in
 		if(userToDelete != null)
 			try {
 				userService.deleteUser(userToDelete);
-				return (ResponseEntity<?>) ResponseEntity.ok(userToDelete);
+				return ResponseEntity.ok(userToDelete);
 			} catch (PermissionDeniedException e) {
 				return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 			}

@@ -11,14 +11,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
+import com.revature.rideforce.user.beans.UserRegistrationInfo;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -46,6 +49,20 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserCannotPostUsers() throws Exception {
 		this.mockMvc.perform(post("/users")).andExpect(status().isUnsupportedMediaType());
+	}
+	
+	@Test
+	public void incorrectFormatWillReturn400PostUsers() throws Exception {
+		User admin = userRepository.findById(1); //unfortunately have to get a user
+		UserRegistrationInfo info = new UserRegistrationInfo();
+		info.setUser(admin);
+		info.setPassword("password");
+		info.setRegistrationKey("ThisIsAKey");
+		ObjectMapper om = new ObjectMapper();
+		String userRegInfo = om.writeValueAsString(info);
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin, "password", admin.getAuthorities()));
+		this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(userRegInfo)).andExpect(status().is4xxClientError());
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 	
 	@Test
@@ -134,7 +151,7 @@ public class UserControllerTest {
 			//throws PermissionDeniedException
 	}
 	
-	@Transactional   //"mock" mvc still actually deletes....like wtf is up with that??
+	@Transactional   //"mock" mvc still actually delete
 	@Test
 	public void loggedInAdminUserCanDeleteAccount() throws Exception
 	{

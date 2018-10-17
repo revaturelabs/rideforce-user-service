@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
@@ -18,15 +19,17 @@ import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
-import lombok.extern.slf4j.Slf4j;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
  * users, getting information about the current user.
  */
-@Slf4j
 @Service
 public class AuthenticationService {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -50,8 +53,9 @@ public class AuthenticationService {
 	 * @return a JWT for future authentication
 	 * @throws InvalidCredentialsException if the given credentials are invalid
 	 *                                     (wrong email or password)
+	 * @throws DisabledAccountException	   if the account is disabled (by admin)
 	 */
-	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException {
+	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException, DisabledAccountException {
 		User found = userRepository.findByEmail(credentials.getEmail());
 		log.info("Authenticating user credentials");
 		log.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
@@ -61,6 +65,9 @@ public class AuthenticationService {
 		}
 		if (!passwordEncoder.matches(credentials.getPassword(), found.getPassword())) {
 			throw new InvalidCredentialsException();
+		}
+		if (found.isActive().equals("DISABLED")) {
+			throw new DisabledAccountException();
 		}
 		return loginTokenProvider.generateToken(found.getId());
 	}
@@ -135,6 +142,6 @@ public class AuthenticationService {
 	 * @return true if valid password
 	 */
 	private boolean passwordIsValid(String password) {
-		return (password.length() < 8 || password.length() > 16) ? false : true;
+		return (password.length() >= 8 && password.length() <= 16);
 	}
 }

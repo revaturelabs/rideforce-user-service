@@ -1,22 +1,30 @@
 package com.revature.rideforce.user.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RestController
+@Lazy(true)
 @RequestMapping("/registration-key")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class RegistrationKeyController {
-	@Autowired
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());	
+  @Autowired
 	private RegistrationTokenProvider tokenProvider;
 
 	@Autowired
@@ -27,8 +35,10 @@ public class RegistrationKeyController {
 	 * someone to register
 	 * @return <code>String</code> from {@linkplain RegistrationTokenProvider#generateToken()}
 	 */
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> get() {
+		log.info("Accessing the token as an admin");
 		// Only trainers and admins can get registration tokens.
 		User loggedIn = authenticationService.getCurrentUser();
 		if (!loggedIn.isTrainer() && !loggedIn.isAdmin()) {

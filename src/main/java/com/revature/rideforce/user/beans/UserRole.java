@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -19,7 +20,9 @@ import com.revature.rideforce.user.json.Linkable;
 
 @Entity
 @Table(name = "ROLE")
-public class UserRole implements EnumLike, Identifiable, Linkable {
+public class UserRole implements EnumLike, Identifiable, Linkable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "ROLE_ID")
@@ -37,7 +40,6 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 
 
 	public UserRole(int id, @NotEmpty String type) {
-		super();
 		this.id = id;
 		this.type = type;
 	}
@@ -94,7 +96,8 @@ public class UserRole implements EnumLike, Identifiable, Linkable {
 		if (type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!type.equalsIgnoreCase(other.type))
+		} 
+		else if (!type.equalsIgnoreCase(other.type))
 			return false;
 		return true;
 	}

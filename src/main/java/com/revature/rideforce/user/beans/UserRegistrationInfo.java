@@ -4,8 +4,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
-
 public class UserRegistrationInfo {
 	
 	@Valid
@@ -68,7 +66,7 @@ public class UserRegistrationInfo {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) 
 			return true;
 		if (obj == null)
 			return false;
@@ -78,17 +76,20 @@ public class UserRegistrationInfo {
 		if (password == null) {
 			if (other.password != null)
 				return false;
-		} else if (!password.equals(other.password))
+		} 
+		else if (!password.equals(other.password))
 			return false;
 		if (registrationKey == null) {
 			if (other.registrationKey != null)
 				return false;
-		} else if (!registrationKey.equals(other.registrationKey))
+		} 
+		else if (!registrationKey.equals(other.registrationKey))
 			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} 
+		else if (!user.equals(other.user))
 			return false;
 		return true;
 	}

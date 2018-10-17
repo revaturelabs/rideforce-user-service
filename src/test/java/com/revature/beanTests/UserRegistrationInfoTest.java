@@ -1,6 +1,5 @@
 package com.revature.beanTests;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -12,12 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.revature.rideforce.user.beans.Car;
-import com.revature.rideforce.user.beans.ContactInfo;
-import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.beans.UserRole;
 
 public class UserRegistrationInfoTest {
 
@@ -107,5 +102,58 @@ public class UserRegistrationInfoTest {
 			} 
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
+	}
+	
+	@Test
+	public void toStringWorksTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		Assertions.assertThat(this.uri.toString())
+			.isEqualTo("UserRegistrationInfo [user=User [id=0, firstName=null, lastName=null, email=null, password=null, photoUrl=null, bio=null, active=ACTIVE, role=UserRole [id=0, type=null], office=Office [id=0, name=null, address=null], address=null, startTime=9.0, batchEnd=null, cars=[], venmo=null, contactInfo=[]], password=credentialpw]");
+	}
+	@Test
+	public void hashCodeWithFilledValuesWorksTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		UserRegistrationInfo otherUri = this.uri;
+		Assertions.assertThat(this.uri.hashCode() == otherUri.hashCode()).isTrue();
+	}
+	@Test
+	public void hashCodeWithNullValuesWorksTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		Assertions.assertThat(this.uri.hashCode() == this.uri.hashCode()).isTrue();
+	}
+	@Test
+	public void equalsWithSameObjectTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		Assertions.assertThat(this.uri.equals(this.uri)).isTrue();
+	}
+	@Test
+	public void equalsWithNullOtherObjectTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		Assertions.assertThat(this.uri.equals(null)).isFalse();
+	}
+	@Test
+	public void equalsWithOtherClassIsFalseTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		Assertions.assertThat(this.uri.equals(new Object())).isFalse();
+	}
+	@Test
+	public void equalsWithNullValuesOnOneSetValuesOnOtherTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		UserRegistrationInfo uri2 = new UserRegistrationInfo();
+		Assertions.assertThat(uri2.equals(this.uri)).isFalse();
+	}
+	@Test
+	public void equalsWithDifferentSetValuesOnBothTest() {
+		User u = new User();
+		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
+		UserRegistrationInfo uri2 = new UserRegistrationInfo(u, "differentCredential", "OtherFakeRegistrationKey");
+		Assertions.assertThat(uri2.equals(this.uri)).isFalse();
 	}
 }

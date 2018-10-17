@@ -1,7 +1,9 @@
-server:
-  port: 5555
-
 spring:
+  profiles:
+    active: development-oracl
+---
+spring:
+  profiles: development-oracl
   application:
     name: user-service
   datasource:
@@ -20,3 +22,31 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+server:
+  port: 5555
+---      
+spring:
+  profiles: development-h2
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:h2:mem:test 
+    username: sa 
+    driver-class-name: org.h2.Driver 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  show-sql: true
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+server:
+  port: 9001
+
+ 
+amazonProperties:
+  endpointUrl: http://rideshare-photos.s3-website-us-east-1.amazonaws.com
+  accessKey: ${ACCESS}
+  secretKey: ${SECRET}
+  bucketName: rideshare-photos

@@ -1,5 +1,6 @@
 package com.revature.rideforce.user.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -47,8 +48,9 @@ import com.revature.rideforce.user.json.UserLinkResolver;
  * @author clpeng
  */
 @Entity
-public class Car implements Identifiable, Linkable {
-	
+public class Car implements Identifiable, Linkable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Min(1)
 	@Column(name = "CAR_ID")
@@ -92,12 +94,8 @@ public class Car implements Identifiable, Linkable {
 	}
 	
 	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
-		super();
+		this(owner, make, model, year);
 		this.id = id;
-		this.owner = owner;
-		this.make = make;
-		this.model = model;
-		this.year = year;
 	}
 
 	@Override

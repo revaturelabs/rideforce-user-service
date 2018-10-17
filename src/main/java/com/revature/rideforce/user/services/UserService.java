@@ -18,8 +18,9 @@ import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * inherits methods from {@linkplain CrudService} but adds methods more specific to the {@linkplain User} model 
  * like password updating, finding by User's fields email & office, adding certain users only if the logged in user is the correct type.
@@ -29,15 +30,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author clpeng
  * @since Iteration1 10/01/2018
  */
-@Slf4j
 @Service
 public class UserService extends CrudService<User> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private UserRepository userRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	/**
 	 * constructor injects repository dependency
 	 * @param userRepository {@linkplain UserRepository} object that will be injected as the service's dao layer
@@ -61,14 +61,16 @@ public class UserService extends CrudService<User> {
 		log.debug("User email: {}", email);
 		User found = userRepository.findByEmail(email);
 
-    log.info("User {} found", found);
+		log.info("User {} found", found);
 
+		
 		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
 			throw new PermissionDeniedException("Permission denied to get user by email.");
 		}
 		
 		return userRepository.findByEmail(email);
 	}
+	
 
 	/**
 	 * find the correct {@linkplain User} after being provided the user's office and role
@@ -128,9 +130,9 @@ public class UserService extends CrudService<User> {
 	 */
 	@Override
 	protected void throwOnConflict(User obj) throws EntityConflictException {
-		User existing = userRepository.findByEmail(obj.getEmail());
+		User existing = userRepository.findByEmail(obj.getUsername());
 		if (existing != null && existing.getId() != obj.getId()) {
-			throw new EmailAlreadyUsedException(obj.getEmail());
+			throw new EmailAlreadyUsedException(obj.getUsername());
 		}
 	}
 	

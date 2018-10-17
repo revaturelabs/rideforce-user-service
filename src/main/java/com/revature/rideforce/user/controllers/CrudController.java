@@ -6,6 +6,7 @@ import java.lang.invoke.MethodHandles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +27,9 @@ import lombok.extern.slf4j.Slf4j;
  * An abstract base class for CRUD controllers that takes care of common CRUD
  * method implementations.
  */
-@Slf4j
+@PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public abstract class CrudController<T extends Identifiable & Linkable> {
-  final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
 
 	/**
@@ -66,10 +67,12 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 		try {
     log.info("Finding Id: " + id);
 		T found = service.findById(id);
-		return found == null
+    log.info("Found id is: {}", found);
+		return found == null //restructure to allow logging the return value 
 				? new ResponseError("Instance with ID " + id + " not found.").toResponseEntity(HttpStatus.NOT_FOUND)
 				: ResponseEntity.ok(found);
 		} catch (PermissionDeniedException e) {
+      log.error("something went wrong getting id", e); 
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
@@ -87,8 +90,10 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 			T created = service.add(obj);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (EntityConflictException e) {
+      log.error("entity already exists!; returning error", e);
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		} catch (PermissionDeniedException e) {
+      log.error("something went wrong adding entity; returning error", e); 
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
@@ -105,8 +110,10 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 		try {
 			return ResponseEntity.ok(service.save(obj));
 		} catch (EntityConflictException e) {
+      log.error("Could not update!", e);
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		} catch (PermissionDeniedException e) {
+      log.error("Could not update!", e);
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}

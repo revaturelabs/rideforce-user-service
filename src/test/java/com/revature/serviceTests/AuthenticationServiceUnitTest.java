@@ -21,6 +21,7 @@ import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
@@ -37,9 +38,6 @@ import com.revature.rideforce.user.services.UserService;
 								//RunWith annotation is from JUnit, and I guess it accepts that SpringRunner.class from spring
 @SpringBootTest(classes=UserApplication.class)   //this annotation comes from spring boot starter test context.....Application Context
 public class AuthenticationServiceUnitTest {
-//	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException
-//	public User register(UserRegistrationInfo info)
-//	public User getCurrentUser()
 	private User user;
 	private UserCredentials userCredentials;
 	private UserRegistrationInfo registrationInfo;
@@ -54,8 +52,8 @@ public class AuthenticationServiceUnitTest {
 	@MockBean
 	private UserService userService;
 	
-	@Before 
-	public void setUp()
+	@Before
+	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException, EmptyPasswordException
 	{
 		Assertions.assertThat(authenticationService).isNotNull();
 		Assertions.assertThat(userRepo).isNotNull();
@@ -63,15 +61,11 @@ public class AuthenticationServiceUnitTest {
 		Assertions.assertThat(userCredentials).isNotNull();
 		this.user = new User();
 		user.setId(1);
+		user.setLastName("admin");
+		user.setFirstName("admin");
 		Assertions.assertThat(user).isNotNull();
 		Assertions.assertThat(passwordEncoder).isNotNull();
 		Assertions.assertThat(userService).isNotNull();
-	}
-	
-	@Before
-	public void setUpMockitos() throws EntityConflictException, PermissionDeniedException, EmptyPasswordException
-	{
-		User user = new User();
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
 		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
@@ -84,9 +78,10 @@ public class AuthenticationServiceUnitTest {
 	/**
 	 * Test the logic of the authentication service layer is sound
 	 * @throws InvalidCredentialsException 
+	 * @throws DisabledAccountException 
 	 */
 	@Test
-	public void authenticateWithGoodCredentialsTest() throws InvalidCredentialsException
+	public void authenticateWithGoodCredentialsTest() throws InvalidCredentialsException, DisabledAccountException
 	{
 		userCredentials.setEmail("admin@revature.com");
 		userCredentials.setPassword("password"); 									//ultimately the token returned by LoginTokenProvider is just a string
@@ -112,23 +107,23 @@ public class AuthenticationServiceUnitTest {
 	
 	@Test
 	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
-                                    , PasswordRequirementsException
+                                   , PasswordRequirementsException
 	{
 		String token = registrationTokenProvider.generateToken();
 		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", token);
 		Assertions.assertThat( authenticationService.register(registrationInfo) ).isInstanceOf(User.class).isNotNull();
 	}
 	
-	@Test
-	public void registerWithInvalidRegistrationKeyTest()
+	@Test(expected = InvalidRegistrationKeyException.class)
+	public void registerWithInvalidRegistrationKeyTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
 	{
 		registrationInfo = new UserRegistrationInfo(this.user, "pally8888", "badkey");
-		Throwable caughtException = Assertions.catchThrowable( () -> authenticationService.register(registrationInfo) );
-		Assertions.assertThat(caughtException).isInstanceOf(InvalidRegistrationKeyException.class);
+		authenticationService.register(registrationInfo);
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
+	{
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
 		authenticationService.register(registrationInfo);
 	}

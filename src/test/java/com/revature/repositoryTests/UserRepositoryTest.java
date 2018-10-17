@@ -1,5 +1,6 @@
 package com.revature.repositoryTests;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,7 @@ import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.repository.OfficeRepository;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.repository.UserRoleRepository;
@@ -32,6 +34,13 @@ public class UserRepositoryTest {
 	
 	@Autowired
 	private OfficeRepository officeRepo;
+	
+	private User user;
+	
+//	@Before
+//	public void setup() throws EmptyPasswordException {
+//		Assertions.assertThat(repository).isNotNull();
+//	}
 	
 	@Before
 	public void validate() {
@@ -51,15 +60,41 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	public void canFindById() {
+	public void canFindById() throws EmptyPasswordException {
 		// Issues persisting new user, using existing admin in db
-		User returnedUser = repository.findById(1);
+		user = new User();
+		user.setId(400);
+		user.setFirstName("first");
+		user.setLastName("last");
+		user.setEmail("email@email.com");
+		user.setPassword("password");
+		user.setRole(userRoleRepo.findById(1));
+		user.setOffice(officeRepo.findById(1));
+		user.setAddress("address");
+		user.setStartTime((float) 9.0);
+		user.setCars(new HashSet<>());
+		user.setContactInfo(new HashSet<>());
+		user = repository.save(user);
+		User returnedUser = repository.findById(user.getId());
 		Assertions.assertThat(returnedUser).isNotNull();
 	}
 	
 	@Test
-	public void canFindByEmail() {
-		User returnedUser = repository.findByEmail("admin@revature.com");
+	public void canFindByEmail() throws EmptyPasswordException {
+		user = new User();
+		user.setId(400);
+		user.setFirstName("first");
+		user.setLastName("last");
+		user.setEmail("email@email.com");
+		user.setPassword("password");
+		user.setRole(userRoleRepo.findById(1));
+		user.setOffice(officeRepo.findById(1));
+		user.setAddress("address");
+		user.setStartTime((float) 9.0);
+		user.setCars(new HashSet<>());
+		user.setContactInfo(new HashSet<>());
+		user = repository.save(user);
+		User returnedUser = repository.findByEmail("email@email.com");
 		Assertions.assertThat(returnedUser).isNotNull();
 	}
 	
@@ -76,7 +111,20 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	public void canFindByOfficeAndRole() {
+	public void canFindByOfficeAndRole() throws EmptyPasswordException {
+		user = new User();
+		user.setId(400);
+		user.setFirstName("first");
+		user.setLastName("last");
+		user.setEmail("email@email.com");
+		user.setPassword("password");
+		user.setRole(userRoleRepo.findById(1));
+		user.setOffice(officeRepo.findById(1));
+		user.setAddress("address");
+		user.setStartTime((float) 9.0);
+		user.setCars(new HashSet<>());
+		user.setContactInfo(new HashSet<>());
+		user = repository.save(user);
 		List<User> returnedUser = repository.findByOfficeAndRole(officeRepo.findById(1), userRoleRepo.findById(1));
 		Assertions.assertThat(returnedUser).isNotNull();
 	}
