@@ -67,11 +67,8 @@ public class AmazonClientService {
     public String uploadFile(MultipartFile multipartFile) {
       String fileUrl = "";
       try {
-    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
     	  File file = convertMultiPartToFile(multipartFile);
-    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
     	  String fileName = generateFileName(multipartFile);
-    	  System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
     	  fileUrl = endpointUrl + "/" + fileName;
     	  uploadFileTos3bucket(fileName, file);
     	  file.delete();
