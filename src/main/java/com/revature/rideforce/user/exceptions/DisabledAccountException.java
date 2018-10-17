@@ -5,5 +5,6 @@ public class DisabledAccountException extends Exception {
 
 	public DisabledAccountException() {
 		super("Account is disabled.");
+    
 	}
 }
