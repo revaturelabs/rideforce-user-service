@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
+import com.revature.rideforce.user.exceptions.DisabledUserException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.services.AuthenticationService;
 
@@ -36,7 +37,7 @@ public class LoginController {
 		try {
 			credentials.setEmail(credentials.getEmail().toLowerCase());  //email case shouldnt matter during login
 			return ResponseEntity.ok('"' + authenticationService.authenticate(credentials) + '"');
-		} catch (InvalidCredentialsException e) {
+		} catch (InvalidCredentialsException | DisabledUserException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
 	}
