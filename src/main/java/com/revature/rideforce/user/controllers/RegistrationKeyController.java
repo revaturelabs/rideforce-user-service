@@ -10,21 +10,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/registration-key")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class RegistrationKeyController {
-  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());	
-  @Autowired
+	@Autowired
 	private RegistrationTokenProvider tokenProvider;
 
 	@Autowired
