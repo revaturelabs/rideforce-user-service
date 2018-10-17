@@ -131,9 +131,16 @@ public class UserController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
+		
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
-		user.setRole(userRoleService.findByType(changedUserModel.getRole()));
+		UserRole role = userRoleService.findByType(changedUserModel.getRole());
+		System.out.println("=================");
+		System.out.println("User: " + user);
+		if(role != null) {
+			user.setRole(role);
+		}
+		
 		try {
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {
