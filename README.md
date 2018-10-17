@@ -38,7 +38,7 @@ Spring Tool Suite does not automatically recognize the lombok annotation and wil
 ```bash
 java -jar path/to/lombok.jar
 ```
-
+![Alt Text](src/main/resources/lombok-install.gif)
 Lombok was not tested on MacOS.
 
 
