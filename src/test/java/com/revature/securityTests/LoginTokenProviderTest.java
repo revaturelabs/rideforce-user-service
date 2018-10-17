@@ -55,12 +55,12 @@ public class LoginTokenProviderTest {
 	}
 
 	@Test
-	public void verifyToken() {
-		DecodedJWT decodedJwt = verification.build().verify(testToken);
-		String header = decodedJwt.getHeader();
-		String payload = decodedJwt.getPayload();
-		String signature = decodedJwt.getSignature();
-		assertThat(testToken).matches(header + "." + payload + "." + signature);
-		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
+	  public void verifyToken() {
+	    DecodedJWT decodedJwt = verification.build().verify(testToken);
+	    String header = decodedJwt.getHeader();
+	    String payload = decodedJwt.getPayload();
+	    String signature = decodedJwt.getSignature();
+	    assertThat(testToken).matches(header + "." +  payload + "." + signature); 
+	    assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
 	}
 }

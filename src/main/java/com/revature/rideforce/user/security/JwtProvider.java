@@ -3,9 +3,7 @@ package com.revature.rideforce.user.security;
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import java.util.Date;
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -21,8 +19,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
  * @since Iteration1 10/01/2018
  */
 public abstract class JwtProvider implements InitializingBean {
-
-  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String ISSUER = "revature";
 
 	@Value("SECRET")
@@ -37,8 +33,6 @@ public abstract class JwtProvider implements InitializingBean {
 	public void afterPropertiesSet() {
 		algorithm = Algorithm.HMAC256(secret);
 		verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
-    log.debug("algorithm: {}", algorithm);
-    log.debug("ISSUER: {}", ISSUER);
 	}
 
 	/**
@@ -50,14 +44,11 @@ public abstract class JwtProvider implements InitializingBean {
 	 */
 	protected String generateToken(String subject, TemporalAmount expiresIn) {
 		Instant now = Instant.now();
-    log.debug("Issued At: {}", now);
 		Instant expires = now.plus(expiresIn);
-    log.debug("Expires in: {}", expiresIn);
 		try {
 			return JWT.create().withIssuer(ISSUER).withSubject(subject).withIssuedAt(Date.from(now))
 					.withExpiresAt(Date.from(expires)).sign(algorithm);
 		} catch (JWTCreationException e) {
-      log.error("Something went wrong creating JWT token. returning null", e);
 			return null;
 		}
 	}
@@ -72,12 +63,8 @@ public abstract class JwtProvider implements InitializingBean {
 	 */
 	protected String getSubject(String token) {
 		try {
-      log.info("Getting subject from token");
-			String subject = verifier.verify(token).getSubject();
-      log.info("subject is: {}", subject);
-      return subject;
+			return verifier.verify(token).getSubject();
 		} catch (JWTVerificationException e) {
-      log.error("token is null!: {}", token);
 			return null;
 		}
 	}

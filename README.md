@@ -12,24 +12,20 @@ This service handles the following endpoints (see the API documentation in the g
 - `/contact-types`
 
 ## Configuring the database
-Environment variables are used for sensitive data that should not be exposed in the public Git repository. The following is a comprehensive list of all environment variables that are necessary for proper program execution:
+Set the following environment variables are used for data that should not be exposed in the public Git repository. 
 
-- `JDBC_URL`: the database url
-- `JDBC_USERNAME`: the database username
-- `JDBC_PASSWORD`: the database password
+- `JDBC_URL`: *the database url*
+- `JDBC_USERNAME`: *the database username*
+- `JDBC_PASSWORD`: *the database password*
+- `ACCESS`: *access key* (to access AWS)
+- `SECRET`: *secret key* (to access AWS)
 
-In Windows, open `cmd` as administrator and enter the command substituting the appropriate values for each:
+Spring Tool Suite can contain its own environment variables. To do this, go to the run menu and select `Run Configurations...`. Look for your project in the left panel and click on the "Environment" tab. Select "New" to create a new environment variable. Click "Apply" and "Close".
+![Alt Text](src/main/resources/stsenv5.gif)
 
-```
-setx JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword
-```
-Verify the correct values have been set by opening a new command prompt and entering, for example:
-```
-echo %JDBC_URL%
-```
 For *nix users, modify `.bashrc` (or for whatever shell you use):
 ```bash
-echo export JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword >> .bashrc && exec bash 
+echo export JDBC_URL=someurl JDBC_USERNAME=someusername JDBC_PASSWORD=somepassword >> ~/.bashrc && exec bash 
 ```
 Set `ddl-auto` property to `validate` in the configuration file, located under `src/main/resources/`. For yaml:
 ```yaml
@@ -62,7 +58,6 @@ Spring Tool Suite does not automatically recognize the lombok annotation and wil
 ```bash
 java -jar path/to/lombok.jar
 ```
-![Alt Text](src/main/resources/lombok-install.gif)
 Lombok was not tested on MacOS.
 
 
