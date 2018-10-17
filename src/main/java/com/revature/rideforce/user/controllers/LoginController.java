@@ -39,8 +39,10 @@ public class LoginController {
 		try {
 			credentials.setEmail(credentials.getEmail().toLowerCase());  //email case shouldnt matter during login
 			return ResponseEntity.ok('"' + authenticationService.authenticate(credentials) + '"');
-		} catch (InvalidCredentialsException | DisabledAccountException e) {
+		} catch (InvalidCredentialsException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
+		} catch (DisabledAccountException e) {
+			return new ResponseError(e).toResponseEntity(HttpStatus.LOCKED);
 		}
 	}
 	

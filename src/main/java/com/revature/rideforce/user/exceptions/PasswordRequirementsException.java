@@ -5,7 +5,7 @@ package com.revature.rideforce.user.exceptions;
  * @author Newton Hoac
  *
  */
-public class PasswordRequirementsException extends Exception{
+public class PasswordRequirementsException extends CustomException{
 	private static final long serialVersionUID = 1L;
 	
 	public PasswordRequirementsException() {

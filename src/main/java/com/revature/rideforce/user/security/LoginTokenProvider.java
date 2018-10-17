@@ -1,7 +1,7 @@
 package com.revature.rideforce.user.security;
 
 import java.time.Period;
-
+import java.lang.invoke.MethodHandles;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.repository.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * A class for generating and parsing JSON Web Tokens.
  * 
@@ -20,6 +22,7 @@ import com.revature.rideforce.user.repository.UserRepository;
  */
 @Service
 public class LoginTokenProvider extends JwtProvider {
+  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	private UserRepository userRepository;
 
@@ -50,6 +53,7 @@ public class LoginTokenProvider extends JwtProvider {
 			}
 			return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
 		} catch (NumberFormatException e) {
+      log.error("Cannot authenticate!", e);
 			return null;
 		} 
 	}
