@@ -42,3 +42,6 @@ In SQLCL or SQL*Plus:
 ```bash
 sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @OfficialDbSQL.sql
 ```
+
+# Tip 
+You can check for Issues on github for future developing
