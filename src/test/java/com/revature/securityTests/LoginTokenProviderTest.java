@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.UserApplication;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.assertj.core.api.Assert;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
