@@ -60,8 +60,6 @@ public class BucketControllerTest {
 	                       .file(file))
 	                   .andExpect(status().is(200))
 	                   .andReturn().getResponse().getContentAsString();
-	    System.out.println("\n\n\n"+url);
-//	    mockMvc.
 	    mockMvc.perform(delete("/storage/deleteFile").content(url))
 	    		.andExpect(status().is(200))
 	    		.andReturn().getResponse().getContentAsString();
@@ -69,8 +67,5 @@ public class BucketControllerTest {
 	    SecurityContextHolder.getContext().setAuthentication(null);
 	}
 	 
-//	@Test
-//	public void printUrl() {
-//		System.out.println("\n\n\n" + url);
-//	}
+
 }

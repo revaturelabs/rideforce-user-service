@@ -61,7 +61,6 @@ public class AmazonClientService {
     
     private void uploadFileTos3bucket(String fileName, File file) {
     	   s3client.putObject(new PutObjectRequest(bucketName, fileName, file));
-//    	           //.withCannedAcl(CannedAccessControlList.PublicRead));
 	}
     
     public String uploadFile(MultipartFile multipartFile) {
