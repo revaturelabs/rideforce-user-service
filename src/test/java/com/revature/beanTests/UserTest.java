@@ -12,6 +12,8 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.Car;
@@ -24,7 +26,7 @@ import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 public class UserTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
-	
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private User u;
 
 	@Before
@@ -46,6 +48,10 @@ public class UserTest {
 		u.setContactInfo(new HashSet<ContactInfo>());
 		u.setVenmo("venmo");
 		u.setStartTime((float) 9.0);
+		
+		Assertions.assertThat(u.getFirstName()).isEqualTo("first");
+		Assertions.assertThat(u.getLastName()).isEqualTo("last");
+		Assertions.assertThat(passwordEncoder.matches("password", u.getPassword())).isTrue();
     }
 	
 	@Test
@@ -201,6 +207,24 @@ public class UserTest {
 	}
 	
 	@Test
+	public void equalsWithSameObjectTest() {
+		Assertions.assertThat(this.u.equals(this.u)).isTrue();
+	}
+	@Test
+	public void equalsWithNullOtherObjectTest() {
+		Assertions.assertThat(this.u.equals(null)).isFalse();
+	}
+	@Test
+	public void equalsWithOtherClassIsFalseTest() {
+		Assertions.assertThat(this.u.equals(new Object())).isFalse();
+	}
+	@Test
+	public void equalsWithNullValuesOnOneSetValuesOnOtherTest() {
+		User user = new User();
+		Assertions.assertThat(user.equals(this.u)).isFalse();
+	}
+	
+	@Test
 	public void equalsRtnTrueForEqualUserObjectTest() {
 		User user = this.u;
 		Assertions.assertThat(user.equals(this.u)).isTrue();
@@ -261,6 +285,11 @@ public class UserTest {
 	public void isATrainerShouldReturnTrueTest() {
 		this.u.setRole(new UserRole(2, "TRAINER"));
 		Assertions.assertThat(this.u.isTrainer()).isTrue();
+	}
+	
+	@Test
+	public void settersAndGettersMissed() {
+		
 	}
 	
 	
