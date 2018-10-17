@@ -137,8 +137,7 @@ public class UserController {
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
 		UserRole role = userRoleService.findByType(changedUserModel.getRole());
-		System.out.println("=================");
-		System.out.println("User: " + user);
+
 		if(role != null) {
 			user.setRole(role);
 		}
