@@ -43,3 +43,10 @@ eureka:
       default-zone: http://localhost:8761/eureka
 server:
   port: 9001
+
+ 
+amazonProperties:
+  endpointUrl: http://s3-website-us-east-1.amazonaws.com
+  accessKey: ${ACCESS}
+  secretKey: ${SECRET}
+  bucketName: rideshare-photos
