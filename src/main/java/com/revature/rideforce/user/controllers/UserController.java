@@ -35,15 +35,13 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/users")
 public class UserController {
-  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	static final String DNE = " does not exist.";
 	
 	@Autowired
@@ -114,10 +112,10 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
+			log.info("Received Registration in RequestBody: {}", registration);
 			User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
 			user.setEmail(user.getUsername().toLowerCase());
 			registration.setUser(user);
-			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
@@ -133,7 +131,6 @@ public class UserController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
-		
 		User user = userService.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
 		UserRole role = userRoleService.findByType(changedUserModel.getRole());

@@ -74,5 +74,6 @@ public class LoginTokenProviderTest {
 		assertThat(testToken).matches(header + "." + payload + "." + signature);
 		assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
     assertThat(decodedJwt.getIssuedAt()).isCloseTo(rightNow.getToday(), 1000); //checks if issued date and verifier build date are close
+
 	}
 }

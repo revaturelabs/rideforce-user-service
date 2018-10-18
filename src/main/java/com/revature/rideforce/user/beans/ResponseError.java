@@ -7,9 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The error type that is returned in conjunction with an HTTP error status.
@@ -27,9 +25,8 @@ import org.slf4j.LoggerFactory;
  * }
  * </pre>
  */
-
+@Slf4j
 public class ResponseError {
-  static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	/**
 	 * The primary message describing the error.
 	 */
