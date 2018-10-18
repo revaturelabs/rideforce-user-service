@@ -38,10 +38,26 @@ If the sql script is missing the create statements, change `ddl-auto` to `create
 
 In SQL Developer, click on the file menu and open a new file. Select locate `OfficialDbSQL.sql`. Once it's loaded, run the script by pressing the play button.  
 
-In SQLCL or SQL*Plus: 
+In SQLCl or SQL*Plus: 
 ```bash
 sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @OfficialDbSQL.sql
 ```
+## Logging
+Logging is done by logback, through the slfj interface. [lombok](https://projectlombok.org/download) dependency is required to use `@Slf4j`, which reduces code duplication.
+```diff
++ import lombok.extern.slf4j.Slf4j;
+...
++ @Slf4j
+  public class SomeClass {
+-   static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+```
+`@Slf4j` implicitly declares a variable named `log` of type `Logger`. `log` is initialized using logback's `LoggerFactory` and takes as its name the fully qualified name (package + class name) of the class in which it is declared. 
 
-# Tip 
-You can check for Issues on github for future developing
+### Lombok & Spring Tool Suite
+Spring Tool Suite does not automatically recognize the lombok annotation and will have Sonar Lint flag it as an error. To install lombok, locate the jar (in your .m2 folder or by downloading it from the link above). Execute by double clicking or with the command `java -jar lombok.jar`. In the wizard, locate the STS executable and hit install. If on Windows, run as administrator if necessary. Open `CMD` as administrator and run lombok as a jar:
+```bash
+java -jar path/to/lombok.jar
+```
+Lombok was not tested on MacOS.
+
+
