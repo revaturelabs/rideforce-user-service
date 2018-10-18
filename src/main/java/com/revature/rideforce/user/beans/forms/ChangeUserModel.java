@@ -148,7 +148,7 @@ public class ChangeUserModel {
 			} catch (EmptyPasswordException e) {
 				//don't change the password if it's empty ""
 			}
-		if(startTime < 0.0)
+		if(startTime > 0.0)
 			original.setStartTime(startTime);
 	}
 	
