@@ -17,8 +17,8 @@ Set the following environment variables are used for data that should not be exp
 - `JDBC_URL`: *the database url*
 - `JDBC_USERNAME`: *the database username*
 - `JDBC_PASSWORD`: *the database password*
-- `ACCESS`: *access key* (to access AWS)
-- `SECRET`: *secret key* (to access AWS)
+- `ACCESS`: *access key* (to access AWS S3 Bucket)
+- `SECRET`: *secret key* (to access AWS S3 Bucket)
 
 Spring Tool Suite can contain its own environment variables. To do this, go to the run menu and select `Run Configurations...`. Look for your project in the left panel and click on the "Environment" tab. Select "New" to create a new environment variable. Click "Apply" and "Close".
 ![Alt Text](src/main/resources/stsenv5.gif)
