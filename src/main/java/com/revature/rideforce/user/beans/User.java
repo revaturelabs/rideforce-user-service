@@ -102,9 +102,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@JsonLink(CarLinkResolver.class)
 	private Set<Car> cars;
 
-	@Column(length = 30)
-	private String venmo;
-
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
 	@NotNull
 	@Valid
@@ -209,14 +206,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.batchEnd = batchEnd;
 	}
 
-	public String getVenmo() {
-		return venmo;
-	}
-
-	public void setVenmo(String venmo) {
-		this.venmo = venmo;
-	}
-
 	public float getStartTime() {
 		return startTime;
 	}
@@ -290,6 +279,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -309,10 +299,9 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + Float.floatToIntBits(startTime);
-		result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -325,101 +314,82 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		if (active == null) {
 			if (other.active != null)
 				return false;
-		} else if (!active.equals(other.active)) {
+		} else if (!active.equals(other.active))
 			return false;
-		}
 		if (address == null) {
 			if (other.address != null)
 				return false;
-		} else if (!address.equals(other.address)) {
+		} else if (!address.equals(other.address))
 			return false;
-		}
 		if (batchEnd == null) {
 			if (other.batchEnd != null)
 				return false;
-		} else if (!batchEnd.equals(other.batchEnd)) {
+		} else if (!batchEnd.equals(other.batchEnd))
 			return false;
-		}
 		if (bio == null) {
 			if (other.bio != null)
 				return false;
-		} else if (!bio.equals(other.bio)) {
+		} else if (!bio.equals(other.bio))
 			return false;
-		}
 		if (cars == null) {
 			if (other.cars != null)
 				return false;
-		} else if (!cars.equals(other.cars)) {
+		} else if (!cars.equals(other.cars))
 			return false;
-		}
 		if (contactInfo == null) {
 			if (other.contactInfo != null)
 				return false;
-		} else if (!contactInfo.equals(other.contactInfo)) {
+		} else if (!contactInfo.equals(other.contactInfo))
 			return false;
-		}
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		} else if (!email.equals(other.email)) {
+		} else if (!email.equals(other.email))
 			return false;
-		}
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
-		} else if (!firstName.equals(other.firstName)) {
+		} else if (!firstName.equals(other.firstName))
 			return false;
-		}
 		if (id != other.id)
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
-		} else if (!lastName.equals(other.lastName)) {
+		} else if (!lastName.equals(other.lastName))
 			return false;
-		}
 		if (office == null) {
 			if (other.office != null)
 				return false;
-		} else if (!office.equals(other.office)) {
+		} else if (!office.equals(other.office))
 			return false;
-		}
 		if (password == null) {
 			if (other.password != null)
 				return false;
-		} else if (!password.equals(other.password)) {
+		} else if (!password.equals(other.password))
 			return false;
-		}
 		if (photoUrl == null) {
 			if (other.photoUrl != null)
 				return false;
-		} else if (!photoUrl.equals(other.photoUrl)) {
+		} else if (!photoUrl.equals(other.photoUrl))
 			return false;
-		}
 		if (role == null) {
 			if (other.role != null)
 				return false;
-		} else if (!role.equals(other.role)) {
+		} else if (!role.equals(other.role))
 			return false;
-		}
 		if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime))
 			return false;
-		if (venmo == null) {
-			if (other.venmo != null)
-				return false;
-		} else if (!venmo.equals(other.venmo)) {
-			return false;
-		}
 		return true;
 	}
+
 	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active
 				+ ", role=" + role + ", office=" + office + ", address=" + address + ", startTime=" + startTime
-				+ ", batchEnd=" + batchEnd + ", cars=" + cars + ", venmo=" + venmo + ", contactInfo=" + contactInfo
-				+ "]";
+				+ ", batchEnd=" + batchEnd + ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 	}
 
 	@Override
