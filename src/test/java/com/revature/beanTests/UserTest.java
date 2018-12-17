@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.Car;
@@ -23,6 +25,7 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;

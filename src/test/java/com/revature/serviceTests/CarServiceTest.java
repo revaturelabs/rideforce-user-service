@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ import com.revature.rideforce.user.services.CarService;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class) //need this for the Application Context
 @Transactional
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class CarServiceTest {
 //	https://www.baeldung.com/spring-boot-testing
 	@TestConfiguration                                    //<-- this section is for making sure the service bean isn't considered the same as
