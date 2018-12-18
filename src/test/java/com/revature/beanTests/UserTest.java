@@ -23,6 +23,7 @@ import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
+import com.revature.rideforce.user.beans.forms.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -294,5 +295,194 @@ public class UserTest {
 		
 	}
 	
+	@Test 
+	public void changeUserModelGetId() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		Assertions.assertThat(changeUserModel.getId() == 0);
+	}
 	
+	@Test 
+	public void changeUserModelSetId() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setId(2);
+		Assertions.assertThat(changeUserModel.getId() == 2);
+	}
+	
+	@Test 
+	public void changeUserModelSetFirstName() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setFirstName("First");
+		Assertions.assertThat(changeUserModel.getFirstName().equals("First"));
+	}
+	
+	@Test 
+	public void changeUserModelSetLastName() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setLastName("Last");
+		Assertions.assertThat(changeUserModel.getLastName().equals("Last"));
+	}
+	
+	@Test 
+	public void changeUserModelSetEmail() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setEmail("email@gmail.com");
+		Assertions.assertThat(changeUserModel.getEmail().equals("email@gmail.com"));
+	}
+	
+	@Test 
+	public void changeUserModelSetPhotoUrl() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setPhotoUrl("google.com");
+		Assertions.assertThat(changeUserModel.getPhotoUrl().equals("google.com"));
+	}
+	
+	@Test 
+	public void changeUserModelSetAddress() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setAddress("123 Main St");
+		Assertions.assertThat(changeUserModel.getAddress().equals("123 Main St"));
+	}
+	
+	@Test 
+	public void changeUserModelSetOffice() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		Office office = new Office();
+		changeUserModel.setOffice(office);
+		Assertions.assertThat(changeUserModel.getOffice().equals(office));
+	}
+	
+	@Test 
+	public void changeUserModelSetBatchEnd() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		Date date = new Date(100);
+		changeUserModel.setBatchEnd(date);
+		Assertions.assertThat(changeUserModel.getBatchEnd().equals(date));
+	}
+	
+	@Test 
+	public void changeUserModelSetRole() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setRole("ADMIN");
+		Assertions.assertThat(changeUserModel.getRole().equals("ADMIN"));
+	}
+	
+	@Test 
+	public void changeUserModelSetActive() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setActive("ACTIVE");
+		Assertions.assertThat(changeUserModel.getActive().equals("ACTIVE"));
+	}
+	
+	@Test 
+	public void changeUserModelSetPassword() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setPassword("password");
+		Assertions.assertThat(changeUserModel.getPassword().equals("password"));
+	}
+	
+	@Test 
+	public void changeUserModelSetStartTime() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		changeUserModel.setStartTime(900);
+		Assertions.assertThat(changeUserModel.getStartTime() == 900);
+	}
+	
+	@Test
+	public void changeUserModelToStringTest() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		String toString = "ChangeUserModel [id=, firstName=, lastName=, email=, photoUrl=, address=, office=, batchEnd=, role=]";
+		Assertions.assertThat(changeUserModel.toString().equals(toString));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest1() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setFirstName("OriginalFirst");
+		changeUserModel.setFirstName("NewFirstName");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getFirstName().equals("NewFirstName"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest2() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setLastName("OriginalLast");
+		changeUserModel.setLastName("NewLastName");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getLastName().equals("NewLastName"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest3() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setEmail("OriginalEmail");
+		changeUserModel.setEmail("NewEmail");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(changeUserModel.getEmail().equals("NewEmail"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest4() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setAddress("OriginalAddress");
+		changeUserModel.setAddress("NewAddress");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getAddress().equals("NewAddress"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest5() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		Office office = new Office();
+		u.setOffice(office);
+		changeUserModel.setOffice(office);
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getOffice().equals(office));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest6() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		Date date = new Date(100);
+		u.setBatchEnd(date);
+		changeUserModel.setBatchEnd(date);
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getBatchEnd().equals(date));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest7() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setActive("ACTIVE");
+		changeUserModel.setActive("INACTIVE");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.isActive().equals("INACTIVE"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest8() throws EmptyPasswordException {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setPassword("OriginalPassword");
+		changeUserModel.setPassword("NewPassword");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getPassword().equals("NewPassword"));
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest9() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setStartTime(-1);
+		changeUserModel.setStartTime(-2);
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getStartTime() == -2);
+	}
+	
+	@Test
+	public void changeUserModelChangeUserTest10() {
+		ChangeUserModel changeUserModel = new ChangeUserModel();
+		u.setPhotoUrl("Original.com");
+		changeUserModel.setPhotoUrl("New.com");
+		changeUserModel.changeUser(u);
+		Assertions.assertThat(u.getPhotoUrl().equals("New.com"));
+	}
 }
