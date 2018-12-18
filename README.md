@@ -43,6 +43,8 @@ In SQLCl or SQL*Plus:
 sqlcl $JDBC_USERNAME/$JDBC_PASSWORD@$JDBC_URL/ @OfficialDbSQL.sql
 ```
 ## Logging
+Logging was previously done by lombok but was removed in a later version.  Below is the documentation should the project ever require the use of lombok again.
+
 Logging is done by logback, through the slfj interface. [lombok](https://projectlombok.org/download) dependency is required to use `@Slf4j`, which reduces code duplication.
 ```diff
 + import lombok.extern.slf4j.Slf4j;
