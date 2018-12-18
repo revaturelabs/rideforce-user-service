@@ -66,4 +66,9 @@ public class LoginTokenProviderTest {
 	    assertThat(testToken).matches(header + "." +  payload + "." + signature); 
 	    assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
 	}
+	
+	@Test
+	public void getAuthenticationTest() {
+		assertThat(loginTokenProvider.getAuthentication(testToken).equals(null));
+	}
 }

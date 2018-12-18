@@ -21,6 +21,7 @@ public class UserRoleTest {
 	private LocalValidatorFactoryBean localValidatorFactory;
 	
 	private UserRole ur;
+	private UserRole ur2;
 	
 	@Before
     public void setupValidatorFactory () {
@@ -51,5 +52,40 @@ public class UserRoleTest {
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<UserRole>> violations = validator.validate(ur);
 		Assertions.assertThat(violations.size()).isEqualTo(1);
+	}
+	
+	@Test
+	public void equalsTest() {
+		ur = new UserRole(0, "test");
+		ur2 = new UserRole(0, "test");
+		Assertions.assertThat(ur.equals(ur2));
+	}
+	
+	@Test
+	public void equalsTest2() {
+		ur = new UserRole(0, "test");
+		ur2 = new UserRole(1, "test");
+		Assertions.assertThat(!ur.equals(ur2));
+	}
+	
+	@Test
+	public void equalsTest3() {
+		ur = new UserRole(0, "test");
+		ur2 = new UserRole(1, "test2");
+		Assertions.assertThat(!ur.equals(ur2));
+	}
+	
+	@Test
+	public void equalsTest4() {
+		ur = new UserRole(0, "test");
+		ur2 = new UserRole(0, "test2");
+		Assertions.assertThat(!ur.equals(ur2));
+	}
+	
+	@Test
+	public void equalsTest5() {
+		ur = new UserRole(0, null);
+		ur2 = new UserRole(1, "test");
+		Assertions.assertThat(!ur.equals(ur2));
 	}
 }

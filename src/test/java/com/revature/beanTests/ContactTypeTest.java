@@ -1,6 +1,7 @@
 package com.revature.beanTests;
 
 import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -68,4 +69,31 @@ private LocalValidatorFactoryBean localValidatorFactory;
 		Assertions.assertThat(violations.size()).isEqualTo(1);
 	}
 	
+	@Test 
+	public void equalsTest1() {
+		ContactType ct = new ContactType(9, "Venmo");
+		ContactType ct2 = new ContactType(8, "Other");
+		assertThat(!ct.equals(ct2));
+	}
+	
+	@Test
+	public void equalsTest2() {
+		ContactType ct = new ContactType(9, "Venmo");
+		ContactType ct2 = new ContactType(9, "Venmo");
+		assertThat(ct.equals(ct2));
+	}
+	
+	@Test
+	public void equalsTest3() {
+		ContactType ct = new ContactType(9, "Venmo");
+		ContactType ct2 = new ContactType(7, "Venmo");
+		assertThat(!ct.equals(ct2));
+	}
+	
+	@Test
+	public void equalsTest4() {
+		ContactType ct = new ContactType(9, "Venmo");
+		ContactType ct2 = new ContactType(9, "Other");
+		assertThat(!ct.equals(ct2));
+	}
 }

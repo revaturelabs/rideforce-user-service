@@ -1,5 +1,8 @@
 package com.revature.beanTests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -58,5 +61,40 @@ private LocalValidatorFactoryBean localValidatorFactory;
 		Assertions.assertThat(violations.size()).isEqualTo(1);
 	}
 	
+	@Test
+	public void responseErrorHashCodeTest() {
+		ResponseError re = new ResponseError("message");
+		assertEquals(re.hashCode(), 954926055);
+	}
+	
+	@Test
+	public void responseErrorEqualsTest1() {
+		ResponseError re = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message2");
+		assertThat(!re.equals(re2));
+	}
+	
+	@Test
+	public void responseErrorEqualsTest2() {
+		ResponseError re = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message");
+		assertThat(re.equals(re2));
+	}
+	
+	@Test
+	public void responseErrorEqualsTest3() {
+		ResponseError re = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message");
+		String[] details = new String[2];
+		re.withDetails(details);
+		re.setMessage(null);
+		assertThat(!re.equals(re2));
+	}
+	
+	@Test 
+	public void toStringTest() {
+		ResponseError re = new ResponseError("message");
+		assertThat(re.toString().equals("ResponseError [message=message, details=]"));
+	}
 }
 
