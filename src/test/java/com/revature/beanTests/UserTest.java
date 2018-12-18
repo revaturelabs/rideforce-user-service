@@ -51,6 +51,7 @@ public class UserTest {
 		u.setCars(new HashSet<Car>());
 		u.setContactInfo(new HashSet<ContactInfo>());
 		u.setStartTime((float) 9.0);
+		u.setActive("ACTIVE");
 		
 		Assertions.assertThat(u.getFirstName()).isEqualTo("first");
 		Assertions.assertThat(u.getLastName()).isEqualTo("last");
@@ -293,6 +294,100 @@ public class UserTest {
 	@Test
 	public void settersAndGettersMissed() {
 		
+	}
+	
+	@Test 
+	public void equalsTest1() {
+		User u2 = new User();
+		u.setActive(null);
+		u2.setActive("ACTIVE");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest2() {
+		User u2 = new User();
+		u.setActive("ACTIVE");
+		u2.setActive("INACTIVE");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest3() {
+		User u2 = new User();
+		u.setBatchEnd(null);
+		u2.setBatchEnd(Date.valueOf("2018-1-1"));
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest4() {
+		User u2 = new User();
+		u.setBatchEnd(Date.valueOf("2018-6-2"));
+		u2.setBatchEnd(Date.valueOf("2018-5-2"));
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest5() {
+		User u2 = new User();
+		u2.setContactInfo(new HashSet<ContactInfo>());
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest6() {
+		User u2 = new User();
+		u.setContactInfo(null);
+		u2.setContactInfo(new HashSet<ContactInfo>());
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest7() {
+		User u2 = new User();
+		u2.setEmail("test@email.com");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest8() {
+		User u2 = new User();
+		u.setFirstName(null);
+		u2.setFirstName("First");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest9() {
+		User u2 = new User();
+		u.setFirstName("FirstName");
+		u2.setFirstName("First");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest10() {
+		User u2 = new User();
+		u.setLastName(null);
+		u2.setLastName("Last");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest11() {
+		User u2 = new User();
+		u.setLastName("LastName");
+		u2.setLastName("Last");
+		Assertions.assertThat(!u.equals(u2));
+	}
+	
+	@Test
+	public void equalsTest12() {
+		User u2 = new User();
+		u.setFirstName("First");
+		u2.setFirstName("First");
+		Assertions.assertThat(u.equals(u2));
 	}
 	
 	@Test 

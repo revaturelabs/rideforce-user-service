@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -95,5 +97,11 @@ private LocalValidatorFactoryBean localValidatorFactory;
 		ContactType ct = new ContactType(9, "Venmo");
 		ContactType ct2 = new ContactType(9, "Other");
 		assertThat(!ct.equals(ct2));
+	}
+	
+	@Test
+	public void toUriTest() throws URISyntaxException {
+		ContactType ct = new ContactType(9, "Venmo");
+		Assertions.assertThat(ct.toUri()).isEqualTo(new URI("/contact-types/"+ct.getId()));
 	}
 }

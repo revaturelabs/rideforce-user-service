@@ -1,5 +1,7 @@
 package com.revature.beanTests;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -134,4 +136,10 @@ public class ContactInfoTest {
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
+	@Test
+	public void toUriTest() throws URISyntaxException {
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		Assertions.assertThat(contactInfo.toUri()).isEqualTo(new URI("/contact-info/"+contactInfo.getId()));
+	}
 }
