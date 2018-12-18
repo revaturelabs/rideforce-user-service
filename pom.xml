@@ -162,13 +162,14 @@
                             </execution>
                         </executions>
                     </plugin>
+                                       
                 </plugins>
             </build>
-            <!--
+       <!--      
                 Include this section to disable, or configure, generation
                 of project info report(s).
                 In this case, all project info reports have been disabled.
-            -->
+        -->    
             <reporting>
                 <plugins>
                     <plugin>
@@ -284,6 +285,7 @@
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -323,7 +325,11 @@
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
-				
+		
+		<dependency>
+			 <groupId>org.hibernate</groupId>
+    		 <artifactId>hibernate-core</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
 		<dependency>
 		    <groupId>org.hibernate</groupId>
