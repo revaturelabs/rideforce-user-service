@@ -1,5 +1,6 @@
 package com.revature.serviceTests;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.assertj.core.api.Assertions;
@@ -140,4 +141,21 @@ public class AuthenticationServiceUnitTest {
 		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 	
+	@Test
+	public void updatePasswordUserServiceTest() throws PermissionDeniedException, EmptyPasswordException {
+		userService.updatePassword(user, "password", "newPassword");
+		Assertions.assertThat(user.getPassword().equals("newPassword"));
+	}
+	
+	@Test
+	public void updatePasswordUserServiceTest2() throws PermissionDeniedException, EmptyPasswordException {
+		userService.updatePassword(user, "password", "");
+		assertThatExceptionOfType(EmptyPasswordException.class);
+	}
+	
+	@Test
+	public void updatePasswordUserServiceTest3() throws PermissionDeniedException, EmptyPasswordException {
+		userService.updatePassword(user, "wrongPassword", "newPassword");
+		assertThatExceptionOfType(PermissionDeniedException.class);
+	}
 }

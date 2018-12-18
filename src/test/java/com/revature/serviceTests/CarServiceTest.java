@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.Car;
 import com.revature.rideforce.user.beans.User;
+import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.CarRepository;
 import com.revature.rideforce.user.repository.UserRepository;
@@ -75,5 +76,13 @@ public class CarServiceTest {
 		SecurityContextHolder.getContext().setAuthentication(null);
 	
     }
+    
+//    @Test
+//    public void canAddTest() {
+//    	User admin = new User();
+//    	UserRole role = new UserRole(1, "ADMIN");
+//    	admin.setRole(role);
+//    	Assertions.assertThat(carService.canAdd(admin, new Car));
+//    }
     
 }
