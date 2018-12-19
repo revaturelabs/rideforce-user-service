@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideforce.user.UserApplication;
@@ -18,6 +20,7 @@ import com.revature.rideforce.user.services.ContactInfoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ContactInfoServiceTest {
 
 	@TestConfiguration                                    //<-- this section is for making sure the service bean isn't considered the same as
