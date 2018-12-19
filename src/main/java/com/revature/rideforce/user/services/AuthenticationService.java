@@ -17,6 +17,7 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
+import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
@@ -64,7 +65,7 @@ public class AuthenticationService {
 		if (!passwordEncoder.matches(credentials.getPassword(), found.getPassword())) {
 			throw new InvalidCredentialsException();
 		}
-		if (found.isActive().equals("DISABLED")) {
+		if (found.isActive().equals(Active.DISABLED)) {
 			throw new DisabledAccountException();
 		}
 		return loginTokenProvider.generateToken(found.getId());
@@ -101,7 +102,7 @@ public class AuthenticationService {
 		}
 		// Make sure password meets requirements.
 		if(!passwordIsValid(info.getPassword())) {
-			log.info("Password length violation");
+//			log.info("Password length violation");
 			throw new PasswordRequirementsException();
 		}
 		log.info("User registered successfully");

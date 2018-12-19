@@ -141,6 +141,7 @@ public class UserController {
 		}
 		
 		try {
+			System.out.println(changedUserModel);
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
