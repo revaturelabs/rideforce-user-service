@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
-import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.json.EnumLikeDeserializerModifier;
 import com.revature.rideforce.user.json.EnumLikeSerializerModifier;
 import com.revature.rideforce.user.json.LinkDeserializerModifier;
@@ -88,7 +87,7 @@ public class UserApplication implements InitializingBean {
 			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
 			admin.setContactInfo(new HashSet<>());
-			admin.setActive(Active.ACTIVE);
+			admin.setActive("ACTIVE");
 			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
 			admin.setPassword("password"); 							//within setPassword is where we can encode it (more modular)
 			admin.setStartTime((float) 9.0);

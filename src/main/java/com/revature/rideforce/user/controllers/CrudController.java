@@ -22,13 +22,15 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.services.CrudService;
 
+import lombok.extern.slf4j.Slf4j;
 /**
  * An abstract base class for CRUD controllers that takes care of common CRUD
  * method implementations.
  */
+@Slf4j
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public abstract class CrudController<T extends Identifiable & Linkable> {
-	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	protected CrudService<T> service;
 
 	/**

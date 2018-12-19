@@ -12,13 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.revature.rideforce.user.json.JsonLink;
@@ -49,14 +47,12 @@ import com.revature.rideforce.user.json.UserLinkResolver;
  * @since Iteration 1: 10/01/2018
  * @author clpeng
  */
-@Component
 @Entity
-@Table(name = "CAR")
 public class Car implements Identifiable, Linkable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-//	@Min(1)
+	@Min(1)
 	@Column(name = "CAR_ID")
 	@SequenceGenerator(name = "carid", sequenceName = "carid")
 	@GeneratedValue(generator = "carid", strategy = GenerationType.SEQUENCE)

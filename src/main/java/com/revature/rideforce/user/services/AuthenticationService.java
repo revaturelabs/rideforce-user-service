@@ -1,6 +1,4 @@
 package com.revature.rideforce.user.services;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,18 +15,19 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.LoginTokenProvider;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
  * users, getting information about the current user.
  */
+@Slf4j
 @Service
 public class AuthenticationService {
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -65,7 +64,7 @@ public class AuthenticationService {
 		if (!passwordEncoder.matches(credentials.getPassword(), found.getPassword())) {
 			throw new InvalidCredentialsException();
 		}
-		if (found.isActive().equals(Active.DISABLED)) {
+		if (found.isActive().equals("DISABLED")) {
 			throw new DisabledAccountException();
 		}
 		return loginTokenProvider.generateToken(found.getId());
@@ -102,7 +101,7 @@ public class AuthenticationService {
 		}
 		// Make sure password meets requirements.
 		if(!passwordIsValid(info.getPassword())) {
-//			log.info("Password length violation");
+			log.info("Password length violation");
 			throw new PasswordRequirementsException();
 		}
 		log.info("User registered successfully");
@@ -123,13 +122,14 @@ public class AuthenticationService {
 		log.info("Getting current user from Authentication");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+		log.info("Authentication value: {}", auth);
 		log.debug("Authentication value: {}", auth);
 
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
 			log.debug("User is null"); 
 			return null;
 		}
-    
+		log.info("User authenticated successfully");
 		log.debug("User authenticated successfully");
 		return (User) auth.getPrincipal();
 	}

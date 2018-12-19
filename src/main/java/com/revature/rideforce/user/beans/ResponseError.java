@@ -4,10 +4,10 @@ import java.util.Arrays;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The error type that is returned in conjunction with an HTTP error status.
@@ -25,8 +25,8 @@ import org.springframework.http.ResponseEntity;
  * }
  * </pre>
  */
+@Slf4j
 public class ResponseError {
-	private static final Logger log = LoggerFactory.getLogger(ResponseError.class);
 	/**
 	 * The primary message describing the error.
 	 */
