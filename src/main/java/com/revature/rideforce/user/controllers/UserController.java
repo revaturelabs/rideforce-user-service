@@ -3,6 +3,8 @@ package com.revature.rideforce.user.controllers;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -35,13 +37,11 @@ import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @Lazy(true)
 @RequestMapping("/users")
 public class UserController {
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	static final String DNE = " does not exist.";
 	
 	@Autowired
@@ -141,6 +141,7 @@ public class UserController {
 		}
 		
 		try {
+			System.out.println(changedUserModel);
 			return ResponseEntity.ok(userService.save(user)); 		//update user
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
