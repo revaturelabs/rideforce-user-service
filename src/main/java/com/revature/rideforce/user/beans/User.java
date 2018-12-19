@@ -85,7 +85,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 //	@JsonProperty
 //	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
 
-	@Column(name = "STATUS")
+	@Column(name = "ACTIVE")
 	@JsonProperty
 	@Enumerated (EnumType.STRING)
 	private Active active;
