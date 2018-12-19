@@ -402,7 +402,7 @@ public boolean equals(Object obj) {
 	@Override
 public String toString() {
 	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", string=" + active + ", role=" + role
+			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name()+ ", role=" + role
 			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
 			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 }
