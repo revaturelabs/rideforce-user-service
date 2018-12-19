@@ -11,15 +11,16 @@ public class ChangeUserModel {
 	private int id;
 	private String firstName;
 	private String lastName;
-	private String password;
 	private String email;
+	private String password;
 	private String photoUrl;
-	private String address;
+	private String bio;
+	private String active = "ACTIVE";
+	private String role;
 	private Office office;
+	private String address;
 	private float startTime;
 	private Date batchEnd;
-	private String role;
-	private String active;
 	
 	public int getId() {
 		return id;
@@ -116,6 +117,14 @@ public class ChangeUserModel {
 	public void setStartTime(float startTime) {
 		this.startTime = startTime;
 	}
+	
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
 
 	@Override
 	public String toString() {
@@ -134,6 +143,8 @@ public class ChangeUserModel {
 			original.setEmail(email.toLowerCase());
 		if(photoUrl != null)
 			original.setPhotoUrl(photoUrl);
+		if(bio != null)
+			original.setBio(bio);
 		if(address != null)
 			original.setAddress(address);
 		if(office != null)
@@ -151,6 +162,5 @@ public class ChangeUserModel {
 		if(startTime < 0.0)
 			original.setStartTime(startTime);
 	}
-	
 	
 }
