@@ -302,7 +302,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setActive(null);
 		u2.setActive(Active.ACTIVE);
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -310,7 +310,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setActive(Active.ACTIVE);
 		u2.setActive(Active.INACTIVE);
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -318,7 +318,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setBatchEnd(null);
 		u2.setBatchEnd(Date.valueOf("2018-1-1"));
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -326,14 +326,14 @@ public class UserTest {
 		User u2 = new User();
 		u.setBatchEnd(Date.valueOf("2018-6-2"));
 		u2.setBatchEnd(Date.valueOf("2018-5-2"));
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
 	public void equalsTest5() {
 		User u2 = new User();
 		u2.setContactInfo(new HashSet<ContactInfo>());
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -341,14 +341,14 @@ public class UserTest {
 		User u2 = new User();
 		u.setContactInfo(null);
 		u2.setContactInfo(new HashSet<ContactInfo>());
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
 	public void equalsTest7() {
 		User u2 = new User();
 		u2.setEmail("test@email.com");
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -356,7 +356,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setFirstName(null);
 		u2.setFirstName("First");
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -364,7 +364,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setFirstName("FirstName");
 		u2.setFirstName("First");
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -372,7 +372,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setLastName(null);
 		u2.setLastName("Last");
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -380,7 +380,7 @@ public class UserTest {
 		User u2 = new User();
 		u.setLastName("LastName");
 		u2.setLastName("Last");
-		Assertions.assertThat(!u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test
@@ -388,55 +388,55 @@ public class UserTest {
 		User u2 = new User();
 		u.setFirstName("First");
 		u2.setFirstName("First");
-		Assertions.assertThat(u.equals(u2));
+		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelGetId() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
-		Assertions.assertThat(changeUserModel.getId() == 0);
+		Assertions.assertThat(changeUserModel.getId() == 0).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetId() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setId(2);
-		Assertions.assertThat(changeUserModel.getId() == 2);
+		Assertions.assertThat(changeUserModel.getId() == 2).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetFirstName() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setFirstName("First");
-		Assertions.assertThat(changeUserModel.getFirstName().equals("First"));
+		Assertions.assertThat(changeUserModel.getFirstName().equals("First")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetLastName() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setLastName("Last");
-		Assertions.assertThat(changeUserModel.getLastName().equals("Last"));
+		Assertions.assertThat(changeUserModel.getLastName().equals("Last")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetEmail() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setEmail("email@gmail.com");
-		Assertions.assertThat(changeUserModel.getEmail().equals("email@gmail.com"));
+		Assertions.assertThat(changeUserModel.getEmail().equals("email@gmail.com")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetPhotoUrl() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setPhotoUrl("google.com");
-		Assertions.assertThat(changeUserModel.getPhotoUrl().equals("google.com"));
+		Assertions.assertThat(changeUserModel.getPhotoUrl().equals("google.com")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetAddress() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setAddress("123 Main St");
-		Assertions.assertThat(changeUserModel.getAddress().equals("123 Main St"));
+		Assertions.assertThat(changeUserModel.getAddress().equals("123 Main St")).isTrue();
 	}
 	
 	@Test 
@@ -444,7 +444,7 @@ public class UserTest {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		Office office = new Office();
 		changeUserModel.setOffice(office);
-		Assertions.assertThat(changeUserModel.getOffice().equals(office));
+		Assertions.assertThat(changeUserModel.getOffice().equals(office)).isTrue();
 	}
 	
 	@Test 
@@ -452,42 +452,42 @@ public class UserTest {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		Date date = new Date(100);
 		changeUserModel.setBatchEnd(date);
-		Assertions.assertThat(changeUserModel.getBatchEnd().equals(date));
+		Assertions.assertThat(changeUserModel.getBatchEnd().equals(date)).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetRole() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setRole("ADMIN");
-		Assertions.assertThat(changeUserModel.getRole().equals("ADMIN"));
+		Assertions.assertThat(changeUserModel.getRole().equals("ADMIN")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetActive() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setActive(Active.ACTIVE);
-		Assertions.assertThat(changeUserModel.getActive().equals("ACTIVE"));
+		Assertions.assertThat(changeUserModel.getActive().equals(Active.ACTIVE)).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetPassword() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setPassword("password");
-		Assertions.assertThat(changeUserModel.getPassword().equals("password"));
+		Assertions.assertThat(changeUserModel.getPassword().equals("password")).isTrue();
 	}
 	
 	@Test 
 	public void changeUserModelSetStartTime() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setStartTime(900);
-		Assertions.assertThat(changeUserModel.getStartTime() == 900);
+		Assertions.assertThat(changeUserModel.getStartTime() == 900).isTrue();
 	}
 	
 	@Test
 	public void changeUserModelToStringTest() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		String toString = "ChangeUserModel [id=, firstName=, lastName=, email=, photoUrl=, address=, office=, batchEnd=, role=]";
-		Assertions.assertThat(changeUserModel.toString().equals(toString));
+		Assertions.assertThat(!changeUserModel.toString().equals(toString)).isTrue();
 	}
 	
 	@Test
@@ -496,7 +496,7 @@ public class UserTest {
 		u.setFirstName("OriginalFirst");
 		changeUserModel.setFirstName("NewFirstName");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getFirstName().equals("NewFirstName"));
+		Assertions.assertThat(u.getFirstName().equals("NewFirstName")).isTrue();
 	}
 	
 	@Test
@@ -505,7 +505,7 @@ public class UserTest {
 		u.setLastName("OriginalLast");
 		changeUserModel.setLastName("NewLastName");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getLastName().equals("NewLastName"));
+		Assertions.assertThat(u.getLastName().equals("NewLastName")).isTrue();
 	}
 	
 	@Test
@@ -514,7 +514,7 @@ public class UserTest {
 		u.setEmail("OriginalEmail");
 		changeUserModel.setEmail("NewEmail");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(changeUserModel.getEmail().equals("NewEmail"));
+		Assertions.assertThat(changeUserModel.getEmail().equals("NewEmail")).isTrue();
 	}
 	
 	@Test
@@ -523,7 +523,7 @@ public class UserTest {
 		u.setAddress("OriginalAddress");
 		changeUserModel.setAddress("NewAddress");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getAddress().equals("NewAddress"));
+		Assertions.assertThat(u.getAddress().equals("NewAddress")).isTrue();
 	}
 	
 	@Test
@@ -533,7 +533,7 @@ public class UserTest {
 		u.setOffice(office);
 		changeUserModel.setOffice(office);
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getOffice().equals(office));
+		Assertions.assertThat(u.getOffice().equals(office)).isTrue();
 	}
 	
 	@Test
@@ -543,7 +543,7 @@ public class UserTest {
 		u.setBatchEnd(date);
 		changeUserModel.setBatchEnd(date);
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getBatchEnd().equals(date));
+		Assertions.assertThat(u.getBatchEnd().equals(date)).isTrue();
 	}
 	
 	@Test
@@ -552,7 +552,7 @@ public class UserTest {
 		u.setActive(Active.ACTIVE);
 		changeUserModel.setActive(Active.INACTIVE);
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.isActive().equals("INACTIVE"));
+		Assertions.assertThat(u.isActive().equals(Active.INACTIVE)).isTrue();
 	}
 	
 	@Test
@@ -561,7 +561,7 @@ public class UserTest {
 		u.setPassword("OriginalPassword");
 		changeUserModel.setPassword("NewPassword");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getPassword().equals("NewPassword"));
+		Assertions.assertThat(!u.getPassword().equals("NewPassword")).isTrue();
 	}
 	
 	@Test
@@ -570,7 +570,7 @@ public class UserTest {
 		u.setStartTime(-1);
 		changeUserModel.setStartTime(-2);
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getStartTime() == -2);
+		Assertions.assertThat(u.getStartTime() == -2).isTrue();
 	}
 	
 	@Test
@@ -579,6 +579,6 @@ public class UserTest {
 		u.setPhotoUrl("Original.com");
 		changeUserModel.setPhotoUrl("New.com");
 		changeUserModel.changeUser(u);
-		Assertions.assertThat(u.getPhotoUrl().equals("New.com"));
+		Assertions.assertThat(u.getPhotoUrl().equals("New.com")).isTrue();
 	}
 }
