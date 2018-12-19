@@ -84,7 +84,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Column(name = "ACTIVE")
 	@JsonProperty
 	@Enumerated (EnumType.STRING)
-	private Active active;
+	private Active active = Active.ACTIVE;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
@@ -406,7 +406,7 @@ public boolean equals(Object obj) {
 	@Override
 public String toString() {
 	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name()+ ", role=" + role
+			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name() + ", role=" + role
 			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
 			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 }
