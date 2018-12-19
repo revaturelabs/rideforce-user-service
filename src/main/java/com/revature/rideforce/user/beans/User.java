@@ -64,10 +64,15 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 255)
 	private String bio;
 
-	@Column(name="ACTIVE")
-	@JsonProperty
-	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
+//	@Column(name="ACTIVE")
+//	@JsonProperty
+//	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
 
+	@Column(name = "ACTIVE")
+	@JsonProperty
+	@Enumerated (EnumType.STRING)
+	private Active active = Active.ACTIVE;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	@NotNull
@@ -390,12 +395,13 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	
 	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active
-				+ ", role=" + role + ", office=" + office + ", address=" + address + ", startTime=" + startTime
-				+ ", batchEnd=" + batchEnd + ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
-	}
+  public String toString() {
+    return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
+        + password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name() + ", role=" + role
+        + ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
+        + ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
+  }
+
 
 	@Override
 	@JsonIgnore

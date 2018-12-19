@@ -11,6 +11,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import com.revature.rideforce.user.security.LoginTokenProvider;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserApplication.class)
 @Transactional
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LoginTokenProviderTest {
 	
 	private static final int USER_ID = 1;
@@ -62,5 +65,10 @@ public class LoginTokenProviderTest {
 	    String signature = decodedJwt.getSignature();
 	    assertThat(testToken).matches(header + "." +  payload + "." + signature); 
 	    assertThat(decodedJwt.getSubject()).isNotNull().isInstanceOf(String.class).matches(String.valueOf(USER_ID));
+	}
+	
+	@Test
+	public void getAuthenticationTest() {
+		assertThat(loginTokenProvider.getAuthentication(testToken).equals(null));
 	}
 }

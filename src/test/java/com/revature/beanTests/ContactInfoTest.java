@@ -1,5 +1,7 @@
 package com.revature.beanTests;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -8,12 +10,15 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.beans.ContactType;
 import com.revature.rideforce.user.beans.User;
 
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ContactInfoTest {
 	
 	private LocalValidatorFactoryBean localValidatorFactory;
@@ -131,4 +136,10 @@ public class ContactInfoTest {
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
 	
+	@Test
+	public void toUriTest() throws URISyntaxException {
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setId(0);
+		Assertions.assertThat(contactInfo.toUri()).isEqualTo(new URI("/contact-info/"+contactInfo.getId()));
+	}
 }
