@@ -2,11 +2,7 @@ package com.revature.rideforce.user.beans;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -298,6 +294,14 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
+
+	public String getBio() {
+		return bio;
+	}
+	
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
   
 	@Override
 public int hashCode() {
@@ -413,8 +417,4 @@ public String toString() {
 		return false;
 	}
 
-	
-
-	
-	
 }
