@@ -112,7 +112,7 @@ public class UserRegistrationInfoTest {
 		User u = new User();
 		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
 		Assertions.assertThat(this.uri.toString())
-			.isEqualTo("UserRegistrationInfo [user=User [id=0, firstName=null, lastName=null, email=null, password=null, photoUrl=null, bio=null, active=ACTIVE, role=UserRole [id=0, type=null], office=Office [id=0, name=null, address=null], address=null, startTime=9.0, batchEnd=null, cars=[], contactInfo=[]], password=credentialpw]");
+			.isEqualTo("UserRegistrationInfo [user=User [id=0, firstName=null, lastName=null, email=null, password=null, photoUrl=null, bio=null, string=null, role=UserRole [id=0, type=null], office=Office [id=0, name=null, address=null], address=null, startTime=9.0, batchEnd=null, cars=[], contactInfo=[]], password=credentialpw]");
 	}
 	@Test
 	public void hashCodeWithFilledValuesWorksTest() {

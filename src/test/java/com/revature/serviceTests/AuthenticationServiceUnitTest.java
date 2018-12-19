@@ -29,6 +29,7 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
+import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.repository.UserRepository;
 import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
@@ -69,6 +70,7 @@ public class AuthenticationServiceUnitTest {
 		Assertions.assertThat(userService).isNotNull();
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
+		user.setActive(Active.ACTIVE);
 		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
 		
 		Mockito.when( userService.add(any()) ).then( i -> i.getArgument(0) ); //return the user it was given
@@ -107,6 +109,16 @@ public class AuthenticationServiceUnitTest {
 	}
 	
 	@Test
+	public void authenticateWithInactiveUserTest()
+	{
+		userCredentials.setEmail("admin@revature.com");
+		userCredentials.setPassword("password");
+		user.setActive(Active.DISABLED);
+		Throwable thrown = Assertions.catchThrowable( () -> authenticationService.authenticate(userCredentials) );
+		Assertions.assertThat(thrown).isInstanceOf(DisabledAccountException.class);
+	}
+	
+	@Test
 	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
                                    , PasswordRequirementsException
 	{
@@ -126,6 +138,12 @@ public class AuthenticationServiceUnitTest {
 	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
 	{
 		registrationInfo = new UserRegistrationInfo(null, null, registrationTokenProvider.generateToken());
+		authenticationService.register(registrationInfo);
+	}
+	
+	@Test(expected = PasswordRequirementsException.class)
+	public void registerWithInvalidPasswordTest() throws PasswordRequirementsException, InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException {
+		registrationInfo = new UserRegistrationInfo(this.user, "a", registrationTokenProvider.generateToken());
 		authenticationService.register(registrationInfo);
 	}
 

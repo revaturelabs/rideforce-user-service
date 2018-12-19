@@ -25,6 +25,7 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.forms.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
+import com.revature.rideforce.user.json.Active;
 
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserTest {
@@ -51,7 +52,7 @@ public class UserTest {
 		u.setCars(new HashSet<Car>());
 		u.setContactInfo(new HashSet<ContactInfo>());
 		u.setStartTime((float) 9.0);
-		u.setActive("ACTIVE");
+		u.setActive(Active.ACTIVE);
 		
 		Assertions.assertThat(u.getFirstName()).isEqualTo("first");
 		Assertions.assertThat(u.getLastName()).isEqualTo("last");
@@ -300,15 +301,15 @@ public class UserTest {
 	public void equalsTest1() {
 		User u2 = new User();
 		u.setActive(null);
-		u2.setActive("ACTIVE");
+		u2.setActive(Active.ACTIVE);
 		Assertions.assertThat(!u.equals(u2));
 	}
 	
 	@Test
 	public void equalsTest2() {
 		User u2 = new User();
-		u.setActive("ACTIVE");
-		u2.setActive("INACTIVE");
+		u.setActive(Active.ACTIVE);
+		u2.setActive(Active.INACTIVE);
 		Assertions.assertThat(!u.equals(u2));
 	}
 	
@@ -464,7 +465,7 @@ public class UserTest {
 	@Test 
 	public void changeUserModelSetActive() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
-		changeUserModel.setActive("ACTIVE");
+		changeUserModel.setActive(Active.ACTIVE);
 		Assertions.assertThat(changeUserModel.getActive().equals("ACTIVE"));
 	}
 	
@@ -548,8 +549,8 @@ public class UserTest {
 	@Test
 	public void changeUserModelChangeUserTest7() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
-		u.setActive("ACTIVE");
-		changeUserModel.setActive("INACTIVE");
+		u.setActive(Active.ACTIVE);
+		changeUserModel.setActive(Active.INACTIVE);
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.isActive().equals("INACTIVE"));
 	}
