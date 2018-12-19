@@ -138,9 +138,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@JsonLink(CarLinkResolver.class)
 	private Set<Car> cars;
 
-	@Column(length = 30)
-	private String venmo;
-
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
 	@NotNull
 	@Valid
@@ -245,14 +242,6 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.batchEnd = batchEnd;
 	}
 
-	public String getVenmo() {
-		return venmo;
-	}
-
-	public void setVenmo(String venmo) {
-		this.venmo = venmo;
-	}
-
 	public float getStartTime() {
 		return startTime;
 	}
@@ -324,8 +313,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
-
-
+  
 	@Override
 public int hashCode() {
 	final int prime = 31;
@@ -345,7 +333,6 @@ public int hashCode() {
 	result = prime * result + ((role == null) ? 0 : role.hashCode());
 	result = prime * result + Float.floatToIntBits(startTime);
 	result = prime * result + ((active == null) ? 0 : active.hashCode());
-	result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
 	return result;
 }
 
@@ -424,11 +411,6 @@ public boolean equals(Object obj) {
 		return false;
 	if (active != other.active)
 		return false;
-	if (venmo == null) {
-		if (other.venmo != null)
-			return false;
-	} else if (!venmo.equals(other.venmo))
-		return false;
 	return true;
 }
 
@@ -437,7 +419,7 @@ public String toString() {
 	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
 			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", string=" + active + ", role=" + role
 			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
-			+ ", cars=" + cars + ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
+			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 }
 
 	@Override
