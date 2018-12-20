@@ -52,7 +52,7 @@ public class AmazonClientService {
      * @return
      */
     private String generateFileName(MultipartFile multiPart) {
-    	return new Date().getTime() + "-" + multiPart.getOriginalFilename().replaceAll(" ",  "_");
+    	return multiPart.getOriginalFilename().replaceAll(" ",  "_");
     }
     
     private File convertMultiPartToFile(MultipartFile file) throws IOException{

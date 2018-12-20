@@ -13,7 +13,7 @@ spring:
     driver-class-name: oracle.jdbc.driver.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         dialect:  org.hibernate.dialect.Oracle10gDialect
@@ -38,7 +38,7 @@ spring:
     driver-class-name: org.h2.Driver 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
   show-sql: true
 eureka:
   client:
