@@ -19,6 +19,7 @@ public class ChangeUserModel {
 	private Office office;
 	private float startTime;
 	private Date batchEnd;
+	private String bio;
 	private String role;
 	private Active active;
 //	private String active;
@@ -35,6 +36,8 @@ public class ChangeUserModel {
 			original.setPhotoUrl(photoUrl);
 		if(address != null)
 			original.setAddress(address);
+		if(bio != null)
+			original.setBio(bio);
 		if(office != null)
 			original.setOffice(office);
 		if(batchEnd != null)
@@ -203,6 +206,18 @@ public class ChangeUserModel {
 				+ password + ", email=" + email + ", photoUrl=" + photoUrl + ", address=" + address + ", office="
 				+ office + ", startTime=" + startTime + ", batchEnd=" + batchEnd + ", role=" + role + ", active="
 				+ active + "]";
+	}
+
+
+
+	public String getBio() {
+		return bio;
+	}
+
+
+
+	public void setBio(String bio) {
+		this.bio = bio;
 	}
 	
 	
