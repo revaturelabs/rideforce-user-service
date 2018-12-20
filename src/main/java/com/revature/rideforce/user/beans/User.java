@@ -183,7 +183,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.photoUrl = photoURL;
 	}
 
-	public Active isActive() {  //getter..... lol bad naming
+	public Active isActive() {  
 		return this.active;
 	}
 	
