@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,6 +35,7 @@ import com.revature.rideforce.user.repository.UserRepository;
 @AutoConfigureMockMvc
 @WebAppConfiguration
 @ContextConfiguration(classes = WebConfig.class)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class BucketControllerTest {
 
 	@Autowired

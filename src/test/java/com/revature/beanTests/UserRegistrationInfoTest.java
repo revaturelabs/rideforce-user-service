@@ -9,11 +9,14 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserRegistrationInfoTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
@@ -109,7 +112,7 @@ public class UserRegistrationInfoTest {
 		User u = new User();
 		this.uri = new UserRegistrationInfo(u, "credentialpw", "FakeRegistrationKey");
 		Assertions.assertThat(this.uri.toString())
-			.isEqualTo("UserRegistrationInfo [user=User [id=0, firstName=null, lastName=null, email=null, password=null, photoUrl=null, bio=null, active=ACTIVE, role=UserRole [id=0, type=null], office=Office [id=0, name=null, address=null], address=null, startTime=9.0, batchEnd=null, cars=[], venmo=null, contactInfo=[]], password=credentialpw]");
+			.isEqualTo("UserRegistrationInfo [user=User [id=0, firstName=null, lastName=null, email=null, password=null, photoUrl=null, bio=null, active=ACTIVE, role=UserRole [id=0, type=null], office=Office [id=0, name=null, address=null], address=null, startTime=9.0, batchEnd=null, cars=[], contactInfo=[]], password=credentialpw]");
 	}
 	@Test
 	public void hashCodeWithFilledValuesWorksTest() {

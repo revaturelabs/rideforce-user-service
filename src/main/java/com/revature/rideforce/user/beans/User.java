@@ -2,11 +2,7 @@ package com.revature.rideforce.user.beans;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -85,10 +81,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 //	@JsonProperty
 //	private String active = "ACTIVE"; //default, other values can be "INACTIVE" for user choosing to deactivate, or "DISABLED" for admin disabling 
 
-	@Column(name = "STATUS")
+	@Column(name = "ACTIVE")
 	@JsonProperty
 	@Enumerated (EnumType.STRING)
-	private Active active;
+	private Active active = Active.ACTIVE;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
@@ -187,7 +183,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.photoUrl = photoURL;
 	}
 
-	public Active isActive() {  //getter..... lol bad naming
+	public Active isActive() {  
 		return this.active;
 	}
 	
@@ -298,6 +294,14 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
 	}
+
+	public String getBio() {
+		return bio;
+	}
+	
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
   
 	@Override
 public int hashCode() {
@@ -402,7 +406,7 @@ public boolean equals(Object obj) {
 	@Override
 public String toString() {
 	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", string=" + active + ", role=" + role
+			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name() + ", role=" + role
 			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
 			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 }
@@ -413,8 +417,4 @@ public String toString() {
 		return false;
 	}
 
-	
-
-	
-	
 }

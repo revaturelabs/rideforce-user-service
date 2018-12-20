@@ -8,12 +8,15 @@ import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideforce.user.beans.PasswordChangeRequest;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
 
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class PasswordChangeRequestModelTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
