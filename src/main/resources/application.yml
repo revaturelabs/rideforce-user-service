@@ -13,10 +13,10 @@ spring:
     driver-class-name: oracle.jdbc.driver.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: validate  # validate/create
+      ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.Oracle10gDialect
+        dialect:  org.hibernate.dialect.Oracle10gDialect
   devtools:
     restart:
       enabled: false
