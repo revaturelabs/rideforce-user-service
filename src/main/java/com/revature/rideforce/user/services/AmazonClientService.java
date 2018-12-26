@@ -43,9 +43,7 @@ public class AmazonClientService {
      * @return
      */
     private String generateFileName(MultipartFile multiPart) {
-    	  return multiPart.getOriginalFilename().replaceAll(" ",  "_");
-        String fileName = new Date().toString() + "-" + multiPart.getOriginalFilename().replaceAll(" ",  "_");
-        return fileName.replaceAll(" ", "_");
+    	return multiPart.getOriginalFilename().replaceAll(" ",  "_");
     }
     
     private File convertMultiPartToFile(MultipartFile file) throws IOException{
