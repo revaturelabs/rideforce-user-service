@@ -58,7 +58,7 @@ public class ContactInfoRepositoryTest {
 		contactInfo.setId(60);
 		contactInfo.setInfo("270537676");
 		contactInfo.setUser(user);
-		contactInfo.setType(new ContactType(100, "phone"));
+		contactInfo.setType(new ContactType(1, "Cell Phone"));
 		ContactInfo returnInfo = repository.save(contactInfo);
 		Assertions.assertThat(returnInfo).isNotNull();
 		Assertions.assertThat(repository.findByUserId(returnInfo.getUser().getId())).isNotNull();
