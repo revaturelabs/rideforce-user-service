@@ -1,6 +1,10 @@
 package com.revature.rideforce.user.controllers;
+import java.io.File;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,15 @@ public class BucketController {
     BucketController(AmazonClientService amazonClient) {
         this.amazonClient = amazonClient;
     }
+    /*
+    @GetMapping(value="/getFile")
+    public File getFile(@RequestParam("user") int id) throws PermissionDeniedException, IOException {
+    	User user = (User) userService.findById(id);
+    	
+    	return amazonClient.getFileByUserURL(user.getPhotoUrl());
+    }
+    */
+    
     @PostMapping(value="/uploadFile")
     public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("user") int id) throws PermissionDeniedException, EntityConflictException{
         User user = (User) userService.findById(id);
