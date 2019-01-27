@@ -21,6 +21,7 @@ import com.revature.rideforce.user.services.UserService;
 //@PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 @RequestMapping("/storage")
 public class BucketController {
+	@Autowired
     private AmazonClientService amazonClient;
     @Autowired
     UserService userService;

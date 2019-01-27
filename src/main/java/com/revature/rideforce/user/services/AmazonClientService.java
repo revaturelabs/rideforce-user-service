@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
@@ -38,7 +39,10 @@ public class AmazonClientService {
     @PostConstruct
     private void initializeAmazon() {
        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-       this.s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+       this.s3client = AmazonS3ClientBuilder.standard()
+    		   .withRegion(Regions.US_EAST_1)
+    		   .withCredentials(new AWSStaticCredentialsProvider(credentials))
+    		   .build();
     }
     /*
     public File getFileByUserURL(String url) throws IOException {
