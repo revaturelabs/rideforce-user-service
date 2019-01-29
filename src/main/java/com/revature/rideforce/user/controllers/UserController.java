@@ -1,10 +1,11 @@
 package com.revature.rideforce.user.controllers;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
@@ -33,6 +36,7 @@ import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.services.AuthenticationService;
+import com.revature.rideforce.user.services.CognitoService;
 import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
@@ -41,20 +45,36 @@ import com.revature.rideforce.user.services.UserService;
 @Lazy(true)
 @RequestMapping("/users")
 public class UserController {
-	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	static final String DNE = " does not exist.";
 	
 	@Autowired
-	UserService userService;
+	private Logger log;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
-	AuthenticationService authenticationService;
+	private AuthenticationService authenticationService;
 
 	@Autowired
-	OfficeService officeService;
+	private OfficeService officeService;
 
 	@Autowired
-	UserRoleService userRoleService;
+	private UserRoleService userRoleService;
+	
+	@Autowired
+	private CognitoService cs;
+	
+	@GetMapping("/test/{token}")
+	public String cognito(@PathVariable String token) {
+		DecodedJWT j = cs.verify(token);
+		if(j != null) {
+			return j.getClaim("email").asString();
+		} else {
+			return "Nothing to see here.";
+		}
+		
+	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findAll() {
