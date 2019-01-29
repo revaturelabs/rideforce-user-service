@@ -227,6 +227,23 @@ ALTER TABLE users
         REFERENCES office ( office_id )
     NOT DEFERRABLE;
 	
+/* Sequences */
+drop sequence hibernate_sequence;
+drop sequence cardid;
+drop sequence contactinfoid;
+drop sequence contacttypeid;
+drop sequence officeid;
+drop sequence roleid;
+drop sequence userid;
+
+create sequence hibernate_sequence;
+create sequence cardid;
+create sequence contactinfoid;
+create sequence contacttypeid;
+create sequence officeid;
+create sequence roleid;
+create sequence userid;
+
 /* Populate tables */
 
 Insert into CONTACT_TYPE (CONTACT_TYPE_ID,TYPE) values (3,'Slack');

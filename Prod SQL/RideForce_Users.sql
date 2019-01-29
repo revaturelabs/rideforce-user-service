@@ -66,4 +66,18 @@ alter table contact_info add constraint fkg0ycabphn86rwcuxirtbphs8k foreign key 
 
 alter table car add constraint fkc2osr9qmb46vr8pjyps6weii0 foreign key (user_id) references users(user_id) on delete cascade;
 
+drop sequence cardid;
+drop sequence contactinfoid;
+drop sequence contacttypeid;
+drop sequence officeid;
+drop sequence roleid;
+drop sequence userid;
+
+create sequence cardid;
+create sequence contactinfoid;
+create sequence contacttypeid;
+create sequence officeid;
+create sequence roleid;
+create sequence userid;
+
 commit;
