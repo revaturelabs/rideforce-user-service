@@ -80,4 +80,20 @@ create sequence officeid;
 create sequence roleid;
 create sequence userid;
 
+create or replace function getSubtotal(total in number) 
+return number
+is
+begin
+  return total+total*(0.06);
+end;
+/
+
+create or replace function getSubtotal(total in number) 
+return number
+is
+begin
+  return total+total*(0.06);
+end;
+/
+
 commit;
