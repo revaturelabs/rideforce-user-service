@@ -88,11 +88,20 @@ begin
 end;
 /
 
-create or replace function getSubtotal(total in number) 
-return number
-is
+create or replace function strcat(str in varchar2, n in number)
+return varchar2
+is 
+temp number := 0;
+newstr varchar2(50);
 begin
-  return total+total*(0.06);
+  loop
+    newstr := newstr ||' ' || str;
+    temp := temp+1;
+    if temp = n then
+      exit;
+    end if;
+  end loop;
+  return newstr;
 end;
 /
 
