@@ -11,14 +11,14 @@ create table users (
 	user_id number(10) not null primary key,
 	active varchar2(255 char),
 	address varchar2(255 char) not null,
-	batch_end date,
+	batchEnd date,
 	bio varchar2(255 char),
 	email varchar2(40 char) not null,
-	first_name varchar2(25 char) not null,
-	last_name varchar2(30 char) not null,
+	firstname varchar2(25 char) not null,
+	lastname varchar2(30 char) not null,
 	password varchar2(70 char) not null,
-	photo_url varchar2(200 char),
-	start_time float(126) not null,
+	photoUrl varchar2(200 char),
+	startTime float(126) not null,
 	venmo varchar2(30 char),
 	office_id number(10) not null,
 	role_id number(10) not null
@@ -103,6 +103,7 @@ begin
   end loop;
   return newstr;
 end;
+
 /
 
 commit;
