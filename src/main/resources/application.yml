@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: development-oracl
+    active: development-h2
 ---
 spring:
   profiles: development-oracl
@@ -38,7 +38,7 @@ spring:
     driver-class-name: org.h2.Driver 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
   show-sql: true
 eureka:
   client:
@@ -47,7 +47,6 @@ eureka:
 server:
   port: 9001
 
- 
 amazonProperties:
   endpointUrl: http://rideshare-photos.s3-website-us-east-1.amazonaws.com
   accessKey: ${ACCESS}
