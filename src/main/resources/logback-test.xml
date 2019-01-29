@@ -2,11 +2,11 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/base.xml" />
   <property name="LOGS_BASE" value="logs"/>
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <!-- <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%date{yy-MMM-dd@HH:mm:ss}  %level %caller %logger{5} %M => %msg%n</pattern>
     </encoder>
-  </appender>
+  </appender> -->
   <appender name="ROOT_LOGGER" class="ch.qos.logback.core.FileAppender">
     <file>${LOGS_BASE}/root.log</file>
     <encoder>
@@ -25,6 +25,6 @@
   </root>
   <logger name="com.revature.rideforce" level="INFO">
     <appender-ref ref="SERVICE_LOGGER"/>
-    <appender-ref ref="STDOUT"/>
+    <!-- <appender-ref ref="STDOUT"/> -->
   </logger>
 </configuration>
