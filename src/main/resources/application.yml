@@ -45,7 +45,7 @@ eureka:
     service-url:
       default-zone: http://localhost:8761/eureka
 server:
-  port: 9001
+  port: 5555
 
 amazonProperties:
   endpointUrl: http://rideshare-photos.s3-website-us-east-1.amazonaws.com

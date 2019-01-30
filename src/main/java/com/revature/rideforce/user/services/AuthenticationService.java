@@ -1,4 +1,6 @@
 package com.revature.rideforce.user.services;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.beans.UserRegistrationInfo;
@@ -43,6 +46,9 @@ public class AuthenticationService {
 
 	@Autowired
 	private RegistrationTokenProvider registrationTokenProvider;
+	
+	@Autowired
+	private CognitoService cs;
 
 	/**
 	 * Authenticates a user with the given credentials, returning a JSON Web Token
@@ -94,20 +100,31 @@ public class AuthenticationService {
 		if(info == null) {
 			throw new InvalidRegistrationKeyException();
 		}
+		
+		log.info("REGISTER: " + info.toString());
 		// Make sure that the registration key token is valid.
-		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
+		if (!registrationTokenProvider.isValid(info.getRegistrationToken())) {
 			log.info("Attempting to register user");
-			log.debug(info.getRegistrationKey());
+			log.debug(info.getRegistrationToken());
 			throw new InvalidRegistrationKeyException();
 		}
-		// Make sure password meets requirements.
-		if(!passwordIsValid(info.getPassword())) {
-//			log.info("Password length violation");
-			throw new PasswordRequirementsException();
+		
+		// Check the Identity Token
+		DecodedJWT djwt = cs.verify(info.getIdToken());
+		if(djwt != null) {
+			info.getUser().setEmail(djwt.getClaim("email").asString());
+		} else {
+			throw new InvalidRegistrationKeyException();
 		}
+		
+		
+//		// Make sure password meets requirements.
+//		if(!passwordIsValid(info.getPassword())) {
+////			log.info("Password length violation");
+//			throw new PasswordRequirementsException();
+//		}
 		log.info("User registered successfully");
-		log.info("Hashing password");
-		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
+//		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
 		return userService.add(info.getUser());
 	}
 
@@ -134,13 +151,13 @@ public class AuthenticationService {
 		return (User) auth.getPrincipal();
 	}
 	
-	/**
-	 * Method for password requirements validation. Can be adjusted to accommodate future requirements.
-	 * 
-	 * @param password to be validated
-	 * @return true if valid password
-	 */
-	private boolean passwordIsValid(String password) {
-		return (password.length() >= 8 && password.length() <= 16);
-	}
+//	/**
+//	 * Method for password requirements validation. Can be adjusted to accommodate future requirements.
+//	 * 
+//	 * @param password to be validated
+//	 * @return true if valid password
+//	 */
+//	private boolean passwordIsValid(String password) {
+//		return (password.length() >= 8 && password.length() <= 16);
+//	}
 }

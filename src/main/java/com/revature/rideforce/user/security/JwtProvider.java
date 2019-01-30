@@ -31,6 +31,7 @@ public abstract class JwtProvider implements InitializingBean {
 	 */
 	@Override
 	public void afterPropertiesSet() {
+		System.out.println("SECRET: " + secret);
 		algorithm = Algorithm.HMAC256(secret);
 		verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
 	}
