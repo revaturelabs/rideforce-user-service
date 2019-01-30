@@ -59,8 +59,8 @@ public class UserControllerTest {
 		User admin = userRepository.findById(1); //unfortunately have to get a user
 		UserRegistrationInfo info = new UserRegistrationInfo();
 		info.setUser(admin);
-		info.setPassword("password");
-		info.setRegistrationKey("ThisIsAKey");
+		info.setIdToken("password");
+		info.setRegistrationToken("ThisIsAKey");
 		ObjectMapper om = new ObjectMapper();
 		String userRegInfo = om.writeValueAsString(info);
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin, "password", admin.getAuthorities()));

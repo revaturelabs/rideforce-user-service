@@ -11,21 +11,21 @@ public class UserRegistrationInfo {
 	private User user;
 	
 	@NotEmpty
-	private String password;
+	private String idToken;
 	
 	@NotEmpty
-	private String registrationKey;
+	private String registrationToken;
 	
 	public UserRegistrationInfo() {
 		super();
 		this.user = new User();
 	}
 
-	public UserRegistrationInfo(@NotEmpty User user, @NotEmpty String password, @NotEmpty String registrationKey) {
+	public UserRegistrationInfo(@NotEmpty User user, @NotEmpty String idToken, @NotEmpty String registrationToken) {
 		super();
 		this.user = user;
-		this.password = password;
-		this.registrationKey = registrationKey;
+		this.idToken = idToken;
+		this.registrationToken = registrationToken;
 	}
 
 	public User getUser() {
@@ -36,66 +36,62 @@ public class UserRegistrationInfo {
 		this.user = user;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getIdToken() {
+		return idToken;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setIdToken(String idToken) {
+		this.idToken = idToken;
 	}
 
-	public String getRegistrationKey() {
-		return registrationKey;
+	public String getRegistrationToken() {
+		return registrationToken;
 	}
 
-	public void setRegistrationKey(String registrationKey) {
-		this.registrationKey = registrationKey;
+	public void setRegistrationToken(String registrationToken) {
+		this.registrationToken = registrationToken;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "UserRegistrationInfo [user=" + user + ", idToken=" + idToken + ", registrationToken="
+				+ registrationToken + "]";
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((registrationKey == null) ? 0 : registrationKey.hashCode());
+		result = prime * result + ((idToken == null) ? 0 : idToken.hashCode());
+		result = prime * result + ((registrationToken == null) ? 0 : registrationToken.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) 
+		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		UserRegistrationInfo other = (UserRegistrationInfo) obj;
-		if (password == null) {
-			if (other.password != null)
+		if (idToken == null) {
+			if (other.idToken != null)
 				return false;
-		} 
-		else if (!password.equals(other.password))
+		} else if (!idToken.equals(other.idToken))
 			return false;
-		if (registrationKey == null) {
-			if (other.registrationKey != null)
+		if (registrationToken == null) {
+			if (other.registrationToken != null)
 				return false;
-		} 
-		else if (!registrationKey.equals(other.registrationKey))
+		} else if (!registrationToken.equals(other.registrationToken))
 			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
-		} 
-		else if (!user.equals(other.user))
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "UserRegistrationInfo [user=" + user + ", password=" + password + "]";
 	}
 }
