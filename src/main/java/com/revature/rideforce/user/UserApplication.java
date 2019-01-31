@@ -83,6 +83,18 @@ public class UserApplication implements InitializingBean {
 				adminRole.setType(ADMIN);
 				userRoleRepository.save(adminRole);
 			}
+			
+			if (userRoleRepository.findByTypeIgnoreCase("RIDER") == null) {
+				UserRole role = new UserRole();
+				role.setType("RIDER");
+				userRoleRepository.save(role);
+			}
+			
+			if (userRoleRepository.findByTypeIgnoreCase("DRIVER") == null) {
+				UserRole role = new UserRole();
+				role.setType("DRIVER");
+				userRoleRepository.save(role);
+			}
 
 			User admin = new User();
 			admin.setFirstName("admin");
