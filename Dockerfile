@@ -12,5 +12,5 @@
 
 
 FROM java:8
-COPY target/rideforce-user-service.jar.jar /tmp/rideforce-user-service.jar.jar
+COPY target/rideforce-user-service.jar /tmp/rideforce-user-service.jar
 CMD ["java", "-jar", "/tmp/rideforce-user-service.jar","--server.servlet.context-path=/user","&"]
