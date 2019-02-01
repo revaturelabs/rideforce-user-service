@@ -10,7 +10,7 @@ public class UserRegistrationInfo {
 	@NotNull
 	private User user;
 	
-	@NotEmpty
+//	@NotEmpty
 	private String idToken;
 	
 	@NotEmpty

@@ -4,7 +4,9 @@ import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.auth0.jwt.JWT;
@@ -20,6 +22,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
  */
 public abstract class JwtProvider implements InitializingBean {
 	private static final String ISSUER = "revature";
+	@Autowired
+	private Logger log;
 
 	@Value("SECRET")
 	private String secret;
@@ -66,6 +70,7 @@ public abstract class JwtProvider implements InitializingBean {
 		try {
 			return verifier.verify(token).getSubject();
 		} catch (JWTVerificationException e) {
+			log.info("TOKEN: ", e);
 			return null;
 		}
 	}

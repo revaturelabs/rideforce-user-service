@@ -103,19 +103,19 @@ public class AuthenticationService {
 		
 		log.info("REGISTER: " + info.toString());
 		// Make sure that the registration key token is valid.
-		if (!registrationTokenProvider.isValid(info.getRegistrationToken())) {
-			log.info("Attempting to register user");
-			log.debug(info.getRegistrationToken());
-			throw new InvalidRegistrationKeyException();
-		}
+//		if (!registrationTokenProvider.isValid(info.getRegistrationToken())) {
+//			log.info("Attempting to register user");
+//			log.debug(info.getRegistrationToken());
+//			throw new InvalidRegistrationKeyException();
+//		}
 		
-		// Check the Identity Token
-		DecodedJWT djwt = cs.verify(info.getIdToken());
-		if(djwt != null) {
-			info.getUser().setEmail(djwt.getClaim("email").asString());
-		} else {
-			throw new InvalidRegistrationKeyException();
-		}
+//		// Check the Identity Token
+//		DecodedJWT djwt = cs.verify(info.getIdToken());
+//		if(djwt != null) {
+//			info.getUser().setEmail(djwt.getClaim("email").asString());
+//		} else {
+//			throw new InvalidRegistrationKeyException();
+//		}
 		
 		
 //		// Make sure password meets requirements.

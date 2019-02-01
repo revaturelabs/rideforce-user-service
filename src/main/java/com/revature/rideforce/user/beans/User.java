@@ -161,7 +161,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	public void setEmail(String email) {
-		this.email = email.toLowerCase();
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -250,6 +250,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Override
 	public String getUsername() {
+		return email;
+	}
+	
+	public String getEmail() {
 		return email;
 	}
 

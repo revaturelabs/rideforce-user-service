@@ -88,7 +88,7 @@ public class UserController {
 	@GetMapping(params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		try {
-			User user = userService.findByEmail(email.toLowerCase());  //make the email to be looked for lower case to match the case of our db
+			User user = userService.findByEmail(email);  //make the email to be looked for lower case to match the case of our db
 
 			return user == null ? new ResponseError("User with email " + email + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
@@ -132,9 +132,9 @@ public class UserController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
 		try {
-			User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
-			user.setEmail(user.getUsername().toLowerCase());
-			registration.setUser(user);
+			//User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
+			//user.setEmail(user.getUsername().toLowerCase());
+			//registration.setUser(user);
 			log.info("Received Registration in RequestBody: {}", registration);
 			User created = authenticationService.register(registration);
 			return ResponseEntity.created(created.toUri()).body(created);
