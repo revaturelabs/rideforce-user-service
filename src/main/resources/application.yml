@@ -25,8 +25,8 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
-      fetch-registry: false
-      register-with-eureka: false
+    fetch-registry: false
+    register-with-eureka: false
 server:
   port: 5555
 ---      
@@ -46,6 +46,8 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+    fetch-registry: false
+    register-with-eureka: false
 server:
   port: 9001
 
