@@ -16,7 +16,6 @@ public class RegistrationToken {
 	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 	@Future
-	@JsonFormat(shape = JsonFormat.Shape.NUMBER)
 	private Date batchEndDate;
 
 	public RegistrationToken() {}
