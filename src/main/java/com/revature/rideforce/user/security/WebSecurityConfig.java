@@ -11,10 +11,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
- * configures the {@linkplain HttpSecurity} - authorizes requests, adds session management, adds filters<p>
- * <strong>Member Variables</strong><br>
- * {@linkplain LoginTokenProvider} tokenProvider
- * @author clpeng
+ * configures the {@linkplain HttpSecurity} - authorizes requests, adds session management, adds filters
+ * 
+ * @author clpeng, Mateusz Wiater
  * @since Iteration1 10/01/2018
  */
 @Configuration
@@ -27,6 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Matchers for routes that can be accessed without authentication.
 		RequestMatcher[] allowable = { new AntPathRequestMatcher("/login", "POST"),
+				new AntPathRequestMatcher("/.well-known/jwks.json", "GET"), new AntPathRequestMatcher("/tokens/**"),
 				new AntPathRequestMatcher("/users/**", "GET"), new AntPathRequestMatcher("/users", "POST"),
 				new AntPathRequestMatcher("/offices", "GET"), new AntPathRequestMatcher("/contact-types", "GET"),
 				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS")};

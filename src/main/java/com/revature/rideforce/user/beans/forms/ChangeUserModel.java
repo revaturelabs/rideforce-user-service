@@ -44,12 +44,6 @@ public class ChangeUserModel {
 			original.setBatchEnd(batchEnd);
 		if(active != null)
 			original.setActive(active);
-		if(password != null)
-			try {
-				original.setPassword(password);
-			} catch (EmptyPasswordException e) {
-				//don't change the password if it's empty ""
-			}
 		if(startTime < 0.0)
 			original.setStartTime(startTime);
 	}

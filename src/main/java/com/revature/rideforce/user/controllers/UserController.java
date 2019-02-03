@@ -1,6 +1,6 @@
 package com.revature.rideforce.user.controllers;
 
-import java.util.Map;
+import java.net.URISyntaxException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.amazonaws.services.cognitoidp.model.UsernameExistsException;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserRegistrationInfo;
+import com.revature.rideforce.user.beans.UserRegistration;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.forms.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
@@ -36,7 +35,6 @@ import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.services.AuthenticationService;
-import com.revature.rideforce.user.services.CognitoService;
 import com.revature.rideforce.user.services.OfficeService;
 import com.revature.rideforce.user.services.UserRoleService;
 import com.revature.rideforce.user.services.UserService;
@@ -51,35 +49,21 @@ public class UserController {
 	private Logger log;
 	
 	@Autowired
-	private UserService userService;
+	private UserService us;
 
 	@Autowired
-	private AuthenticationService authenticationService;
+	private AuthenticationService as;
 
 	@Autowired
-	private OfficeService officeService;
+	private OfficeService os;
 
 	@Autowired
-	private UserRoleService userRoleService;
-	
-	@Autowired
-	private CognitoService cs;
-	
-	@GetMapping("/test/{token}")
-	public String cognito(@PathVariable String token) {
-		DecodedJWT j = cs.verify(token);
-		if(j != null) {
-			return j.getClaim("email").asString();
-		} else {
-			return "Nothing to see here.";
-		}
-		
-	}
+	private UserRoleService urs;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findAll() {
 		try {
-			return ResponseEntity.ok(userService.findAll());
+			return ResponseEntity.ok(us.findAll());
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
@@ -88,7 +72,7 @@ public class UserController {
 	@GetMapping(params = "email", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findByEmail(@RequestParam("email") @NotEmpty String email) {
 		try {
-			User user = userService.findByEmail(email);  //make the email to be looked for lower case to match the case of our db
+			User user = us.findByEmail(email);  //make the email to be looked for lower case to match the case of our db
 
 			return user == null ? new ResponseError("User with email " + email + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
@@ -101,18 +85,18 @@ public class UserController {
 	public ResponseEntity<?> findByOfficeAndRole(@RequestParam("office") int officeId,
 			@RequestParam("role") String roleString) {
 		try {
-			Office office = officeService.findById(officeId);
+			Office office = os.findById(officeId);
 			if (office == null) {
 				return new ResponseError("Office with ID " + officeId + DNE)
 						.toResponseEntity(HttpStatus.BAD_REQUEST);
 			}
-			UserRole role = userRoleService.findByType(roleString);
+			UserRole role = urs.findByType(roleString);
 			if (role == null) {
 				return new ResponseError(roleString + " is not a valid user role.")
 						.toResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 
-			return ResponseEntity.ok(userService.findByOfficeAndRole(office, role));
+			return ResponseEntity.ok(us.findByOfficeAndRole(office, role));
 		} catch (PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
 		}
@@ -121,7 +105,7 @@ public class UserController {
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
 		try {
-			User user = userService.findById(id);
+			User user = us.findById(id);
 			return user == null ? new ResponseError("User with ID " + id + DNE)
 					.toResponseEntity(HttpStatus.NOT_FOUND) : ResponseEntity.ok(user);
 		} catch (PermissionDeniedException e) {
@@ -130,17 +114,13 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationInfo registration) {
+	public ResponseEntity<?> add(@RequestBody @Valid UserRegistration registration) throws URISyntaxException {
 		try {
-			//User user = registration.getUser(); //change the user's email to lowercase then save user back to registration info
-			//user.setEmail(user.getUsername().toLowerCase());
-			//registration.setUser(user);
-			log.info("Received Registration in RequestBody: {}", registration);
-			User created = authenticationService.register(registration);
-			return ResponseEntity.created(created.toUri()).body(created);
+			User created = as.register(registration);
+			return ResponseEntity.created(created.toUri()).body("{ \"message\": \"Registration successful! Please check your email for an activation link.\"}");
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
-		} catch (EntityConflictException e) {
+		} catch (EntityConflictException | UsernameExistsException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		} catch (EmptyPasswordException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.LENGTH_REQUIRED);
@@ -152,9 +132,9 @@ public class UserController {
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
 		
-		User user = userService.findById(id);
+		User user = us.findById(id);
 		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
-		UserRole role = userRoleService.findByType(changedUserModel.getRole());
+		UserRole role = urs.findByType(changedUserModel.getRole());
 
 		if(role != null) {
 			user.setRole(role);
@@ -162,7 +142,7 @@ public class UserController {
 		
 		try {
 			System.out.println(changedUserModel);
-			return ResponseEntity.ok(userService.save(user)); 		//update user
+			return ResponseEntity.ok(us.save(user)); 		//update user
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);
 		} catch (PermissionDeniedException e) {
@@ -173,10 +153,10 @@ public class UserController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") int id) throws PermissionDeniedException {
-		User userToDelete = userService.findById(id); //throw permission denied exception if not logged in
+		User userToDelete = us.findById(id); //throw permission denied exception if not logged in
 		if(userToDelete != null)
 			try {
-				userService.deleteUser(userToDelete);
+				us.deleteUser(userToDelete);
 				return ResponseEntity.ok(userToDelete);
 			} catch (PermissionDeniedException e) {
 				return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
