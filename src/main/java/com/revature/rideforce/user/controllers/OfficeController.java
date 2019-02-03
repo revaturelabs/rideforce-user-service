@@ -11,7 +11,7 @@ import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.services.OfficeService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/offices")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")

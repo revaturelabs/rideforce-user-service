@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.revature.rideforce.user.beans.ResponseError;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {

@@ -19,7 +19,7 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/registration-key")
 @PreAuthorize("hasRole('ROLE_ADMIN')")

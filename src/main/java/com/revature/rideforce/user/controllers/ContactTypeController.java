@@ -11,7 +11,7 @@ import com.revature.rideforce.user.beans.ContactType;
 import com.revature.rideforce.user.services.ContactTypeService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/contact-types")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")

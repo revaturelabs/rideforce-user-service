@@ -11,7 +11,7 @@ import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.services.ContactInfoService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/contact-info")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")

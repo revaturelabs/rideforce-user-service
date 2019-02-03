@@ -22,7 +22,7 @@ import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.services.AuthenticationService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/login")
 public class LoginController {

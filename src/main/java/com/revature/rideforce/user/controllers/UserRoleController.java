@@ -11,7 +11,7 @@ import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.services.UserRoleService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @Lazy(true)
 @RequestMapping("/roles")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
