@@ -4,29 +4,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class UserRegistrationInfo {
-	
+public class UserRegistration {
 	@Valid
 	@NotNull
 	private User user;
 	
-//	@NotEmpty
-	private String idToken;
-	
 	@NotEmpty
 	private String registrationToken;
-	
-	public UserRegistrationInfo() {
-		super();
-		this.user = new User();
-	}
-
-	public UserRegistrationInfo(@NotEmpty User user, @NotEmpty String idToken, @NotEmpty String registrationToken) {
-		super();
-		this.user = user;
-		this.idToken = idToken;
-		this.registrationToken = registrationToken;
-	}
 
 	public User getUser() {
 		return user;
@@ -34,14 +18,6 @@ public class UserRegistrationInfo {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String getIdToken() {
-		return idToken;
-	}
-
-	public void setIdToken(String idToken) {
-		this.idToken = idToken;
 	}
 
 	public String getRegistrationToken() {
@@ -53,16 +29,9 @@ public class UserRegistrationInfo {
 	}
 
 	@Override
-	public String toString() {
-		return "UserRegistrationInfo [user=" + user + ", idToken=" + idToken + ", registrationToken="
-				+ registrationToken + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((idToken == null) ? 0 : idToken.hashCode());
 		result = prime * result + ((registrationToken == null) ? 0 : registrationToken.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
@@ -76,12 +45,7 @@ public class UserRegistrationInfo {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserRegistrationInfo other = (UserRegistrationInfo) obj;
-		if (idToken == null) {
-			if (other.idToken != null)
-				return false;
-		} else if (!idToken.equals(other.idToken))
-			return false;
+		UserRegistration other = (UserRegistration) obj;
 		if (registrationToken == null) {
 			if (other.registrationToken != null)
 				return false;
@@ -93,5 +57,10 @@ public class UserRegistrationInfo {
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRegistrationInfo [user=" + user + ", registrationToken=" + registrationToken + "]";
 	}
 }
