@@ -1,6 +1,25 @@
 spring:
   profiles:
     active: development-h2
+
+aws:
+  cognito:
+    region: ${COGNITO_REGION}
+    pool-id: ${COGNITO_POOL_ID}
+    client-id: 3dd3ghbnv8v9s9ika4tpgj19t5
+    access-key: ${COGNITO_ACCESS_KEY}
+    secret-key: ${COGNITO_SECRET_KEY}
+    jwks: https://cognito-idp.${COGNITO_REGION}.amazonaws.com/${COGNITO_POOL_ID}/.well-known/jwks.json
+
+jwt:
+  registration:
+    ttl: 24
+    rsa-key:
+      id: registration
+      modulus: ${JWK_MODULUS}
+      public-exponent: ${JWK_PUBLIC_EXPONENT}  
+      private-exponent: ${JWK_PRIVATE_EXPONENT}   
+    
 ---
 spring:
   profiles: development-oracl
