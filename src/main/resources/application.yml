@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: development-h2
+    active: development-oracl
 
 aws:
   access-key: ${AWS_ACCESS_KEY}
@@ -29,6 +29,7 @@ eureka:
       
 server:
   port: 5555
+  
 ---
 spring:
   profiles: development-oracl
