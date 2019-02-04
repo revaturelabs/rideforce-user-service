@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ import com.revature.rideforce.user.beans.UserCredentials;
 import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.services.AuthenticationService;
-
+@CrossOrigin(origins="*")
 @RestController
 @Lazy(true)
 @RequestMapping("/login")
