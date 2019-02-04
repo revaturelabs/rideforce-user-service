@@ -223,7 +223,7 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- Spring Cloud -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -245,7 +245,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
-		
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -259,14 +259,14 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
-		
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Documentation -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -288,39 +288,39 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>2.1.1</version>
 		</dependency>
-		
+
 		<!-- JSON Web Tokens -->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>6.8</version>
 		</dependency>
-		
+
 		<!-- H2 Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.minidev</groupId>
 			<artifactId>asm</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		
+
 		<!-- JDBC -->
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0</version>
 		</dependency>
-		
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -335,7 +335,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.0.13.Final</version>
 		</dependency>
-		
+
 		<!-- AWS -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
@@ -353,9 +353,9 @@
 
 	<build>
 		<finalName>rideforce-user-service</finalName>
-<!-- 		<pluginManagement> -->
+		<pluginManagement>
 			<plugins>
-<!-- 				<plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.6.0</version>
@@ -363,13 +363,14 @@
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
-				</plugin> -->
+				</plugin>
 
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
-<!-- 				<plugin>
+				
+				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>0.8.2</version>
@@ -391,26 +392,10 @@
 							<goals>
 								<goal>check</goal>
 							</goals>
-							<configuration>
-								<rules> -->
-									<!-- implementation is needed only for Maven 2 -->
-<!-- 									<rule implementation="org.jacoco.maven.RuleConfiguration">
-										<element>BUNDLE</element>
-										<limits> -->
-											<!-- implementation is needed only for Maven 2 -->
-											<!--<limit implementation="org.jacoco.report.check.Limit">
-												<counter>COMPLEXITY</counter>
-												<value>COVEREDRATIO</value>
-												<minimum>0.60</minimum>
-											</limit>
-										</limits>
-									</rule>
-								</rules>
-							</configuration>
 						</execution>
 					</executions>
-				</plugin> -->
+				</plugin>
 			</plugins>
-<!-- 		</pluginManagement> -->
+		</pluginManagement>
 	</build>
 </project>
