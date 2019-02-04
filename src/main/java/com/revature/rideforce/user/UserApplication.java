@@ -55,12 +55,26 @@ public class UserApplication implements InitializingBean {
 	public static void main(String[] args) {
 		SpringApplication.run(UserApplication.class, args);
 	}
+	
+	/**
+	 * Enable autowiring of the logger.
+	 * 
+	 * @param injectionPoint the injection point.
+	 * @return the logger for the class of the injection point.
+	 */
+	@Bean
+	@Scope("prototype")
+	public Logger produceLogger(InjectionPoint injectionPoint) {
+		return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
+	}
 
 	@Bean
 	public Jackson2ObjectMapperBuilderCustomizer objectMapperCustomizer() {
-		Module jsonLinks = new SimpleModule("json-links").setSerializerModifier(new LinkSerializerModifier())
+		Module jsonLinks = new SimpleModule("json-links")
+				.setSerializerModifier(new LinkSerializerModifier())
 				.setDeserializerModifier(new LinkDeserializerModifier(context));
-		Module jsonEnumLike = new SimpleModule("json-enum-like").setSerializerModifier(new EnumLikeSerializerModifier())
+		Module jsonEnumLike = new SimpleModule("json-enum-like")
+				.setSerializerModifier(new EnumLikeSerializerModifier())
 				.setDeserializerModifier(new EnumLikeDeserializerModifier(context));
 
 		return builder -> builder.modules(jsonLinks, jsonEnumLike);
@@ -113,11 +127,5 @@ public class UserApplication implements InitializingBean {
 			admin.setStartTime((float) 9.0);
 			userRepository.save(admin);
 		}
-	}
-	
-	@Bean
-	@Scope("prototype")
-	public Logger produceLogger(InjectionPoint injectionPoint) {
-		return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
 	}
 }

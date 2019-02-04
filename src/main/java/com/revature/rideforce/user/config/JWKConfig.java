@@ -57,6 +57,14 @@ public class JWKConfig {
 		this.privateExponent = privateExponent;
 	}
 	
+	/**
+	 * Creates a set containing the public Cognito keys and our registration token signing key. 
+	 * 
+	 * @param cc the Cognito configuration.
+	 * @return a set with public Cognito keys and private registration key.
+	 * @throws IOException when the Cognito keys cannot be loaded.
+	 * @throws ParseException when the Cognito keys cannot be parsed.
+	 */
 	@Bean
 	public ImmutableJWKSet<SecurityContext> produceJWKSource(CognitoConfig cc) throws IOException, ParseException {
 		// Generate our signing key
@@ -76,6 +84,12 @@ public class JWKConfig {
 		return new ImmutableJWKSet<SecurityContext>(new JWKSet(l));
 	}
 	
+	/**
+	 * Creates a public JWKS with the Cognito public keys and our registration public key.
+	 * 
+	 * @param jwkSet the set containing the public Cognito keys and our registration token signing key.
+	 * @return public JWKS with the Cognito public keys and our registration public key.
+	 */
 	@Bean
 	public JSONObject producePublicJWKSet(ImmutableJWKSet<SecurityContext> jwkSet) {
 		// Return the public JWKSet

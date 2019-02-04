@@ -42,6 +42,12 @@ public class CognitoConfig {
 		this.jwks = jwks;
 	}
 	
+	/**
+	 * Creates the Cognito client.
+	 * 
+	 * @param acp the AWS credentials.
+	 * @return the Cognito client.
+	 */
 	@Bean
 	public AWSCognitoIdentityProvider produceCognitoClient(AWSStaticCredentialsProvider acp) {
 		return AWSCognitoIdentityProviderClientBuilder.standard()
