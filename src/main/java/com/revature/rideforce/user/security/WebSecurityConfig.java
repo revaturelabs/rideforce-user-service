@@ -27,6 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Matchers for routes that can be accessed without authentication.
 		RequestMatcher[] allowable = { new AntPathRequestMatcher("/login", "POST"),
 				new AntPathRequestMatcher("/.well-known/jwks.json", "GET"), new AntPathRequestMatcher("/tokens/**"),
+				new AntPathRequestMatcher("/actuator/info","GET"), new AntPathRequestMatcher("/actuator/health","GET"),
 				new AntPathRequestMatcher("/users/**", "GET"), new AntPathRequestMatcher("/users", "POST"),
 				new AntPathRequestMatcher("/offices", "GET"), new AntPathRequestMatcher("/contact-types", "GET"),
 				new AntPathRequestMatcher("/roles", "GET"), new AntPathRequestMatcher("/**", "OPTIONS")};
