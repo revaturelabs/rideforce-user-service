@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.json.CarLinkResolver;
 import com.revature.rideforce.user.json.ContactInfoLinkResolver;
@@ -29,7 +28,6 @@ import com.revature.rideforce.user.json.JsonLink;
 import com.revature.rideforce.user.json.Linkable;
 import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
-import com.revature.rideforce.user.security.PasswordSecurityUtil;
 
 /**
 
@@ -65,8 +63,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	private String email;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
-	@Column(nullable = false, length = 70)
-	@NotEmpty
+	@Transient
 	private String password;
 
 	@Column(length = 200)
@@ -110,7 +107,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
 	private Date batchEnd;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
@@ -161,18 +158,15 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	public void setEmail(String email) {
-		this.email = email.toLowerCase();
+		this.email = email;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) throws EmptyPasswordException { 
-		//changing the place to encode because this is more modular than encoding in the Application.class, updateUser controller view, and loginrecovery reset password view
-		if(password.equals(""))
-			throw new EmptyPasswordException();
-		this.password = PasswordSecurityUtil.getPasswordEncoder().encode(password); //made the class because as a member of User, gave me errors in LoginRecoveryControllerTest...null pointer exceptions, idk
+	public void setPassword(String password) { 
+		this.password = password;
 	}
 
 	public String getPhotoUrl() {
@@ -250,6 +244,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Override
 	public String getUsername() {
+		return email;
+	}
+	
+	public String getEmail() {
 		return email;
 	}
 

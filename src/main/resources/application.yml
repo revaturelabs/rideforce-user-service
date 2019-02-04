@@ -1,6 +1,37 @@
 spring:
   profiles:
     active: development-oracl
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  s3:
+    region: ${S3_REGION}
+    bucketName: ${S3_BUCKET_NAME}
+  cognito:
+    region: ${COGNITO_REGION}
+    client-id: ${COGNITO_CLIENT_ID}
+    jwks: https://cognito-idp.${COGNITO_REGION}.amazonaws.com/${COGNITO_POOL_ID}/.well-known/jwks.json
+
+jwt:
+  registration:
+    ttl: 24
+    rsa-key:
+      id: registration
+      modulus: ${JWK_MODULUS}
+      public-exponent: ${JWK_PUBLIC_EXPONENT}  
+      private-exponent: ${JWK_PRIVATE_EXPONENT}   
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    fetch-registry: false
+    register-with-eureka: false
+      
+server:
+  port: 5555
+  
 ---
 spring:
   profiles: development-oracl
@@ -12,6 +43,7 @@ spring:
     password: ${JDBC_PASSWORD}         #INSTEAD, CAN JUST ADD ENV VARIABLES    SPRING_DATASOURCE_URL/USERNAME/PASSWORD
     driver-class-name: oracle.jdbc.driver.OracleDriver
   jpa:
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -20,13 +52,7 @@ spring:
   devtools:
     restart:
       enabled: false
-
-eureka:
-  client:
-    service-url:
-      default-zone: http://localhost:8761/eureka
-server:
-  port: 5555
+      
 ---      
 spring:
   profiles: development-h2
@@ -37,19 +63,6 @@ spring:
     username: sa 
     driver-class-name: org.h2.Driver 
   jpa:
+    show-sql: false
     hibernate:
-      ddl-auto: validate
-  show-sql: true
-eureka:
-  client:
-    service-url:
-      default-zone: http://localhost:8761/eureka
-server:
-  port: 9001
-
- 
-amazonProperties:
-  endpointUrl: http://rideshare-photos.s3-website-us-east-1.amazonaws.com
-  accessKey: ${ACCESS}
-  secretKey: ${SECRET}
-  bucketName: rideshare-photos
+      ddl-auto: create

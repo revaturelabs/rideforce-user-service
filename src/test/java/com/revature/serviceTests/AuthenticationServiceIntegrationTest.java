@@ -36,12 +36,12 @@ public class AuthenticationServiceIntegrationTest {
 		Assertions.assertThat(authenticationService).isNotNull();
 	}
 	
-	@Test(expected = InvalidCredentialsException.class)
-	public void invalidCredentialsThrowsException() throws InvalidCredentialsException, DisabledAccountException {
-		UserCredentials userCred = new UserCredentials();
-		userCred.setEmail("bobby@gmail.com");
-		authenticationService.authenticate(new UserCredentials());
-	}
+//	@Test(expected = InvalidCredentialsException.class)
+//	public void invalidCredentialsThrowsException() throws InvalidCredentialsException, DisabledAccountException {
+//		UserCredentials userCred = new UserCredentials();
+//		userCred.setEmail("bobby@gmail.com");
+//		authenticationService.authenticate(new UserCredentials());
+//	}
 	
 	@Test(expected = InvalidRegistrationKeyException.class)
 	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, 
