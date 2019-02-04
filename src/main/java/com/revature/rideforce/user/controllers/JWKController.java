@@ -1,6 +1,5 @@
 package com.revature.rideforce.user.controllers;
 
-import java.util.Date;
 import java.util.Optional;
 
 import javax.validation.Valid;
