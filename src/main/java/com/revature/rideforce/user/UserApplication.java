@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.revature.rideforce.user.beans.Office;
@@ -117,7 +116,7 @@ public class UserApplication implements InitializingBean {
 			User admin = new User();
 			admin.setFirstName("admin");
 			admin.setLastName("admin");
-			admin.setEmail("mateuszwiater@gmail.com");
+			admin.setEmail("admin@revature.com");
 			admin.setAddress("11730 Plaza America Dr. Reston, VA");
 			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
