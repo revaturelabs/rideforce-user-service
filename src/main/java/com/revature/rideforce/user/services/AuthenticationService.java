@@ -1,26 +1,46 @@
 package com.revature.rideforce.user.services;
+import java.text.ParseException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Optional;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidp.model.SignUpRequest;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.proc.BadJOSEException;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import com.nimbusds.jwt.proc.JWTProcessor;
+import com.revature.rideforce.user.beans.RegistrationToken;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserCredentials;
-import com.revature.rideforce.user.beans.UserRegistrationInfo;
-import com.revature.rideforce.user.exceptions.DisabledAccountException;
+import com.revature.rideforce.user.beans.UserRegistration;
+import com.revature.rideforce.user.config.CognitoConfig;
+import com.revature.rideforce.user.config.JWKConfig;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
-import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
-import com.revature.rideforce.user.json.Active;
+import com.revature.rideforce.user.repository.OfficeRepository;
 import com.revature.rideforce.user.repository.UserRepository;
-import com.revature.rideforce.user.security.LoginTokenProvider;
-import com.revature.rideforce.user.security.RegistrationTokenProvider;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
@@ -28,47 +48,41 @@ import com.revature.rideforce.user.security.RegistrationTokenProvider;
  */
 @Service
 public class AuthenticationService {
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private UserRepository userRepository;
+	@Value("${jwt.registration.ttl}")
+	private Integer registrationTokenTTL;
 	
 	@Autowired
-	private UserService userService;
-
+	private Logger log;
+	
 	@Autowired
-	private LoginTokenProvider loginTokenProvider;
-
+	OfficeRepository or;
+	
 	@Autowired
-	private RegistrationTokenProvider registrationTokenProvider;
+	private CognitoConfig cc;
+	
+	@Autowired
+	private UserService us;
+	
+	@Autowired
+	private UserRepository ur;
+	
+	@Autowired
+	AWSCognitoIdentityProvider cognito;
 
-	/**
-	 * Authenticates a user with the given credentials, returning a JSON Web Token
-	 * that can be used for future authentication.
-	 * 
-	 * @param credentials the user's credentials (email and password)
-	 * @return a JWT for future authentication
-	 * @throws InvalidCredentialsException if the given credentials are invalid
-	 *                                     (wrong email or password)
-	 * @throws DisabledAccountException	   if the account is disabled (by admin)
-	 */
-	public String authenticate(UserCredentials credentials) throws InvalidCredentialsException, DisabledAccountException {
-		User found = userRepository.findByEmail(credentials.getEmail());
-		log.info("Authenticating user credentials");
-		log.debug("credentials.email(): {} ", credentials.getEmail()); //find solution for logging sensitive data; possibly dbappender
-		log.debug("credentials.password: {} ", credentials.getPassword());
-		if (found == null) {
-			throw new InvalidCredentialsException();
-		}
-		if (!passwordEncoder.matches(credentials.getPassword(), found.getPassword())) {
-			throw new InvalidCredentialsException();
-		}
-		if (found.isActive().equals(Active.DISABLED)) {
-			throw new DisabledAccountException();
-		}
-		return loginTokenProvider.generateToken(found.getId());
+	private JWSSigner registrationTokenSigner;
+	private JWSHeader registrationTokenHeader;
+	private JWTProcessor<SecurityContext> jwtProcessor;
+	
+	@Autowired
+	public AuthenticationService(JWKConfig jc, ImmutableJWKSet<SecurityContext> jwkSet) throws JOSEException {
+		// Create the registration token header
+		this.registrationTokenHeader = new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jc.getId()).build();
+		// Create the registration token signer
+		this.registrationTokenSigner = new RSASSASigner(((RSAKey)jwkSet.getJWKSet().getKeyByKeyId(jc.getId())).toPrivateKey());
+		// Create the token processor
+		ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
+		jwtProcessor.setJWSKeySelector(new JWSVerificationKeySelector<>(JWSAlgorithm.RS256, jwkSet));
+		this.jwtProcessor = jwtProcessor;
 	}
 
 	/**
@@ -85,30 +99,28 @@ public class AuthenticationService {
 	 *                                         desired user (e.g. if an
 	 *                                         unauthenticated user attempts to
 	 *                                         create an admin)
-	 * @throws EmptyPasswordException          Password in the {@linkplain UserRegistrationInfo} must be non empty
+	 * @throws EmptyPasswordException          Password in the {@linkplain UserRegistration} must be non empty
 	 * @throws PasswordRequirementsException   if the password entered does not
 	 * 										   meet the requirements specified
 	 */
-	public User register(UserRegistrationInfo info)
-			throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
-		if(info == null) {
+	public User register(UserRegistration ur) throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		// Check the registration token
+		RegistrationToken registrationToken = validateRegistrationToken(ur.getRegistrationToken());
+		if(registrationToken != null) {
+			ur.getUser().setOffice(registrationToken.getOffice());
+			ur.getUser().setBatchEnd(registrationToken.getBatchEndDate());
+		} else {
 			throw new InvalidRegistrationKeyException();
 		}
-		// Make sure that the registration key token is valid.
-		if (!registrationTokenProvider.isValid(info.getRegistrationKey())) {
-			log.info("Attempting to register user");
-			log.debug(info.getRegistrationKey());
-			throw new InvalidRegistrationKeyException();
-		}
-		// Make sure password meets requirements.
-		if(!passwordIsValid(info.getPassword())) {
-//			log.info("Password length violation");
-			throw new PasswordRequirementsException();
-		}
-		log.info("User registered successfully");
-		log.info("Hashing password");
-		info.getUser().setPassword(info.getPassword());   //hashing will be done in setPassword()
-		return userService.add(info.getUser());
+		
+		// Sign the user up with Cognito
+		cognito.signUp(new SignUpRequest()
+				.withClientId(cc.getClientId())
+				.withUsername(ur.getUser().getEmail().toLowerCase())
+				.withPassword(ur.getUser().getPassword()));
+		
+		// Add the user to our database
+		return us.add(ur.getUser());
 	}
 
 	/**
@@ -134,13 +146,62 @@ public class AuthenticationService {
 		return (User) auth.getPrincipal();
 	}
 	
+	public String createRegistrationToken(RegistrationToken rt) throws JOSEException {
+		// Prepare the JWT claims
+		JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+		    .subject("registration")
+		    .issuer("rideforce")
+		    .claim("oid", rt.getOffice().getId())
+		    .claim("bed", rt.getBatchEndDate())
+		    .issueTime(Date.from(Instant.now()))
+		    .expirationTime(Date.from(Instant.now().plus(Duration.ofHours(registrationTokenTTL))))
+		    .build();
+		
+		// Create the JWT
+		SignedJWT signedJWT = new SignedJWT(registrationTokenHeader, claimsSet);
+
+		// Sign the JWT
+		signedJWT.sign(registrationTokenSigner);
+		
+		// Return the signed JWT
+		return signedJWT.serialize();
+	}
+	
+	public JWTClaimsSet processToken(String token) {
+		try {
+			return jwtProcessor.process(token, null);
+		} catch (ParseException | BadJOSEException | JOSEException e) {
+			return null;
+		}
+	}
+	
+	public RegistrationToken validateRegistrationToken(String token) {
+		return Optional.ofNullable(token)
+				.map(this::processToken)
+				.map(c -> new RegistrationToken(or.findById(Integer.parseInt(c.getClaim("oid").toString())), new Date(Long.parseLong(c.getClaim("bed").toString()) * 1000L)))
+				.orElse(null);
+	}
+	
 	/**
-	 * Method for password requirements validation. Can be adjusted to accommodate future requirements.
+	 * Converts the given JWT into an authentication object that can be stored as the
+	 * authentication principal in Spring's SecurityContext.
 	 * 
-	 * @param password to be validated
-	 * @return true if valid password
+	 * @param token the JWT to convert.
+	 * @return the authentication object, or null if the given JWT was invalid.
 	 */
-	private boolean passwordIsValid(String password) {
-		return (password.length() >= 8 && password.length() <= 16);
+	public Authentication authenticate(String token) {
+		return Optional.ofNullable(token)
+				// Verify the token
+				.map(this::processToken)
+				// Extract the email from the token
+				.map(t -> t.getClaim("email"))
+				// Convert the email claim to a string
+				.map(Object::toString)
+				// Find a user by the email
+				.map(ur::findByEmail)
+				// Create an authentication object from the user
+				.map(u -> new UsernamePasswordAuthenticationToken(u, "", u.getAuthorities()))
+				// Return null if anything in this chain is null
+				.orElse(null);
 	}
 }

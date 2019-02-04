@@ -1,10 +1,8 @@
 package com.revature.rideforce.user.services;
 
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.exceptions.EmailAlreadyUsedException;
-import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
@@ -29,11 +26,10 @@ import com.revature.rideforce.user.repository.UserRepository;
  */
 @Service
 public class UserService extends CrudService<User> {
-	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	private UserRepository userRepository;
-	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private Logger log;
+	private UserRepository userRepository;
+
 	
 	/**
 	 * constructor injects repository dependency
@@ -43,8 +39,6 @@ public class UserService extends CrudService<User> {
 	public UserService(UserRepository userRepository) {
 		super(userRepository);
 		this.userRepository = userRepository;
-    log.info("UserService created");
-    log.debug("UserService.userRepository initialized to: {}", userRepository);
 	}
 
 	/**
@@ -81,31 +75,6 @@ public class UserService extends CrudService<User> {
 			throw new PermissionDeniedException("Permission denied to get users by office and role.");
 		}
 		return userRepository.findByOfficeAndRole(office, role);
-	}
-	
-	/**Lets the user change the account password
-	 * @param user the account which will have its password changed
-	 * @param oldPassword <code>String</code> current password user inputs
-	 * @param newPassword <code>String</code> new password to be set
-	 * @throws PermissionDeniedException if the user inputs the wrong <strong> oldPassword</strong>
-	 * @throws EmptyPasswordException if the user inputs a new password but it's empty
-	 */
-	public void updatePassword(User user, String oldPassword, String newPassword) throws PermissionDeniedException, EmptyPasswordException {
-		User loggedIn = authenticationService.getCurrentUser();
-		// Check permission to update password. Admins can update anyone's
-		// password, provided they know the old password.
-		if (loggedIn == null || (!loggedIn.isAdmin() && loggedIn.getId() != user.getId())) {
-			throw new PermissionDeniedException("Cannot change this user's password.");
-		}
-		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-			throw new PermissionDeniedException("Old password is incorrect.");
-		}
-		if(newPassword.equals(""))
-			throw new EmptyPasswordException();
-		
-		user.setPassword(newPassword);   //will encode in the setter
-		userRepository.save(user);
-    log.info("updated user: " + user);
 	}
 	
 	/**
