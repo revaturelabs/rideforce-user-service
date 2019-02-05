@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,9 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRegistration;
+import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +42,8 @@ public class UserControllerTest {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	private static final Logger log = LoggerFactory.getLogger(UserControllerTest.class);
 	
 	// Current build allows anyone to get request all users, this should be changed to be more secure
 	@Test
@@ -54,19 +61,18 @@ public class UserControllerTest {
 		this.mockMvc.perform(post("/users")).andExpect(status().isUnsupportedMediaType());
 	}
 	
-//	@Test
-//	public void incorrectFormatWillReturn400PostUsers() throws Exception {
-//		User admin = userRepository.findById(1); //unfortunately have to get a user
-//		UserRegistration info = new UserRegistration();
-//		info.setUser(admin);
-//		info.setIdToken("password");
-//		info.setRegistrationToken("ThisIsAKey");
-//		ObjectMapper om = new ObjectMapper();
-//		String userRegInfo = om.writeValueAsString(info);
-//		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin, "password", admin.getAuthorities()));
-//		this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(userRegInfo)).andExpect(status().is4xxClientError());
-//		SecurityContextHolder.getContext().setAuthentication(null);
-//	}
+	@Test
+	public void incorrectFormatWillReturn400PostUsers() throws Exception {
+		User admin = userRepository.findById(1); //unfortunately have to get a user
+		UserRegistration info = new UserRegistration();
+		info.setUser(admin);
+		info.setRegistrationToken("ThisIsAKey");
+		ObjectMapper om = new ObjectMapper();
+		String userRegInfo = om.writeValueAsString(info);
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin, "password", admin.getAuthorities()));
+		this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content(userRegInfo)).andExpect(status().is4xxClientError());
+		SecurityContextHolder.getContext().setAuthentication(null);
+	}
 	
 	@Test
 	public void loggedOutUserCannotPostUsersById() throws Exception {
@@ -141,12 +147,6 @@ public class UserControllerTest {
 		this.mockMvc.perform(get("/users/a")).andExpect(status().isBadRequest());
 	}
 	
-	@Test
-	public void loggedOutUserFindByWeirdCaseEmailShouldWork() throws Exception
-	{ 							//so to put parameters in get request url, it's a ? not a /   !!!!
-		this.mockMvc.perform(get("/users?email=adMIN@REVature.com")).andExpect(status().is2xxSuccessful());
-	}
-	
 	@Test()
 	public void loggedOutUserCantDeleteAccount() throws Exception
 	{
@@ -158,10 +158,55 @@ public class UserControllerTest {
 	@Test
 	public void loggedInAdminUserCanDeleteAccount() throws Exception
 	{
+		//Tests if an admin can delete a user
 		User admin = userRepository.findById(1); //unfortunately have to get a user
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin, "password", admin.getAuthorities()));
 		this.mockMvc.perform(delete("/users/1")).andExpect(status().is2xxSuccessful());
 		SecurityContextHolder.getContext().setAuthentication(null);
 		
+	}
+	
+	@Transactional
+	@Test
+	public void loggedInUserCanSaveAccount() throws Exception{
+		//user that is logged in can update information of their accounts
+		User user = userRepository.findById(1); 
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, "password", user.getAuthorities()));
+		this.mockMvc.perform(put("/users/1").contentType(MediaType.APPLICATION_JSON)
+				.content("{\"firstName\":\"fname\",\"lastName\":\"lname\",\"email\":\"email@email.com\",\"password\":\"password\",\"UserRole\":\"DRIVER\"}"))
+				.andExpect(status().is2xxSuccessful());
+		SecurityContextHolder.getContext().setAuthentication(null);
+	}
+	
+
+	//This is to test out registration user currently gets 400 error
+	@Test
+	public void registerUserTest() throws Exception{
+		log.trace("register user test");
+		//Setting up User and UserRole objects to be tested as a new registering user
+		User user = new User();
+		UserRole userR = new UserRole(); 
+		userR.setType("DRIVER");
+		user.setFirstName("john");
+		user.setLastName("doe");
+		user.setEmail("jdoe@email.com");
+		user.setPassword("password");
+		user.setRole(userR);
+		
+		//ObjectMapper maps the object as a Json object to be sent in the request body
+		
+		ObjectMapper om = new ObjectMapper();
+		
+		//converting to string
+		String requestJson = om.writeValueAsString(user);
+		
+		
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, "password", user.getAuthorities()));
+		log.trace("register user test before mock");
+		this.mockMvc.perform(post("/users/registration").contentType(MediaType.APPLICATION_JSON)
+			.content(requestJson))
+			.andExpect(status().isCreated());
+		
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 }

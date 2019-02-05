@@ -44,7 +44,7 @@ public class CarService extends CrudService<Car> {
     @return true if user is admin or owner of car
     */
 	@Override
-	protected boolean canAdd(User user, Car obj) {
+	public boolean canAdd(User user, Car obj) {
 		// Users can only add cars for themselves, except admins who can add
 		// cars to any user.
 		return user != null && (user.isAdmin() || user.getId() == obj.getOwner().getId());

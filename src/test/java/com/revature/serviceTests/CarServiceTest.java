@@ -77,12 +77,12 @@ public class CarServiceTest {
 	
     }
     
-//    @Test
-//    public void canAddTest() {
-//    	User admin = new User();
-//    	UserRole role = new UserRole(1, "ADMIN");
-//    	admin.setRole(role);
-//    	Assertions.assertThat(carService.canAdd(admin, new Car));
-//    }
+    @Test
+    public void canAddTest() {
+    	User admin = new User();
+    	UserRole role = new UserRole(1, "ADMIN");
+    	admin.setRole(role);
+    	Assertions.assertThat(carService.canAdd(admin, new Car()));
+    }
     
 }

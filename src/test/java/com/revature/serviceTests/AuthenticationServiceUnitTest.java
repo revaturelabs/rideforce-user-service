@@ -41,7 +41,7 @@ public class AuthenticationServiceUnitTest {
 	private UserRegistration registrationInfo;
 	@Autowired
 	private AuthenticationService authenticationService;
-	@Autowired
+	@MockBean
 	private PasswordEncoder passwordEncoder;
 	@MockBean
 	private UserRepository userRepo;
@@ -71,75 +71,6 @@ public class AuthenticationServiceUnitTest {
 //		https://stackoverflow.com/questions/2684630/how-can-i-make-a-method-return-an-argument-that-was-passed-to-it
 		
 	}
-	
-	/**
-	 * Test the logic of the authentication service layer is sound
-	 * @throws InvalidCredentialsException 
-	 * @throws DisabledAccountException 
-	 */
-//	@Test
-//	public void authenticateWithGoodCredentialsTest() throws InvalidCredentialsException, DisabledAccountException
-//	{
-//		userCredentials.setEmail("admin@revature.com");
-//		userCredentials.setPassword("password"); 									//ultimately the token returned by LoginTokenProvider is just a string
-//		Assertions.assertThat(authenticationService.authenticate(userCredentials)).isInstanceOf(String.class).isNotNull();
-//	}
-	
-//	@Test
-//	public void authenticateWithBadPasswordTest()
-//	{
-//		userCredentials.setEmail("admin@revature.com");
-//		userCredentials.setPassword("pas"); 	
-//		Assertions.assertThatExceptionOfType(InvalidCredentialsException.class)
-//			.isThrownBy( () -> authenticationService.authenticate(userCredentials) );  //yay lambdas...w/o doesnt work to just put the method
-//	}
-	
-//	@Test
-//	public void authenticateWithBadEmailTest()
-//	{
-//		userCredentials.setEmail("bad");
-//		Throwable thrown = Assertions.catchThrowable( () -> authenticationService.authenticate(userCredentials) );
-//		Assertions.assertThat(thrown).isInstanceOf(InvalidCredentialsException.class);
-//	}
-	
-//	@Test
-//	public void authenticateWithInactiveUserTest()
-//	{
-//		userCredentials.setEmail("admin@revature.com");
-//		userCredentials.setPassword("password");
-//		user.setActive(Active.DISABLED);
-//		Throwable thrown = Assertions.catchThrowable( () -> authenticationService.authenticate(userCredentials) );
-//		Assertions.assertThat(thrown).isInstanceOf(DisabledAccountException.class);
-//	}
-	
-//	@Test
-//	public void registerTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException
-//                                   , PasswordRequirementsException
-//	{
-//		String token = registrationTokenProvider.generateToken();
-//		registrationInfo = new UserRegistration(this.user, "pally8888", token);
-//		Assertions.assertThat( authenticationService.register(registrationInfo) ).isInstanceOf(User.class).isNotNull();
-//	}
-//	
-//	@Test(expected = InvalidRegistrationKeyException.class)
-//	public void registerWithInvalidRegistrationKeyTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
-//	{
-//		registrationInfo = new UserRegistration(this.user, "pally8888", "badkey");
-//		authenticationService.register(registrationInfo);
-//	}
-//	
-//	@Test(expected = NullPointerException.class)
-//	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
-//	{
-//		registrationInfo = new UserRegistration(null, null, registrationTokenProvider.generateToken());
-//		authenticationService.register(registrationInfo);
-//	}
-//	
-//	@Test(expected = PasswordRequirementsException.class)
-//	public void registerWithInvalidPasswordTest() throws PasswordRequirementsException, InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException {
-//		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
-//		authenticationService.register(registrationInfo);
-//	}
 
 	@Test
 	public void getCurrentUserTest() throws EmptyPasswordException

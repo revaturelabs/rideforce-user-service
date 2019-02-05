@@ -56,7 +56,7 @@ public class UserTest {
 		
 		Assertions.assertThat(u.getFirstName()).isEqualTo("first");
 		Assertions.assertThat(u.getLastName()).isEqualTo("last");
-		Assertions.assertThat(passwordEncoder.matches("password", u.getPassword())).isTrue();
+		Assertions.assertThat(u.getPassword()).isEqualTo("password");
     }
 	
 	@Test
@@ -127,11 +127,6 @@ public class UserTest {
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
-	}
-	
-	@Test(expected = EmptyPasswordException.class)
-	public void emptyUserPasswordTest() throws EmptyPasswordException {
-		u.setPassword("");
 	}
 	
 	@Test

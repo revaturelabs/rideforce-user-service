@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -44,16 +46,7 @@ public class LoginControllerTest {
 		UserCredentials userCred = new UserCredentials("bob@gmail.com", "password");
 		ObjectMapper om = new ObjectMapper();
 		String userCredJson = om.writeValueAsString(userCred);
-		this.mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(userCredJson)).andExpect(status().isForbidden());
-	}
-	
-	@Test
-	public void validUserCredentialDifferentCaseEmailShouldntMatterTest() throws Exception {
-		UserCredentials userCred = new UserCredentials("adMIN@revATure.com", "password");
-		//turn object into JSON string for the body
-		ObjectMapper om = new ObjectMapper();
-		String userCredJson = om.writeValueAsString(userCred);
-		this.mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(userCredJson)).andExpect(status().is2xxSuccessful()); //expect 200 status code from response
+		this.mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(userCredJson)).andExpect(status().is4xxClientError());
 	}
 	
 }
