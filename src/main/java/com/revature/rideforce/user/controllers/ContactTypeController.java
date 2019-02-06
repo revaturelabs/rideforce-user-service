@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.ContactType;
 import com.revature.rideforce.user.services.ContactTypeService;
 
-@RestController
+
 @Lazy(true)
+@RestController
 @RequestMapping("/contact-types")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public class ContactTypeController extends CrudController<ContactType> {

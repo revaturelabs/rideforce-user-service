@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.revature.rideforce.user.beans.ResponseError;
 
-@RestController
 @Lazy(true)
+@RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {
   static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

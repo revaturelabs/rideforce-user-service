@@ -2,6 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
 	<groupId>com.revature.rideforce</groupId>
 	<artifactId>rideforce-user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -25,170 +26,141 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-	<!--
-        Determines to which repository releases of the project are deployed.
-        In this example, artifacts are deployed to a directory on the
-        same computer on which the Jenkins build server is run.
-        Note that this is just the minimal configuration required in order
-        to be able to perform a Maven release, not recommended for production.
-        Reference: http://maven.apache.org/pom.html#Distribution_Management
-    -->
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>home1</id>
-            <name>Home Repository</name>
-            <url>file://C:/MyProjectDeployDirectory/</url>
-            <layout>default</layout>
-        </repository>
-    </distributionManagement>
-    
-    <!--
-        SCM configuration is necessary in order to enable Maven to manage
-        the version of the project when releasing a new version on the
-        Jenkins build server.
-        The configuration varies depending on which provider is used
-        (for example, Git, Subversion, etc).
-        In this example, Git is used.
-        Reference: http://maven.apache.org/pom.html#SCM
-    -->
-    <scm>
-       <connection>scm:git:file://localhost/C:/GitRepo/MyProject/</connection>
-       <developerConnection>scm:git:file://localhost/C:/GitRepo/MyProject/</developerConnection>
-       <tag>HEAD</tag>
-    </scm>
-    
-    <properties>
-        <!--
-            Path to the root directory of the documentation web application.
-            This example assumes that the documentation web application
-            is located in the same Tomcat instance as the Jenkins build
-            server runs.
-        -->
-        <release.javadoc.root.path>[path to Tomcat home]/webapps/api-documentation/</release.javadoc.root.path>
-    </properties>
-    
-    <profiles>
-        <!--
-            Profile for generation and publishing of release JavaDoc
-            documentation.
-            Use: mvn -P releaseDocumentation site
-            References: http://maven.apache.org/guides/introduction/introduction-to-profiles.html
-        -->
-        <profile>
-            <!-- 
-                Name of the Maven build profile.
-                Used in project's Jenkins job configuration.
-            -->
-            <id>releaseDocumentation</id>
-            <build>
-                <plugins>
-                    <!--
-                        In preparation of site generation, extract the release
-                        version number to a maven property.
-                        Performed during pre-site phase.
-                    -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.8</version>
-                        <executions>
-                            <execution>
-                                <phase>pre-site</phase>
-                                <id>regex-property</id>
-                                <goals>
-                                    <goal>regex-property</goal>
-                                </goals>
-                                <configuration>
-                                    <name>release_version</name>
-                                    <value>${project.version}</value>
-                                    <regex>-SNAPSHOT</regex>
-                                    <replacement />
-                                    <failIfNoMatch>false</failIfNoMatch>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!--
-                        JavaDoc generation.
-                        JavaDoc is generated during pre-site phase.
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <phase>pre-site</phase>
-                                <goals>
-                                    <goal>javadoc</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <show>private</show>
-                        </configuration>
-                    </plugin>
-                    <!--
-                        Copy JavaDoc to publish directory.
-                        Performed during the site phase.
-                        If changing the phase, make sure that copying the
-                        documentation is performed after having generated
-                        the JavaDoc.
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>2.6</version>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <phase>site</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <generateProjectInfo>false</generateProjectInfo>
-                                    <generateReports>false</generateReports>
-                                    <outputDirectory>${release.javadoc.root.path}${project.artifactId}-${release_version}/</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/site/</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                                       
-                </plugins>
-            </build>
-       <!--      
-                Include this section to disable, or configure, generation
-                of project info report(s).
-                In this case, all project info reports have been disabled.
-        -->    
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>2.7</version>
-                        <reportSets>
-                            <reportSet>
-                                <reports>
-                                </reports>
-                            </reportSet>
-                        </reportSets>
-                    </plugin>
-                </plugins>
-            </reporting>
-        </profile>
-    </profiles>
 
+	<!-- Determines to which repository releases of the project are deployed. 
+		In this example, artifacts are deployed to a directory on the same computer 
+		on which the Jenkins build server is run. Note that this is just the minimal 
+		configuration required in order to be able to perform a Maven release, not 
+		recommended for production. Reference: http://maven.apache.org/pom.html#Distribution_Management -->
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>home1</id>
+			<name>Home Repository</name>
+			<url>file://C:/MyProjectDeployDirectory/</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
 
+	<!-- SCM configuration is necessary in order to enable Maven to manage the 
+		version of the project when releasing a new version on the Jenkins build 
+		server. The configuration varies depending on which provider is used (for 
+		example, Git, Subversion, etc). In this example, Git is used. Reference: 
+		http://maven.apache.org/pom.html#SCM -->
+	<scm>
+		<connection>scm:git:file://localhost/C:/GitRepo/MyProject/</connection>
+		<developerConnection>scm:git:file://localhost/C:/GitRepo/MyProject/</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<properties>
+		<!-- Path to the root directory of the documentation web application. This 
+			example assumes that the documentation web application is located in the 
+			same Tomcat instance as the Jenkins build server runs. -->
+		<release.javadoc.root.path>[path to Tomcat
+			home]/webapps/api-documentation/</release.javadoc.root.path>
+	</properties>
+
+	<profiles>
+		<!-- Profile for generation and publishing of release JavaDoc documentation. 
+			Use: mvn -P releaseDocumentation site References: http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
+		<profile>
+			<!-- Name of the Maven build profile. Used in project's Jenkins job configuration. -->
+			<id>releaseDocumentation</id>
+			<build>
+				<plugins>
+					<!-- In preparation of site generation, extract the release version 
+						number to a maven property. Performed during pre-site phase. -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>pre-site</phase>
+								<id>regex-property</id>
+								<goals>
+									<goal>regex-property</goal>
+								</goals>
+								<configuration>
+									<name>release_version</name>
+									<value>${project.version}</value>
+									<regex>-SNAPSHOT</regex>
+									<replacement />
+									<failIfNoMatch>false</failIfNoMatch>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- JavaDoc generation. JavaDoc is generated during pre-site phase. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<phase>pre-site</phase>
+								<goals>
+									<goal>javadoc</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<show>private</show>
+						</configuration>
+					</plugin>
+					<!-- Copy JavaDoc to publish directory. Performed during the site phase. 
+						If changing the phase, make sure that copying the documentation is performed 
+						after having generated the JavaDoc. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>site</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<generateProjectInfo>false</generateProjectInfo>
+									<generateReports>false</generateReports>
+									<outputDirectory>${release.javadoc.root.path}${project.artifactId}-${release_version}/</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}/site/</directory>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+			<!-- Include this section to disable, or configure, generation of project 
+				info report(s). In this case, all project info reports have been disabled. -->
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>2.7</version>
+						<reportSets>
+							<reportSet>
+								<reports>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+	</profiles>
+
+	<!-- Revature Nexus -->
 	<repositories>
 		<repository>
 			<id>my-nexus</id>
@@ -214,38 +186,13 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
-	</pluginRepositories> 
-	
+	</pluginRepositories>
+
 	<dependencies>
-		<!-- JSON Web Tokens -->
-		<dependency>
-			<groupId>com.auth0</groupId>
-			<artifactId>java-jwt</artifactId>
-			<version>3.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+		<!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -259,7 +206,47 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 
+		<!-- Spring Cloud -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+
+		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
@@ -268,180 +255,160 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
-		
-		<!-- Spring Security Testing Dependency -->
 		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-test</artifactId>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
- -->
+		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Documentation -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.8.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.8.0</version>
 		</dependency>
 
+		<!-- XML -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>11.2.0</version>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.1.1</version>
 		</dependency>
-		
+
+		<!-- JSON Web Tokens -->
 		<dependency>
-		    <groupId>javax.ws.rs</groupId>
-		    <artifactId>javax.ws.rs-api</artifactId>
-		    <version>2.1.1</version>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>6.8</version>
 		</dependency>
+
 		<!-- H2 Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-		<dependency>
-		    <groupId>net.minidev</groupId>
-		    <artifactId>asm</artifactId>
-		    <version>1.0.2</version>
-		</dependency>		
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
-		
-		<dependency>
-			 <groupId>org.hibernate</groupId>
-    		 <artifactId>hibernate-core</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>6.0.13.Final</version>
-		</dependency>	
-		
-		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
-		<dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-		    <version>1.5.0-b01</version>
-		</dependency>
-				
-		<dependency>
-		   <groupId>com.amazonaws</groupId>
-		   <artifactId>aws-java-sdk</artifactId>
-		   <version>1.11.409</version>
+			<groupId>net.minidev</groupId>
+			<artifactId>asm</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<!-- JDBC -->
 		<dependency>
-		    <groupId>commons-fileupload</groupId>
-		    <artifactId>commons-fileupload</artifactId>
-		    <version>1.3.3</version>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0</version>
 		</dependency>
-				
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.13.Final</version>
+		</dependency>
+
+		<!-- AWS -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.490</version>
+		</dependency>
+
+		<!-- File Upload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>rideforce-user-service</finalName>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.0</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
-				</plugin>
-				
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.2</version>
-					<executions>
-						<execution>
-							<id>default-prepare-agent</id>
-							<goals>
-								<goal>prepare-agent</goal>
-								</goals>
-								</execution>
-								<execution>
-								<id>default-report</id>
-								<goals>
-								<goal>report</goal>
-								</goals>
-								</execution>
-								<execution>
-								<id>default-check</id>
-								<goals>
-								<goal>check</goal>
-							</goals>
-							<configuration>
-								<rules>
-								 <!--  implementation is needed only for Maven 2  -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<!-- implementation is needed only for Maven 2 -->
 								<rule implementation="org.jacoco.maven.RuleConfiguration">
-								<element>BUNDLE</element>
-								<limits>
-								 <!--  implementation is needed only for Maven 2  -->
-								<limit implementation="org.jacoco.report.check.Limit">
-								<counter>COMPLEXITY</counter>
-								<value>COVEREDRATIO</value>
-								<minimum>0.60</minimum>
-								</limit>
-								</limits>
+									<element>BUNDLE</element>
+									<limits>
+										<!-- implementation is needed only for Maven 2 -->
+										<limit implementation="org.jacoco.report.check.Limit">
+											<counter>COMPLEXITY</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.60</minimum>
+										</limit>
+									</limits>
 								</rule>
-								</rules>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

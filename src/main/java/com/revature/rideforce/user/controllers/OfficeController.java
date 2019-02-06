@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.services.OfficeService;
 
-@RestController
 @Lazy(true)
+@RestController
 @RequestMapping("/offices")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public class OfficeController extends CrudController<Office> {

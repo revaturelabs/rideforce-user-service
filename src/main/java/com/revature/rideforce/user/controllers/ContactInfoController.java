@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.rideforce.user.beans.ContactInfo;
 import com.revature.rideforce.user.services.ContactInfoService;
 
-@RestController
 @Lazy(true)
+@RestController
 @RequestMapping("/contact-info")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public class ContactInfoController extends CrudController<ContactInfo> {

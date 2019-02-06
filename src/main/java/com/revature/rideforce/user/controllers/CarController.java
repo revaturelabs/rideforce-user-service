@@ -17,9 +17,8 @@ import com.revature.rideforce.user.services.CarService;
  * 
  * @author clpeng
  */
-
-@RestController
 @Lazy(true)
+@RestController
 @RequestMapping("/cars")
 @PreAuthorize("hasAnyRole('ROLE_TRAINER','ROLE_ADMIN','ROLE_RIDER', 'ROLE_DRIVER')")
 public class CarController extends CrudController<Car> {
