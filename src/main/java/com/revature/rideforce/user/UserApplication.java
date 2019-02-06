@@ -1,5 +1,6 @@
 package com.revature.rideforce.user;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -117,7 +121,7 @@ public class UserApplication implements InitializingBean {
 			User admin = new User();
 			admin.setFirstName("admin");
 			admin.setLastName("admin");
-			admin.setEmail("mateuszwiater@gmail.com");
+			admin.setEmail("admin@revature.com");
 			admin.setAddress("11730 Plaza America Dr. Reston, VA");
 			admin.setOffice(officeRepository.findAll().get(0));
 			admin.setCars(new HashSet<>());
@@ -127,5 +131,16 @@ public class UserApplication implements InitializingBean {
 			admin.setStartTime((float) 9.0);
 			userRepository.save(admin);
 		}
+	}
+	
+	@Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
 	}
 }
