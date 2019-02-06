@@ -74,7 +74,7 @@ public class CarServiceTest {
 		Assertions.assertThat( carService.findByOwner(owner) ).isNotNull();
 		
 		SecurityContextHolder.getContext().setAuthentication(null);
-	
+	 
     }
     
     @Test
