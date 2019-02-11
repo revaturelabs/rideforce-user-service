@@ -16,7 +16,7 @@ create table users (
 	email varchar2(40 char) not null,
 	firstname varchar2(25 char) not null,
 	lastname varchar2(30 char) not null,
-	password varchar2(70 char) not null,
+	password varchar2(70 char),
 	photoUrl varchar2(200 char),
 	startTime float(126) not null,
 	venmo varchar2(30 char),
