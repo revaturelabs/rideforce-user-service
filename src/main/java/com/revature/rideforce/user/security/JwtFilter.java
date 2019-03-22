@@ -30,6 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Get the authorization header
+        System.out.println("This is the token: " + request.getHeader("Authorization"));
+
         Optional.ofNullable(request.getHeader("Authorization"))
         // Make sure it starts with the 'Bearer' string
         .filter(a -> a.startsWith("Bearer "))
@@ -40,6 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // If authenticated set the security context
         .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
         
+        System.out.println("This is the token: " + request.getHeader("Authorization"));
 //        response.setHeader("Access-Control-Allow-Origin", "*");
 //        response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
 //        response.setHeader("Access-Control-Allow-Headers", "*");

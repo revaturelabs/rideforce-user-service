@@ -2,7 +2,6 @@ package com.revature.rideforce.user.controllers;
 
 import java.net.URISyntaxException;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
@@ -26,7 +25,6 @@ import com.amazonaws.services.cognitoidp.model.UsernameExistsException;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.beans.UserRegistration;
 import com.revature.rideforce.user.beans.UserRole;
 import com.revature.rideforce.user.beans.forms.ChangeUserModel;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
@@ -113,10 +111,11 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> add(@RequestBody @Valid UserRegistration registration) throws URISyntaxException {
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> add(@RequestBody User user) throws URISyntaxException {
 		try {
-			User created = as.register(registration);
+			log.info(user.toString());
+			User created = as.register(user);
 			return ResponseEntity.created(created.toUri()).body("{ \"message\": \"Registration successful! Please check your email for an activation link.\"}");
 		} catch (InvalidRegistrationKeyException | PermissionDeniedException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.FORBIDDEN);
@@ -133,7 +132,7 @@ public class UserController {
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
 		
 		User user = us.findById(id);
-		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
+		changedUserModel.changeUser(user); //set the changes to the user based on the provided form 
 		UserRole role = urs.findByType(changedUserModel.getRole());
 
 		if(role != null) {

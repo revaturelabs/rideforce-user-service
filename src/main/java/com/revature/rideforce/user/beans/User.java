@@ -37,7 +37,7 @@ import com.revature.rideforce.user.json.UserRoleResolver;
   */
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS_TEST")
 public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -97,9 +97,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 
-	@Column(nullable = false)
-	@NotEmpty
-	private String address;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "LOCATION", nullable = false)
+	@NotNull
+	private CachedLocation location;
 	
 	@Column(nullable = false, columnDefinition = "float default 9.0")
 	@NotNull
@@ -121,6 +122,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Valid
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
+	
+	@Transient
+	private String registrationToken;
+	
+	@Transient
+	private String authToken;
 	
 	public User() {
 		super();
@@ -201,12 +208,12 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.office = office;
 	}
 
-	public String getAddress() {
-		return address;
+	public CachedLocation getLocation() {
+		return location;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setLocation(CachedLocation location) {
+		this.location = location;
 	}
 
 	public Date getBatchEnd() {
@@ -301,11 +308,27 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.bio = bio;
 	}
   
+	public String getRegistrationToken() {
+		return registrationToken;
+	}
+
+	public void setRegistrationToken(String registrationToken) {
+		this.registrationToken = registrationToken;
+	}
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
 	@Override
 public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((address == null) ? 0 : address.hashCode());
+	result = prime * result + ((location == null) ? 0 : location.hashCode());
 	result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
 	result = prime * result + ((bio == null) ? 0 : bio.hashCode());
 	result = prime * result + ((cars == null) ? 0 : cars.hashCode());
@@ -332,10 +355,10 @@ public boolean equals(Object obj) {
 	if (getClass() != obj.getClass())
 		return false;
 	User other = (User) obj;
-	if (address == null) {
-		if (other.address != null)
+	if (location == null) {
+		if (other.location != null)
 			return false;
-	} else if (!address.equals(other.address))
+	} else if (!location.equals(other.location))
 		return false;
 	if (batchEnd == null) {
 		if (other.batchEnd != null)
@@ -405,7 +428,7 @@ public boolean equals(Object obj) {
 public String toString() {
 	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
 			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name() + ", role=" + role
-			+ ", office=" + office + ", address=" + address + ", startTime=" + startTime + ", batchEnd=" + batchEnd
+			+ ", office=" + office + ", location=" + location + ", startTime=" + startTime + ", batchEnd=" + batchEnd
 			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 }
 

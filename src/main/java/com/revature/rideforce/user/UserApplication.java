@@ -118,19 +118,16 @@ public class UserApplication implements InitializingBean {
 				userRoleRepository.save(role);
 			}
 
-			User admin = new User();
-			admin.setFirstName("admin");
-			admin.setLastName("admin");
-			admin.setEmail("admin@revature.com");
-			admin.setAddress("11730 Plaza America Dr. Reston, VA");
-			admin.setOffice(officeRepository.findAll().get(0));
-			admin.setCars(new HashSet<>());
-			admin.setContactInfo(new HashSet<>());
-			admin.setActive(Active.ACTIVE);
-			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
-			admin.setStartTime((float) 9.0);
-			userRepository.save(admin);
-		}
+			/*
+			 * User admin = new User(); admin.setFirstName("admin");
+			 * admin.setLastName("admin"); admin.setEmail("admin@revature.com");
+			 * admin.setAddress("11730 Plaza America Dr. Reston, VA");
+			 * admin.setOffice(officeRepository.findAll().get(0)); admin.setCars(new
+			 * HashSet<>()); admin.setContactInfo(new HashSet<>());
+			 * admin.setActive(Active.ACTIVE);
+			 * admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
+			 * admin.setStartTime((float) 9.0); userRepository.save(admin);
+			 */		}
 	}
 	
 	@Bean
