@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-@Table(name = "ADDRESS")
-public class CachedLocation {
+@Table(name = "ADDRESS_TEST")
+public class CachedLocation implements Identifiable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CACHED_ID")
@@ -69,7 +69,7 @@ public class CachedLocation {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 

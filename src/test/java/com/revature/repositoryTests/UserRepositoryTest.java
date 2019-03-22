@@ -74,7 +74,7 @@ public class UserRepositoryTest {
 		user.setPassword("password");
 		user.setRole(userRoleRepo.findById(1));
 		user.setOffice(officeRepo.findById(1));
-		user.setAddress(new CachedLocation("address", 10.0, 10.0));
+//		user.setAddress(new CachedLocation("address", 10.0, 10.0));
 		user.setStartTime((float) 9.0);
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());
@@ -93,7 +93,7 @@ public class UserRepositoryTest {
 		user.setPassword("password");
 		user.setRole(userRoleRepo.findById(1));
 		user.setOffice(officeRepo.findById(1));
-		user.setAddress(new CachedLocation("address", 10.0, 10.0));
+//		user.setAddress(new CachedLocation("address", 10.0, 10.0));
 		user.setStartTime((float) 9.0);
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());
@@ -124,7 +124,7 @@ public class UserRepositoryTest {
 		user.setPassword("password");
 		user.setRole(userRoleRepo.findById(1));
 		user.setOffice(officeRepo.findById(1));
-		user.setAddress(new CachedLocation("address", 10.0, 10.0));
+//		user.setAddress(new CachedLocation("address", 10.0, 10.0));
 		user.setStartTime((float) 9.0);
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());

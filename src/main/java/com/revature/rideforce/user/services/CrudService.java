@@ -1,12 +1,13 @@
 package com.revature.rideforce.user.services;
 
-import java.util.List;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.User;
@@ -24,7 +25,7 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @param <T> the type of object on which this service acts
  * @since Iteration1 10/01/2018
  */
-public abstract class CrudService<T extends Identifiable> {
+public class CrudService<T extends Identifiable> {
 	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	@Autowired
 	protected AuthenticationService authenticationService;
@@ -39,6 +40,10 @@ public abstract class CrudService<T extends Identifiable> {
 	 */
 	protected CrudService(JpaRepository<T, Integer> repository) {
 		this.repository = repository;
+	}
+
+	public CrudService() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -89,11 +94,12 @@ public abstract class CrudService<T extends Identifiable> {
 			throw new IllegalArgumentException("Cannot add a null object.");
 		}
 		// Ensure that a new entity is created.
-		obj.setId(0);
-		if (!canAdd(obj)) {
-			throw new PermissionDeniedException("Permission denied to add object.");
-		}
+//		obj.setId(0);
+//		if (!canAdd(obj)) {
+//			throw new PermissionDeniedException("Permission denied to add object.");
+//		}
 		throwOnConflict(obj);
+		log.debug(obj.toString());
 		return repository.save(obj);
 	}
 

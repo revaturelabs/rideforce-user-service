@@ -36,7 +36,7 @@ public class ChangeUserModel {
 		if(photoUrl != null)
 			original.setPhotoUrl(photoUrl);
 		if(address != null)
-			original.setAddress(address);
+			original.setLocation(address);
 		if(bio != null)
 			original.setBio(bio);
 		if(office != null)
