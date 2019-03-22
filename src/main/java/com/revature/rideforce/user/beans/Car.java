@@ -80,6 +80,10 @@ public class Car implements Identifiable, Linkable, Serializable {
 	@Column(nullable = true)
 	private int year;
 
+	@Column(length = 10)
+	@NotEmpty
+	private String license;
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */
@@ -89,16 +93,17 @@ public class Car implements Identifiable, Linkable, Serializable {
 	}
 
 	//adding this constructor because the ID for it is actually generated auto...so even if u set it to 1, it'll be like 802...
-	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
+	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license) {
 		super();
 		this.owner = owner;
 		this.make = make;
 		this.model = model;
 		this.year = year;
+		this.license = license;
 	}
 	
-	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
-		this(owner, make, model, year);
+	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license) {
+		this(owner, make, model, year, license);
 		this.id = id;
 	}
 
@@ -158,6 +163,14 @@ public class Car implements Identifiable, Linkable, Serializable {
 		this.year = year;
 	}
 
+	public String getLicense() {
+		return license;
+	}
+	
+	public void setLicense(String license) {
+		this.license = license;
+	}
+	
 	/**
 	 * @return	owner, a User object that owns this car
 	 */

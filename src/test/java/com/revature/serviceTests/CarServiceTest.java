@@ -57,8 +57,8 @@ public class CarServiceTest {
     {
     	User user = userRepo.getOne(1);
     	List<Car> list = new ArrayList<>();
-        list.add( new Car(1, user, "make", "model", 2012) );
-        list.add( new Car(2, user, "honda", "civic", 2016) );
+        list.add( new Car(1, user, "make", "model", 2012, "Zelda") );
+        list.add( new Car(2, user, "honda", "civic", 2016, "Zelda") );
 
         Mockito.when( carRepository.findByOwner(user) )
           .thenReturn(list);
