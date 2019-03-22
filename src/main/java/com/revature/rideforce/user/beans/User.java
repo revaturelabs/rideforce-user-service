@@ -97,9 +97,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "CACHED_ID", nullable = false)
 	@Column(nullable = false)
-	@NotEmpty
-	private String address;
+	@NotNull
+	private CachedLocation address;
 	
 	@Column(nullable = false, columnDefinition = "float default 9.0")
 	@NotNull
@@ -121,6 +123,8 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Valid
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
+	
+	
 	
 	public User() {
 		super();
@@ -201,11 +205,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.office = office;
 	}
 
-	public String getAddress() {
+	public CachedLocation getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(CachedLocation address) {
 		this.address = address;
 	}
 

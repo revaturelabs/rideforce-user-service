@@ -133,7 +133,7 @@ public class UserController {
 	public ResponseEntity<?> save(@PathVariable("id") int id, @RequestBody ChangeUserModel changedUserModel) throws PermissionDeniedException, EntityConflictException {
 		
 		User user = us.findById(id);
-		changedUserModel.changeUser(user); 		//set the changes to the user based on the provided form 
+		changedUserModel.changeUser(user); //set the changes to the user based on the provided form 
 		UserRole role = urs.findByType(changedUserModel.getRole());
 
 		if(role != null) {
