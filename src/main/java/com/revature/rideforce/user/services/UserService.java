@@ -55,11 +55,11 @@ public class UserService extends CrudService<User> {
 		log.info("User {} found", found);
 
 		
-		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
-			throw new PermissionDeniedException("Permission denied to get user by email.");
-		}
+//		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
+//			throw new PermissionDeniedException("Permission denied to get user by email.");
+//		}
 		
-		return userRepository.findByEmail(email);
+		return found;
 	}
 	
 

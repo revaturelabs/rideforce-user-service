@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,8 +40,10 @@ import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
 import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
+import com.revature.rideforce.user.repository.LocationRepository;
 import com.revature.rideforce.user.repository.OfficeRepository;
 import com.revature.rideforce.user.repository.UserRepository;
+import com.revature.rideforce.user.repository.UserTestRepository;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
@@ -64,7 +67,10 @@ public class AuthenticationService {
 	private UserService us;
 	
 	@Autowired
-	private UserRepository ur;
+	private UserRepository uRepo;
+	
+	@Autowired
+	private LocationRepository lRepo;
 	
 	@Autowired
 	AWSCognitoIdentityProvider cognito;
@@ -103,12 +109,12 @@ public class AuthenticationService {
 	 * @throws PasswordRequirementsException   if the password entered does not
 	 * 										   meet the requirements specified
 	 */
-	public User register(UserRegistration ur) throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+	public User register(User ur) throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
 		// Check the registration token
 		RegistrationToken registrationToken = validateRegistrationToken(ur.getRegistrationToken());
 		if(registrationToken != null) {
-			ur.getUser().setOffice(registrationToken.getOffice());
-			ur.getUser().setBatchEnd(registrationToken.getBatchEndDate());
+			ur.setOffice(registrationToken.getOffice());
+			ur.setBatchEnd(registrationToken.getBatchEndDate());
 		} else {
 			throw new InvalidRegistrationKeyException();
 		}
@@ -116,11 +122,13 @@ public class AuthenticationService {
 		// Sign the user up with Cognito
 		cognito.signUp(new SignUpRequest()
 				.withClientId(cc.getClientId())
-				.withUsername(ur.getUser().getEmail().toLowerCase())
-				.withPassword(ur.getUser().getPassword()));
+				.withUsername(ur.getEmail().toLowerCase())
+				.withPassword(ur.getPassword()));
 		
 		// Add the user to our database
-		return us.add(ur.getUser());
+		ur.setLocation(lRepo.save(ur.getLocation()));
+		return uRepo.save(ur);
+//		return us.add(ur);
 	}
 
 	/**
@@ -190,6 +198,7 @@ public class AuthenticationService {
 	 * @return the authentication object, or null if the given JWT was invalid.
 	 */
 	public Authentication authenticate(String token) {
+		System.out.println("We are authenticating the token");
 		return Optional.ofNullable(token)
 				// Verify the token
 				.map(this::processToken)
@@ -198,7 +207,7 @@ public class AuthenticationService {
 				// Convert the email claim to a string
 				.map(Object::toString)
 				// Find a user by the email
-				.map(ur::findByEmail)
+				.map(uRepo::findByEmail)
 				// Create an authentication object from the user
 				.map(u -> new UsernamePasswordAuthenticationToken(u, "", u.getAuthorities()))
 				// Return null if anything in this chain is null
