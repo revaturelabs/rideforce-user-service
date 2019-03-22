@@ -41,7 +41,7 @@ public class CarTest {
 	
 	@Test
 	public void testCreationOfAValidCar() {
-		Car car = new Car(101, new User(), "Honda", "Accord", 2001, "ZELDA");
+		Car car = new Car(101, new User(), "Honda", "Accord", 2001, "ZELDA", "RED");
 		Assert.assertEquals(101, car.getId());
 		Assertions.assertThat(car.getMake()).isEqualTo("Honda");
 		Assertions.assertThat(car.getModel()).isEqualTo("Accord");
@@ -51,7 +51,7 @@ public class CarTest {
 	
 	@Test
 	public void testNullOwnerIsViolationOnACar() {
-		Car car = new Car(101, null, "Honda", "Accord", 2001, "ZELDA");
+		Car car = new Car(101, null, "Honda", "Accord", 2001, "ZELDA", "RED");
         Set<ConstraintViolation<Car>> violations = localValidatorFactory.validate(car);
         Assert.assertTrue(violations.size() == 1);
 	}
@@ -59,7 +59,7 @@ public class CarTest {
 	@Test
 	public void testInvalidIdIsViolationOnACar() {
 		// Set the owner as null to avoid the violations on the owner property of the Car class
-		Car car = new Car(101, null, "Honda", "Accord", 2001, "ZELDA");
+		Car car = new Car(101, null, "Honda", "Accord", 2001, "ZELDA", "RED");
 		car.setId(0);
 		Set<ConstraintViolation<Car>> violations = localValidatorFactory.validate(car);
 		// the violations of a null owner and an invalid id
@@ -69,7 +69,7 @@ public class CarTest {
 	@Test
 	public void testInvalidMakeOnACar() {
 		// Set the owner as null to avoid the violations on the owner property of the Car class
-		Car car = new Car(101, null, "", "Accord", 2001, "ZELDA");
+		Car car = new Car(101, null, "", "Accord", 2001, "ZELDA", "RED");
 		Set<ConstraintViolation<Car>> violations = localValidatorFactory.validate(car);
 		// the violations of a null owner and an empty make
 		Assert.assertTrue(violations.size() == 2);
@@ -78,7 +78,7 @@ public class CarTest {
 	@Test
 	public void testInvalidModelOnACar() {
 		// Set the owner as null to avoid the violations on the owner property of the Car class
-		Car car = new Car(101, null, "Honda", "", 2001, "ZELDA");
+		Car car = new Car(101, null, "Honda", "", 2001, "ZELDA", "RED");
 		Set<ConstraintViolation<Car>> violations = localValidatorFactory.validate(car);
 		// the violations of a null owner and an empty make
 		Assert.assertTrue(violations.size() == 2);
