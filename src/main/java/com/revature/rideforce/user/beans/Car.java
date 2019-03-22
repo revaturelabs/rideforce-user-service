@@ -84,6 +84,10 @@ public class Car implements Identifiable, Linkable, Serializable {
 	@NotEmpty
 	private String license;
 	
+	@Column(length = 30)
+	@NotEmpty
+	private String color;
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */
@@ -93,17 +97,18 @@ public class Car implements Identifiable, Linkable, Serializable {
 	}
 
 	//adding this constructor because the ID for it is actually generated auto...so even if u set it to 1, it'll be like 802...
-	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license) {
+	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license, @NotEmpty String color) {
 		super();
 		this.owner = owner;
 		this.make = make;
 		this.model = model;
 		this.year = year;
 		this.license = license;
+		this.color = color;
 	}
 	
-	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license) {
-		this(owner, make, model, year, license);
+	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license, @NotEmpty String color) {
+		this(owner, make, model, year, license, color);
 		this.id = id;
 	}
 
@@ -185,6 +190,15 @@ public class Car implements Identifiable, Linkable, Serializable {
 		this.owner = owner;
 	}
 	
+	
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.json.Linkable#toUri()
 	 */
