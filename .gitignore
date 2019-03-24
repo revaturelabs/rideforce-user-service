@@ -19,6 +19,7 @@ doc/
 **/.project
 **/.settings/
 **/.classpath
+**/.factorypath
 **/.recommenders/**
 **/Servers
 **/.springBeans
