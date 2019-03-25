@@ -84,6 +84,8 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> add(@RequestBody @Valid T obj) {
 		try {
+			System.out.println("KEVIN CAR OBJECT " + obj.toString());
+			
 			T created = service.add(obj);
 			return ResponseEntity.created(created.toUri()).body(created);
 		} catch (EntityConflictException e) {

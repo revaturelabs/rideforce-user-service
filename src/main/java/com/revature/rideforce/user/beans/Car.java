@@ -187,7 +187,6 @@ public class Car implements Identifiable, Linkable, Serializable {
 	 * @param owner	provide a User that will be the car's owner
 	 */
 	public void setOwner(User owner) {
-		
 		this.owner = owner;
 	}
 	
@@ -206,6 +205,12 @@ public class Car implements Identifiable, Linkable, Serializable {
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toUri();
+	}
+
+	@Override
+	public String toString() {
+		return "Car [id=" + id + ", owner=" + owner + ", make=" + make + ", model=" + model + ", year=" + year
+				+ ", license=" + license + ", color=" + color + "]";
 	}
 	
 }

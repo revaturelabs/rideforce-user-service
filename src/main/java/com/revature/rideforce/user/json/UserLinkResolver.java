@@ -28,7 +28,6 @@ public class UserLinkResolver implements LinkResolver<User> {
 	@Override
 	public User resolve(String link) {
 		try {
-			System.out.println("PRINTING OUT LINK KEVIN " + link);
 			int id = Integer.parseInt(matcher.extractUriTemplateVariables("/users/{id}", link).get("id"));
 			return userRepository.findById(id);
 		} catch (NumberFormatException e) {
