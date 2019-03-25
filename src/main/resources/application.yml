@@ -41,7 +41,7 @@ spring:
     url: ${JDBC_URL}
     username: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}         #INSTEAD, CAN JUST ADD ENV VARIABLES    SPRING_DATASOURCE_URL/USERNAME/PASSWORD
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     show-sql: false
     hibernate:
