@@ -187,6 +187,7 @@ public class Car implements Identifiable, Linkable, Serializable {
 	 * @param owner	provide a User that will be the car's owner
 	 */
 	public void setOwner(User owner) {
+		
 		this.owner = owner;
 	}
 	
