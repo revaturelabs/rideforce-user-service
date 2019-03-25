@@ -190,6 +190,14 @@ public class Car implements Identifiable, Linkable, Serializable {
 		this.owner = owner;
 	}
 	
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.json.Linkable#toUri()
 	 */
