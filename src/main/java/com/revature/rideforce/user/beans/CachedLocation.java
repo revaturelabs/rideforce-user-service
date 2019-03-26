@@ -10,11 +10,10 @@ import javax.validation.constraints.Size;
 
 import org.springframework.stereotype.Component;
 
-
 @Component
 @Entity
 @Table(name = "ADDRESS_TEST")
-public class CachedLocation implements Identifiable{
+public class CachedLocation implements Identifiable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CACHED_ID")
@@ -105,7 +104,6 @@ public class CachedLocation implements Identifiable{
 		super();
 	}
 
-	
 	public CachedLocation(String address, double latitude, double longitude) {
 		super();
 		this.address = address;
@@ -113,7 +111,6 @@ public class CachedLocation implements Identifiable{
 		this.longitude = longitude;
 	}
 
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
