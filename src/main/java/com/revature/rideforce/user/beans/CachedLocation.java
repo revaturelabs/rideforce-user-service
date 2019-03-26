@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -13,9 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Entity
 @Table(name = "ADDRESS_TEST")
-public class CachedLocation implements Identifiable {
+public class CachedLocation {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "loc_seqgen", sequenceName = "loc_seq")
+	@GeneratedValue(generator = "loc_seqgen", strategy = GenerationType.SEQUENCE)
 	@Column(name = "CACHED_ID")
 	Integer id;
 

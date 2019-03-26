@@ -42,10 +42,9 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Min(1)
 	@Column(name = "USER_ID")
-	@SequenceGenerator(name = "userid", sequenceName = "userid")
-	@GeneratedValue(generator = "userid", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "useridgen", sequenceName = "userid")
+	@GeneratedValue(generator = "useridgen", strategy = GenerationType.SEQUENCE)
 	private int id;
 
 	@Column(nullable = false, length = 25)

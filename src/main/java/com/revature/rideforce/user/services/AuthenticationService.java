@@ -126,7 +126,7 @@ public class AuthenticationService {
 				.withPassword(ur.getPassword()));
 		
 		// Add the user to our database
-		ur.setLocation(lRepo.save(ur.getLocation()));
+//		ur.setLocation(lRepo.save(ur.getLocation()));
 		return uRepo.save(ur);
 //		return us.add(ur);
 	}
