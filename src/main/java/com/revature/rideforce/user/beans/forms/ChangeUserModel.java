@@ -5,7 +5,6 @@ import java.util.Date;
 import com.revature.rideforce.user.beans.CachedLocation;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.json.Active;
 
 public class ChangeUserModel {

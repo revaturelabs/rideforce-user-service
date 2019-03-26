@@ -1,4 +1,5 @@
 package com.revature.rideforce.user.services;
+
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.Instant;
@@ -43,7 +44,6 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.LocationRepository;
 import com.revature.rideforce.user.repository.OfficeRepository;
 import com.revature.rideforce.user.repository.UserRepository;
-import com.revature.rideforce.user.repository.UserTestRepository;
 
 /**
  * The service used to handle authentication, that is, logging in, creating new
@@ -53,38 +53,39 @@ import com.revature.rideforce.user.repository.UserTestRepository;
 public class AuthenticationService {
 	@Value("${jwt.registration.ttl}")
 	private Integer registrationTokenTTL;
-	
+
 	@Autowired
 	private Logger log;
-	
+
 	@Autowired
 	OfficeRepository or;
-	
+
 	@Autowired
 	private CognitoConfig cc;
-	
+
 	@Autowired
 	private UserService us;
-	
+
 	@Autowired
 	private UserRepository uRepo;
-	
+
 	@Autowired
 	private LocationRepository lRepo;
-	
+
 	@Autowired
 	AWSCognitoIdentityProvider cognito;
 
 	private JWSSigner registrationTokenSigner;
 	private JWSHeader registrationTokenHeader;
 	private JWTProcessor<SecurityContext> jwtProcessor;
-	
+
 	@Autowired
 	public AuthenticationService(JWKConfig jc, ImmutableJWKSet<SecurityContext> jwkSet) throws JOSEException {
 		// Create the registration token header
 		this.registrationTokenHeader = new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jc.getId()).build();
 		// Create the registration token signer
-		this.registrationTokenSigner = new RSASSASigner(((RSAKey)jwkSet.getJWKSet().getKeyByKeyId(jc.getId())).toPrivateKey());
+		this.registrationTokenSigner = new RSASSASigner(
+				((RSAKey) jwkSet.getJWKSet().getKeyByKeyId(jc.getId())).toPrivateKey());
 		// Create the token processor
 		ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
 		jwtProcessor.setJWSKeySelector(new JWSVerificationKeySelector<>(JWSAlgorithm.RS256, jwkSet));
@@ -105,26 +106,27 @@ public class AuthenticationService {
 	 *                                         desired user (e.g. if an
 	 *                                         unauthenticated user attempts to
 	 *                                         create an admin)
-	 * @throws EmptyPasswordException          Password in the {@linkplain UserRegistration} must be non empty
-	 * @throws PasswordRequirementsException   if the password entered does not
-	 * 										   meet the requirements specified
+	 * @throws EmptyPasswordException          Password in the
+	 *                                         {@linkplain UserRegistration} must be
+	 *                                         non empty
+	 * @throws PasswordRequirementsException   if the password entered does not meet
+	 *                                         the requirements specified
 	 */
-	public User register(User ur) throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+	public User register(User ur) throws InvalidRegistrationKeyException, EntityConflictException,
+			PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
 		// Check the registration token
 		RegistrationToken registrationToken = validateRegistrationToken(ur.getRegistrationToken());
-		if(registrationToken != null) {
+		if (registrationToken != null) {
 			ur.setOffice(registrationToken.getOffice());
 			ur.setBatchEnd(registrationToken.getBatchEndDate());
 		} else {
 			throw new InvalidRegistrationKeyException();
 		}
-		
+
 		// Sign the user up with Cognito
-		cognito.signUp(new SignUpRequest()
-				.withClientId(cc.getClientId())
-				.withUsername(ur.getEmail().toLowerCase())
+		cognito.signUp(new SignUpRequest().withClientId(cc.getClientId()).withUsername(ur.getEmail().toLowerCase())
 				.withPassword(ur.getPassword()));
-		
+
 		// Add the user to our database
 //		ur.setLocation(lRepo.save(ur.getLocation()));
 		return uRepo.save(ur);
@@ -140,41 +142,37 @@ public class AuthenticationService {
 	 *         {@link SecurityContextHolder}
 	 */
 	public User getCurrentUser() {
-		log.info("Getting current user from Authentication");
+		log.info("Getting current user from Authentication!");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		log.debug("Authentication value: {}", auth);
 
 		if (auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof User)) {
-			log.debug("User is null"); 
+			log.debug("User is null");
 			return null;
 		}
-    
+
 		log.debug("User authenticated successfully");
 		return (User) auth.getPrincipal();
 	}
-	
+
 	public String createRegistrationToken(RegistrationToken rt) throws JOSEException {
 		// Prepare the JWT claims
-		JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-		    .subject("registration")
-		    .issuer("rideforce")
-		    .claim("oid", rt.getOffice().getId())
-		    .claim("bed", rt.getBatchEndDate())
-		    .issueTime(Date.from(Instant.now()))
-		    .expirationTime(Date.from(Instant.now().plus(Duration.ofHours(registrationTokenTTL))))
-		    .build();
-		
+		JWTClaimsSet claimsSet = new JWTClaimsSet.Builder().subject("registration").issuer("rideforce")
+				.claim("oid", rt.getOffice().getId()).claim("bed", rt.getBatchEndDate())
+				.issueTime(Date.from(Instant.now()))
+				.expirationTime(Date.from(Instant.now().plus(Duration.ofHours(registrationTokenTTL)))).build();
+
 		// Create the JWT
 		SignedJWT signedJWT = new SignedJWT(registrationTokenHeader, claimsSet);
 
 		// Sign the JWT
 		signedJWT.sign(registrationTokenSigner);
-		
+
 		// Return the signed JWT
 		return signedJWT.serialize();
 	}
-	
+
 	public JWTClaimsSet processToken(String token) {
 		try {
 			return jwtProcessor.process(token, null);
@@ -182,17 +180,17 @@ public class AuthenticationService {
 			return null;
 		}
 	}
-	
+
 	public RegistrationToken validateRegistrationToken(String token) {
-		return Optional.ofNullable(token)
-				.map(this::processToken)
-				.map(c -> new RegistrationToken(or.findById(Integer.parseInt(c.getClaim("oid").toString())), new Date(Long.parseLong(c.getClaim("bed").toString()) * 1000L)))
+		return Optional.ofNullable(token).map(this::processToken)
+				.map(c -> new RegistrationToken(or.findById(Integer.parseInt(c.getClaim("oid").toString())),
+						new Date(Long.parseLong(c.getClaim("bed").toString()) * 1000L)))
 				.orElse(null);
 	}
-	
+
 	/**
-	 * Converts the given JWT into an authentication object that can be stored as the
-	 * authentication principal in Spring's SecurityContext.
+	 * Converts the given JWT into an authentication object that can be stored as
+	 * the authentication principal in Spring's SecurityContext.
 	 * 
 	 * @param token the JWT to convert.
 	 * @return the authentication object, or null if the given JWT was invalid.
