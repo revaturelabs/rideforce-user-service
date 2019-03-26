@@ -30,8 +30,10 @@ import com.revature.rideforce.user.repository.UserRepository;
  */
 @Service
 public class UserService extends CrudService<User> {
+	
 	@Autowired
 	private Logger log;
+	
 	private UserRepository userRepository;
 
 	/**
