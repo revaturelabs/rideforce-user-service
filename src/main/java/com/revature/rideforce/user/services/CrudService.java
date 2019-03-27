@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
 
 import com.revature.rideforce.user.beans.Identifiable;
 import com.revature.rideforce.user.beans.User;
@@ -26,7 +25,9 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
  * @since Iteration1 10/01/2018
  */
 public class CrudService<T extends Identifiable> {
+
 	static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 	@Autowired
 	protected AuthenticationService authenticationService;
 
@@ -55,8 +56,9 @@ public class CrudService<T extends Identifiable> {
 	 */
 	public List<T> findAll() throws PermissionDeniedException {
 		if (!canFindAll()) {
-      String msg = "Permission denied to find all objects";
-      log.info("User found by authenticationService.getCurrentUser(): {}", authenticationService.getCurrentUser());
+			String msg = "Permission denied to find all objects";
+			log.info("User found by authenticationService.getCurrentUser(): {}",
+					authenticationService.getCurrentUser());
 			throw new PermissionDeniedException(msg);
 		}
 		return repository.findAll();
@@ -142,7 +144,8 @@ public class CrudService<T extends Identifiable> {
 	/**
 	 * Determines whether the given user can retrieve a list of all objects. The
 	 * default implementation is to allow access to all logged-in users.<br>
-	 * This is only the helper method though, should always be used within - {@linkplain #canFindAll()}
+	 * This is only the helper method though, should always be used within -
+	 * {@linkplain #canFindAll()}
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
 	 *             unauthenticated)
@@ -190,8 +193,8 @@ public class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the user can add a particular object. The default
-	 * implementation is to allow only admins to add arbitrary objects
-	 * and deny any addition to other users.
+	 * implementation is to allow only admins to add arbitrary objects and deny any
+	 * addition to other users.
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
 	 *             unauthenticated)
@@ -215,8 +218,8 @@ public class CrudService<T extends Identifiable> {
 
 	/**
 	 * Determines whether the user can save a particular object. The default
-	 * implementation is to allow only admins to save arbitrary objects
-	 * and deny any save permissions to other users.
+	 * implementation is to allow only admins to save arbitrary objects and deny any
+	 * save permissions to other users.
 	 * 
 	 * @param user the user requesting permission (or {@code null} if
 	 *             unauthenticated)

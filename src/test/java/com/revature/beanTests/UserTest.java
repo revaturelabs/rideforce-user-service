@@ -36,11 +36,11 @@ public class UserTest {
 	private User u;
 
 	@Before
-    public void setupValidatorFactory () throws EmptyPasswordException {
-        localValidatorFactory = new LocalValidatorFactoryBean();
-        localValidatorFactory.setProviderClass(HibernateValidator.class);
-        localValidatorFactory.afterPropertiesSet();
-        u = new User();
+	public void setupValidatorFactory() throws EmptyPasswordException {
+		localValidatorFactory = new LocalValidatorFactoryBean();
+		localValidatorFactory.setProviderClass(HibernateValidator.class);
+		localValidatorFactory.afterPropertiesSet();
+		u = new User();
 		u.setId(100);
 		u.setFirstName("first");
 		u.setLastName("last");
@@ -54,61 +54,62 @@ public class UserTest {
 		u.setContactInfo(new HashSet<ContactInfo>());
 		u.setStartTime((float) 9.0);
 		u.setActive(Active.ACTIVE);
-		
+
 		Assertions.assertThat(u.getFirstName()).isEqualTo("first");
 		Assertions.assertThat(u.getLastName()).isEqualTo("last");
-		//Assertions.assertThat(passwordEncoder.matches("password", u.getPassword())).isTrue();
-    }
-	
+		// Assertions.assertThat(passwordEncoder.matches("password",
+		// u.getPassword())).isTrue();
+	}
+
 	@Test
 	public void validUserTest() {
-		
+
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void invalidUserIdTest() {
 		u.setId(0);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void emptyUserFirstNameTest() {
 		u.setFirstName("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void emptyUserLastNameTest() {
 		u.setLastName("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
@@ -121,191 +122,205 @@ public class UserTest {
 		u.setEmail("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test(expected = EmptyPasswordException.class)
 	public void emptyUserPasswordTest() throws EmptyPasswordException {
 		u.setPassword("");
 	}
-	
+
 	@Test
 	public void nullUserRoleTest() {
 		u.setRole(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void nullUserOfficeTest() {
 		u.setOffice(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void emptyUserAddressTest() {
-		//u.setAddress("");
+		// u.setAddress("");
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
 
-	
 	@Test
 	public void nullUserCarsTest() {
 		u.setCars(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void nullUserContactInfoTest() {
 		u.setContactInfo(null);
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(u);
 		int counter = 0;
-		
-		for(ConstraintViolation<User> v: violations) {
+
+		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
 				counter++;
 			}
 		}
 		Assertions.assertThat(counter).isEqualTo(1);
 	}
-	
+
 	@Test
 	public void isEnabledTest() {
-		Assertions.assertThat(this.u.isEnabled()).isFalse(); //method should just return false
+		Assertions.assertThat(this.u.isEnabled()).isFalse(); // method should just return false
 	}
-	
+
 	@Test
 	public void equalsWithSameObjectTest() {
 		Assertions.assertThat(this.u.equals(this.u)).isTrue();
 	}
+
 	@Test
 	public void equalsWithNullOtherObjectTest() {
 		Assertions.assertThat(this.u.equals(null)).isFalse();
 	}
+
 	@Test
 	public void equalsWithOtherClassIsFalseTest() {
 		Assertions.assertThat(this.u.equals(new Object())).isFalse();
 	}
+
 	@Test
 	public void equalsWithNullValuesOnOneSetValuesOnOtherTest() {
 		User user = new User();
 		Assertions.assertThat(user.equals(this.u)).isFalse();
 	}
-	
+
 	@Test
 	public void equalsRtnTrueForEqualUserObjectTest() {
 		User user = this.u;
 		Assertions.assertThat(user.equals(this.u)).isTrue();
 	}
-	@Test 
+
+	@Test
 	public void equalsRtnFalseForPartsOfUserThatAreNullObjectTest() {
 		User user = new User();
 		Assertions.assertThat(user.equals(this.u)).isFalse();
 	}
+
 	@Test
 	public void equalsRtnFalseForUnequalUserObjectTest() {
 		Assertions.assertThat(this.u.equals(new User())).isFalse();
 	}
+
 	@Test
 	public void equalsRtnFalseForComparisonToNullUserTest() {
 		Assertions.assertThat(this.u.equals(null)).isFalse();
 	}
+
 	@Test
 	public void equalsRtnFalseForDifferentClassesTest() {
 		Object o = new Object();
 		Assertions.assertThat(this.u.equals(o)).isFalse();
 	}
+
 	@Test
 	public void hashCodeIsSameForTwoSameUsersTest() {
 		Assertions.assertThat(this.u.hashCode() == this.u.hashCode()).isTrue();
 	}
+
 	@Test
 	public void hashCodeIsSameForCopiedUserAndOriginalUserTest() {
 		User user = this.u;
 		Assertions.assertThat(this.u.hashCode() == user.hashCode()).isTrue();
 	}
+
 	@Test
 	public void hashCodeDifferentForUserObjectsWithDifferentValuesTest() {
 		Assertions.assertThat(this.u.hashCode() == new User().hashCode()).isFalse();
 	}
+
 	@Test
 	public void toUriTest() throws URISyntaxException {
-		Assertions.assertThat(this.u.toUri()).isEqualTo(new URI("/users/"+this.u.getId()));
+		Assertions.assertThat(this.u.toUri()).isEqualTo(new URI("/users/" + this.u.getId()));
 	}
+
 	@Test
 	public void isCredentialsNonExpiredShouldReturnTrueTest() {
 		Assertions.assertThat(this.u.isCredentialsNonExpired()).isTrue();
 	}
-	@Test 
+
+	@Test
 	public void isAccountNonLockedShouldReturnTrueTest() {
 		Assertions.assertThat(this.u.isAccountNonLocked()).isTrue();
 	}
-	@Test 
+
+	@Test
 	public void isAccountNonExpiredShouldReturnTrueTest() {
 		Assertions.assertThat(this.u.isAccountNonExpired()).isTrue();
 	}
-	@Test 
+
+	@Test
 	public void isNotATrainerShouldReturnFalseTest() {
 		this.u.setRole(new UserRole(1, "ADMIN"));
 		Assertions.assertThat(this.u.isTrainer()).isFalse();
 	}
+
 	@Test
 	public void isATrainerShouldReturnTrueTest() {
 		this.u.setRole(new UserRole(2, "TRAINER"));
 		Assertions.assertThat(this.u.isTrainer()).isTrue();
 	}
-	
+
 	@Test
 	public void settersAndGettersMissed() {
-		
+
 	}
-	
-	@Test 
+
+	@Test
 	public void equalsTest1() {
 		User u2 = new User();
 		u.setActive(null);
 		u2.setActive(Active.ACTIVE);
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest2() {
 		User u2 = new User();
@@ -313,7 +328,7 @@ public class UserTest {
 		u2.setActive(Active.INACTIVE);
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest3() {
 		User u2 = new User();
@@ -321,7 +336,7 @@ public class UserTest {
 		u2.setBatchEnd(Date.valueOf("2018-1-1"));
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest4() {
 		User u2 = new User();
@@ -329,14 +344,14 @@ public class UserTest {
 		u2.setBatchEnd(Date.valueOf("2018-5-2"));
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest5() {
 		User u2 = new User();
 		u2.setContactInfo(new HashSet<ContactInfo>());
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest6() {
 		User u2 = new User();
@@ -344,14 +359,14 @@ public class UserTest {
 		u2.setContactInfo(new HashSet<ContactInfo>());
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest7() {
 		User u2 = new User();
 		u2.setEmail("test@email.com");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest8() {
 		User u2 = new User();
@@ -359,7 +374,7 @@ public class UserTest {
 		u2.setFirstName("First");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest9() {
 		User u2 = new User();
@@ -367,7 +382,7 @@ public class UserTest {
 		u2.setFirstName("First");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest10() {
 		User u2 = new User();
@@ -375,7 +390,7 @@ public class UserTest {
 		u2.setLastName("Last");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest11() {
 		User u2 = new User();
@@ -383,7 +398,7 @@ public class UserTest {
 		u2.setLastName("Last");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
+
 	@Test
 	public void equalsTest12() {
 		User u2 = new User();
@@ -391,106 +406,106 @@ public class UserTest {
 		u2.setFirstName("First");
 		Assertions.assertThat(!u.equals(u2)).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelGetId() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		Assertions.assertThat(changeUserModel.getId() == 0).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetId() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setId(2);
 		Assertions.assertThat(changeUserModel.getId() == 2).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetFirstName() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setFirstName("First");
 		Assertions.assertThat(changeUserModel.getFirstName().equals("First")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetLastName() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setLastName("Last");
 		Assertions.assertThat(changeUserModel.getLastName().equals("Last")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetEmail() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setEmail("email@gmail.com");
 		Assertions.assertThat(changeUserModel.getEmail().equals("email@gmail.com")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetPhotoUrl() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setPhotoUrl("google.com");
 		Assertions.assertThat(changeUserModel.getPhotoUrl().equals("google.com")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetAddress() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setAddress(new CachedLocation("address", 10.0, 10.0));
 		Assertions.assertThat(changeUserModel.getAddress().equals(new CachedLocation("address", 10.0, 10.0))).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetOffice() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		Office office = new Office();
 		changeUserModel.setOffice(office);
 		Assertions.assertThat(changeUserModel.getOffice().equals(office)).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetBatchEnd() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		Date date = new Date(100);
 		changeUserModel.setBatchEnd(date);
 		Assertions.assertThat(changeUserModel.getBatchEnd().equals(date)).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetRole() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setRole("ADMIN");
 		Assertions.assertThat(changeUserModel.getRole().equals("ADMIN")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetActive() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setActive(Active.ACTIVE);
 		Assertions.assertThat(changeUserModel.getActive().equals(Active.ACTIVE)).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetPassword() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setPassword("password");
 		Assertions.assertThat(changeUserModel.getPassword().equals("password")).isTrue();
 	}
-	
-	@Test 
+
+	@Test
 	public void changeUserModelSetStartTime() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		changeUserModel.setStartTime(900);
 		Assertions.assertThat(changeUserModel.getStartTime() == 900).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelToStringTest() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
 		String toString = "ChangeUserModel [id=, firstName=, lastName=, email=, photoUrl=, address=, office=, batchEnd=, role=]";
 		Assertions.assertThat(!changeUserModel.toString().equals(toString)).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest1() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -499,7 +514,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.getFirstName().equals("NewFirstName")).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest2() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -508,7 +523,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.getLastName().equals("NewLastName")).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest3() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -517,7 +532,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(changeUserModel.getEmail().equals("NewEmail")).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest4() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -526,7 +541,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 //		Assertions.assertThat(u.getAddress().equals(new CachedLocation("address", 10.0, 10.0))).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest5() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -536,7 +551,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.getOffice().equals(office)).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest6() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -546,7 +561,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.getBatchEnd().equals(date)).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest7() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -555,7 +570,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.isActive().equals(Active.INACTIVE)).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest8() throws EmptyPasswordException {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -564,7 +579,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(!u.getPassword().equals("NewPassword")).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest9() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();
@@ -573,7 +588,7 @@ public class UserTest {
 		changeUserModel.changeUser(u);
 		Assertions.assertThat(u.getStartTime() == -2).isTrue();
 	}
-	
+
 	@Test
 	public void changeUserModelChangeUserTest10() {
 		ChangeUserModel changeUserModel = new ChangeUserModel();

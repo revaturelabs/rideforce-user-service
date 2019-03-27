@@ -16,24 +16,31 @@ import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 
 /**
- * inherits methods from {@linkplain CrudService} but adds methods more specific to the {@linkplain User} model 
- * like password updating, finding by User's fields email & office, adding certain users only if the logged in user is the correct type.
- * <p><strong>Member Variables</strong><br>
+ * inherits methods from {@linkplain CrudService} but adds methods more specific
+ * to the {@linkplain User} model like password updating, finding by User's
+ * fields email & office, adding certain users only if the logged in user is the
+ * correct type.
+ * <p>
+ * <strong>Member Variables</strong><br>
  * {@linkplain UserRepository} userRepository<br>
  * {@linkplain PasswordEncoder} passwordEncoder
+ * 
  * @author clpeng
  * @since Iteration1 10/01/2018
  */
 @Service
 public class UserService extends CrudService<User> {
+	
 	@Autowired
 	private Logger log;
+	
 	private UserRepository userRepository;
 
-	
 	/**
 	 * constructor injects repository dependency
-	 * @param userRepository {@linkplain UserRepository} object that will be injected as the service's dao layer
+	 * 
+	 * @param userRepository {@linkplain UserRepository} object that will be
+	 *                       injected as the service's dao layer
 	 */
 	@Autowired
 	public UserService(UserRepository userRepository) {
@@ -43,6 +50,7 @@ public class UserService extends CrudService<User> {
 
 	/**
 	 * finds the correct {@linkplain User} after being provided the email
+	 * 
 	 * @param email <code>String</code> input that's supposed to be a user's email
 	 * @return {@link User} that email belongs to
 	 * @throws PermissionDeniedException
@@ -54,20 +62,21 @@ public class UserService extends CrudService<User> {
 
 		log.info("User {} found", found);
 
-		
 //		if (!canFindOne(found)) {   //if u scroll down, rn this just rtns true (because of matching service needs)
 //			throw new PermissionDeniedException("Permission denied to get user by email.");
 //		}
-		
+
 		return found;
 	}
-	
 
 	/**
-	 * find the correct {@linkplain User} after being provided the user's office and role
+	 * find the correct {@linkplain User} after being provided the user's office and
+	 * role
+	 * 
 	 * @param office the location of the user, {@linkplain Office} object
-	 * @param role the role of the user, {@linkplain UserRole} object
-	 * @return the user working at specified office and role, a {@linkplain User} object
+	 * @param role   the role of the user, {@linkplain UserRole} object
+	 * @return the user working at specified office and role, a {@linkplain User}
+	 *         object
 	 * @throws PermissionDeniedException
 	 */
 	public List<User> findByOfficeAndRole(Office office, UserRole role) throws PermissionDeniedException {
@@ -76,23 +85,43 @@ public class UserService extends CrudService<User> {
 		}
 		return userRepository.findByOfficeAndRole(office, role);
 	}
-	
+
 	/**
-	 * delete the User object if there is someone logged in, and that person is either the same User or an admin user
-	 * @param user User to be deleted from db
-	 * @throws PermissionDeniedException for user that is not allowed to do the transaction
+	 * find the all {@linkplain User} after being provided the a user role
+	 * 
+	 * @param role the role of the users, {@linkplain UserRole} object
+	 * @return the user working at specified office and role, a {@linkplain User}
+	 *         object
+	 * @throws PermissionDeniedException
 	 */
-	public void deleteUser(User user) throws PermissionDeniedException
-	{
-		User loggedInUser = authenticationService.getCurrentUser();
-		if (loggedInUser == null || (!loggedInUser.isAdmin() && loggedInUser.getId() != user.getId())) 
-			throw new PermissionDeniedException("Cannot delete this user's account.");
-		userRepository.delete(user);
-		
+	public List<User> findByRole(UserRole role) throws PermissionDeniedException {
+		if (!canFindAll()) {
+			throw new PermissionDeniedException("Permission denied to get users by office and role.");
+		}
+		return userRepository.findByRole(role);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.services.CrudService#throwOnConflict(com.revature.rideforce.user.beans.Identifiable)
+	/**
+	 * delete the User object if there is someone logged in, and that person is
+	 * either the same User or an admin user
+	 * 
+	 * @param user User to be deleted from db
+	 * @throws PermissionDeniedException for user that is not allowed to do the
+	 *                                   transaction
+	 */
+	public void deleteUser(User user) throws PermissionDeniedException {
+		User loggedInUser = authenticationService.getCurrentUser();
+		if (loggedInUser == null || (!loggedInUser.isAdmin() && loggedInUser.getId() != user.getId()))
+			throw new PermissionDeniedException("Cannot delete this user's account.");
+		userRepository.delete(user);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.revature.rideforce.user.services.CrudService#throwOnConflict(com.revature
+	 * .rideforce.user.beans.Identifiable)
 	 */
 	@Override
 	protected void throwOnConflict(User obj) throws EntityConflictException {
@@ -101,9 +130,13 @@ public class UserService extends CrudService<User> {
 			throw new EmailAlreadyUsedException(obj.getUsername());
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.services.CrudService#canFindAll(com.revature.rideforce.user.beans.User)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.revature.rideforce.user.services.CrudService#canFindAll(com.revature.
+	 * rideforce.user.beans.User)
 	 */
 	@Override
 	protected boolean canFindAll(User user) {
@@ -111,9 +144,13 @@ public class UserService extends CrudService<User> {
 		// service can pass along authorization headers.
 		return true;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.services.CrudService#canFindOne(com.revature.rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.revature.rideforce.user.services.CrudService#canFindOne(com.revature.
+	 * rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
 	 */
 	@Override
 	protected boolean canFindOne(User user, User obj) {
@@ -121,9 +158,12 @@ public class UserService extends CrudService<User> {
 		// service can pass along authorization headers.
 		return true;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.services.CrudService#canAdd(com.revature.rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.revature.rideforce.user.services.CrudService#canAdd(com.revature.
+	 * rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
 	 */
 	@Override
 	protected boolean canAdd(User user, User obj) {
@@ -133,9 +173,12 @@ public class UserService extends CrudService<User> {
 		}
 		return true;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.revature.rideforce.user.services.CrudService#canSave(com.revature.rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.revature.rideforce.user.services.CrudService#canSave(com.revature.
+	 * rideforce.user.beans.User, com.revature.rideforce.user.beans.Identifiable)
 	 */
 	@Override
 	protected boolean canSave(User user, User obj) {

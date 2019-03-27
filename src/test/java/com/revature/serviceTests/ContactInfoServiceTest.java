@@ -23,41 +23,43 @@ import com.revature.rideforce.user.services.ContactInfoService;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ContactInfoServiceTest {
 
-	@TestConfiguration                                    //<-- this section is for making sure the service bean isn't considered the same as
-    static class ContactInfoServiceTestContextConfiguration {    //other beans used for actual application during component-scan
+	/*
+	 * this section is for making sure the service bean isn't considered the same as
+	 * other beans used for actual application during component-scan
+	 */
+	@TestConfiguration
+	static class ContactInfoServiceTestContextConfiguration {
 		@Bean
-        public ContactInfoService contactInfoService(ContactInfoRepository contactInfoRepository) {
-    		return new ContactInfoService(contactInfoRepository);
-        }
-    }
-	
-	@Autowired
-    private ContactInfoService contactInfoService;
+		public ContactInfoService contactInfoService(ContactInfoRepository contactInfoRepository) {
+			return new ContactInfoService(contactInfoRepository);
+		}
+	}
 
-    @MockBean
-    private ContactInfoRepository contactInfoRepository;
-    
-    @Before
-    public void setUp() {
-    	Assertions.assertThat(contactInfoRepository).isNotNull();
-    	Assertions.assertThat(contactInfoService).isNotNull();
-    }
-    
-    @Test
-    public void contactInfoServiceFindByUserCanFind() {
-    	User user = new User();
-    	user.setId(1);
-    	Assertions.assertThat(contactInfoService.findByUser(user)).isNotNull();
-    }
-    
-    @Test
-    public void contactInfoServiceFindByUserReturnsEmptyWithInvalidUser() {
-    	User user = new User();
-    	user.setId(99990);
-    	System.out.println("Finding by user: " + contactInfoService.findByUser(user));
-    	Assertions.assertThat(contactInfoService.findByUser(user)).isEmpty();
-    }
-    
-    
-	
+	@Autowired
+	private ContactInfoService contactInfoService;
+
+	@MockBean
+	private ContactInfoRepository contactInfoRepository;
+
+	@Before
+	public void setUp() {
+		Assertions.assertThat(contactInfoRepository).isNotNull();
+		Assertions.assertThat(contactInfoService).isNotNull();
+	}
+
+	@Test
+	public void contactInfoServiceFindByUserCanFind() {
+		User user = new User();
+		user.setId(1);
+		Assertions.assertThat(contactInfoService.findByUser(user)).isNotNull();
+	}
+
+	@Test
+	public void contactInfoServiceFindByUserReturnsEmptyWithInvalidUser() {
+		User user = new User();
+		user.setId(99990);
+		System.out.println("Finding by user: " + contactInfoService.findByUser(user));
+		Assertions.assertThat(contactInfoService.findByUser(user)).isEmpty();
+	}
+
 }
