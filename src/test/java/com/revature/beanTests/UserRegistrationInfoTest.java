@@ -21,15 +21,15 @@ public class UserRegistrationInfoTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
 
-	private UserRegistration uri; 
-	
+	private UserRegistration uri;
+
 	@Before
-    public void setupValidatorFactory () {
-        localValidatorFactory = new LocalValidatorFactoryBean();
-        localValidatorFactory.setProviderClass(HibernateValidator.class);
-        localValidatorFactory.afterPropertiesSet();
-    }
-	
+	public void setupValidatorFactory() {
+		localValidatorFactory = new LocalValidatorFactoryBean();
+		localValidatorFactory.setProviderClass(HibernateValidator.class);
+		localValidatorFactory.afterPropertiesSet();
+	}
+
 	@Test
 	public void allNullUserRegInfo() {
 		uri = new UserRegistration();
@@ -38,7 +38,7 @@ public class UserRegistrationInfoTest {
 		Set<ConstraintViolation<UserRegistration>> violations = validator.validate(uri);
 		Assertions.assertThat(violations.size()).isEqualTo(3);
 	}
-	
+
 //	@Test
 //	public void emptyPasswordAndKeyUserRegInfo() {
 //		uri = new UserRegistration(null, "", "");

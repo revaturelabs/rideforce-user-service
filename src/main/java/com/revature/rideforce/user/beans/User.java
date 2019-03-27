@@ -49,11 +49,11 @@ import com.revature.rideforce.user.json.OfficeLinkResolver;
 import com.revature.rideforce.user.json.UserRoleResolver;
 
 /**
-
-  Encapsulates state information of the end user. 
-
-
-  */
+ * 
+ * Encapsulates state information of the end user.
+ * 
+ * 
+ */
 
 @Entity
 @Table(name = "USERS_TEST")
@@ -88,7 +88,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Size(max = 200)
 	private String photoUrl;
 
-	@Column(length = 255)   //255 size as requested by angular team ;)
+	@Column(length = 255) // 255 size as requested by angular team ;)
 	@Size(max = 255)
 	private String bio;
 
@@ -98,9 +98,9 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Column(name = "ACTIVE")
 	@JsonProperty
-	@Enumerated (EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	private Active active = Active.ACTIVE;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	@NotNull
@@ -115,15 +115,15 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@JsonLink(OfficeLinkResolver.class)
 	private Office office;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "LOCATION", nullable = false)
 	@NotNull
 	private CachedLocation location;
-	
+
 	@Column(nullable = false, columnDefinition = "float default 9.0")
 	@NotNull
 	private float startTime;
-	
+
 	@Column(columnDefinition = "DATE")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
@@ -140,13 +140,13 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Valid
 	@JsonLink(ContactInfoLinkResolver.class)
 	private Set<ContactInfo> contactInfo;
-	
+
 	@Transient
 	private String registrationToken;
-	
+
 	@Transient
 	private String authToken;
-	
+
 	public User() {
 		super();
 		this.role = new UserRole();
@@ -190,7 +190,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		return password;
 	}
 
-	public void setPassword(String password) { 
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -202,10 +202,10 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.photoUrl = photoURL;
 	}
 
-	public Active isActive() {  
+	public Active isActive() {
 		return this.active;
 	}
-	
+
 	public void setActive(Active string) {
 		this.active = string;
 	}
@@ -271,7 +271,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	public String getUsername() {
 		return email;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -310,9 +310,9 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 		this.contactInfo = contactInfo;
 	}
 
-  /**
-    @return endpoint where this <code>User</code>'s information can be accessed
-    */
+	/**
+	 * @return endpoint where this <code>User</code>'s information can be accessed
+	 */
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(id).toUri();
@@ -321,11 +321,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	public String getBio() {
 		return bio;
 	}
-	
+
 	public void setBio(String bio) {
 		this.bio = bio;
 	}
-  
+
 	public String getRegistrationToken() {
 		return registrationToken;
 	}
@@ -343,112 +343,112 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	}
 
 	@Override
-public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((location == null) ? 0 : location.hashCode());
-	result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
-	result = prime * result + ((bio == null) ? 0 : bio.hashCode());
-	result = prime * result + ((cars == null) ? 0 : cars.hashCode());
-	result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-	result = prime * result + id;
-	result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-	result = prime * result + ((office == null) ? 0 : office.hashCode());
-	result = prime * result + ((password == null) ? 0 : password.hashCode());
-	result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
-	result = prime * result + ((role == null) ? 0 : role.hashCode());
-	result = prime * result + Float.floatToIntBits(startTime);
-	result = prime * result + ((active == null) ? 0 : active.hashCode());
-	return result;
-}
-
-@Override
-public boolean equals(Object obj) {
-	if (this == obj)
-		return true;
-	if (obj == null)
-		return false;
-	if (getClass() != obj.getClass())
-		return false;
-	User other = (User) obj;
-	if (location == null) {
-		if (other.location != null)
-			return false;
-	} else if (!location.equals(other.location))
-		return false;
-	if (batchEnd == null) {
-		if (other.batchEnd != null)
-			return false;
-	} else if (!batchEnd.equals(other.batchEnd))
-		return false;
-	if (bio == null) {
-		if (other.bio != null)
-			return false;
-	} else if (!bio.equals(other.bio))
-		return false;
-	if (cars == null) {
-		if (other.cars != null)
-			return false;
-	} else if (!cars.equals(other.cars))
-		return false;
-	if (contactInfo == null) {
-		if (other.contactInfo != null)
-			return false;
-	} else if (!contactInfo.equals(other.contactInfo))
-		return false;
-	if (email == null) {
-		if (other.email != null)
-			return false;
-	} else if (!email.equals(other.email))
-		return false;
-	if (firstName == null) {
-		if (other.firstName != null)
-			return false;
-	} else if (!firstName.equals(other.firstName))
-		return false;
-	if (id != other.id)
-		return false;
-	if (lastName == null) {
-		if (other.lastName != null)
-			return false;
-	} else if (!lastName.equals(other.lastName))
-		return false;
-	if (office == null) {
-		if (other.office != null)
-			return false;
-	} else if (!office.equals(other.office))
-		return false;
-	if (password == null) {
-		if (other.password != null)
-			return false;
-	} else if (!password.equals(other.password))
-		return false;
-	if (photoUrl == null) {
-		if (other.photoUrl != null)
-			return false;
-	} else if (!photoUrl.equals(other.photoUrl))
-		return false;
-	if (role == null) {
-		if (other.role != null)
-			return false;
-	} else if (!role.equals(other.role))
-		return false;
-	if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime))
-		return false;
-	if (active != other.active)
-		return false;
-	return true;
-}
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((cars == null) ? 0 : cars.hashCode());
+		result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((office == null) ? 0 : office.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + Float.floatToIntBits(startTime);
+		result = prime * result + ((active == null) ? 0 : active.hashCode());
+		return result;
+	}
 
 	@Override
-public String toString() {
-	return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
-			+ password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name() + ", role=" + role
-			+ ", office=" + office + ", location=" + location + ", startTime=" + startTime + ", batchEnd=" + batchEnd
-			+ ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
-}
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
+		if (batchEnd == null) {
+			if (other.batchEnd != null)
+				return false;
+		} else if (!batchEnd.equals(other.batchEnd))
+			return false;
+		if (bio == null) {
+			if (other.bio != null)
+				return false;
+		} else if (!bio.equals(other.bio))
+			return false;
+		if (cars == null) {
+			if (other.cars != null)
+				return false;
+		} else if (!cars.equals(other.cars))
+			return false;
+		if (contactInfo == null) {
+			if (other.contactInfo != null)
+				return false;
+		} else if (!contactInfo.equals(other.contactInfo))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (id != other.id)
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (office == null) {
+			if (other.office != null)
+				return false;
+		} else if (!office.equals(other.office))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (photoUrl == null) {
+			if (other.photoUrl != null)
+				return false;
+		} else if (!photoUrl.equals(other.photoUrl))
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime))
+			return false;
+		if (active != other.active)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active.name()
+				+ ", role=" + role + ", office=" + office + ", location=" + location + ", startTime=" + startTime
+				+ ", batchEnd=" + batchEnd + ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
+	}
 
 	@Override
 	@JsonIgnore
