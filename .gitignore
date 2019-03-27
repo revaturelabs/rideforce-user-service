@@ -70,3 +70,5 @@ hs_err_pid*
 
 #logback
 logs/
+/.apt_generated/
+/.apt_generated_tests/
