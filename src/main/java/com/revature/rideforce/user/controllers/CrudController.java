@@ -103,8 +103,11 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	 *         was a conflict
 	 */
 	@PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> save(@RequestBody @Valid T obj) {
+	public ResponseEntity<?> save(@RequestBody @Valid T obj, @PathVariable("id") int id) {
 		try {
+
+			obj.setId(id);
+			
 			return ResponseEntity.ok(service.save(obj));
 		} catch (EntityConflictException e) {
 			return new ResponseError(e).toResponseEntity(HttpStatus.CONFLICT);

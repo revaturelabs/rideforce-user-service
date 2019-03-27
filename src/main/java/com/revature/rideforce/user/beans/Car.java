@@ -116,7 +116,6 @@ public class Car implements Identifiable, Linkable, Serializable {
 	public int getId() {
 		return id;
 	}
-
 	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#setId(int)
