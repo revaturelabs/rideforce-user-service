@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.revature.rideforce.user.json.JsonLink;
 import com.revature.rideforce.user.json.OfficeLinkResolver;
 

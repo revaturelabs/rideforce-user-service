@@ -2,9 +2,9 @@ package com.revature.rideforce.user.beans.forms;
 
 import java.util.Date;
 
+import com.revature.rideforce.user.beans.CachedLocation;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
-import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.json.Active;
 
 public class ChangeUserModel {
@@ -15,7 +15,7 @@ public class ChangeUserModel {
 	private String password;
 	private String email;
 	private String photoUrl;
-	private String address;
+	private CachedLocation address;
 	private Office office;
 	private float startTime;
 	private Date batchEnd;
@@ -35,7 +35,7 @@ public class ChangeUserModel {
 		if(photoUrl != null)
 			original.setPhotoUrl(photoUrl);
 		if(address != null)
-			original.setAddress(address);
+			original.setLocation(address);
 		if(bio != null)
 			original.setBio(bio);
 		if(office != null)
@@ -122,13 +122,13 @@ public class ChangeUserModel {
 
 
 
-	public String getAddress() {
+	public CachedLocation getAddress() {
 		return address;
 	}
 
 
 
-	public void setAddress(String address) {
+	public void setAddress(CachedLocation address) {
 		this.address = address;
 	}
 

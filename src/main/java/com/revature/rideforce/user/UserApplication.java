@@ -1,7 +1,7 @@
 package com.revature.rideforce.user;
 
 import java.util.Arrays;
-import java.util.HashSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,9 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.revature.rideforce.user.beans.Office;
-import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
-import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.json.EnumLikeDeserializerModifier;
 import com.revature.rideforce.user.json.EnumLikeSerializerModifier;
 import com.revature.rideforce.user.json.LinkDeserializerModifier;
@@ -118,19 +116,16 @@ public class UserApplication implements InitializingBean {
 				userRoleRepository.save(role);
 			}
 
-			User admin = new User();
-			admin.setFirstName("admin");
-			admin.setLastName("admin");
-			admin.setEmail("admin@revature.com");
-			admin.setAddress("11730 Plaza America Dr. Reston, VA");
-			admin.setOffice(officeRepository.findAll().get(0));
-			admin.setCars(new HashSet<>());
-			admin.setContactInfo(new HashSet<>());
-			admin.setActive(Active.ACTIVE);
-			admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
-			admin.setStartTime((float) 9.0);
-			userRepository.save(admin);
-		}
+			/*
+			 * User admin = new User(); admin.setFirstName("admin");
+			 * admin.setLastName("admin"); admin.setEmail("admin@revature.com");
+			 * admin.setAddress("11730 Plaza America Dr. Reston, VA");
+			 * admin.setOffice(officeRepository.findAll().get(0)); admin.setCars(new
+			 * HashSet<>()); admin.setContactInfo(new HashSet<>());
+			 * admin.setActive(Active.ACTIVE);
+			 * admin.setRole(userRoleRepository.findByTypeIgnoreCase(ADMIN));
+			 * admin.setStartTime((float) 9.0); userRepository.save(admin);
+			 */		}
 	}
 	
 	@Bean
