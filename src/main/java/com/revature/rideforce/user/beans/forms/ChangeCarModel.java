@@ -13,6 +13,10 @@ import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.json.JsonLink;
 import com.revature.rideforce.user.json.UserLinkResolver;
 
+/*
+ * useless file dont use this
+ * 
+ * */
 public class ChangeCarModel {
 	private int id;
 	private User owner;
