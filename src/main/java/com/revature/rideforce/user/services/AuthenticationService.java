@@ -50,6 +50,7 @@ import com.revature.rideforce.user.repository.UserRepository;
  * users, getting information about the current user.
  */
 @Service
+@SuppressWarnings({ "unused" })
 public class AuthenticationService {
 	@Value("${jwt.registration.ttl}")
 	private Integer registrationTokenTTL;

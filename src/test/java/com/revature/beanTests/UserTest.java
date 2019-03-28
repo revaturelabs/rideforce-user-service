@@ -32,6 +32,8 @@ import com.revature.rideforce.user.json.Active;
 public class UserTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
+	// TODO: test with passwordEncoder and remove suppressing warnings
+	@SuppressWarnings({ "unused" })
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private User u;
 
