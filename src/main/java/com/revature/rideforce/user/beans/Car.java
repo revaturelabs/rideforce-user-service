@@ -79,6 +79,14 @@ public class Car implements Identifiable, Linkable, Serializable {
 	@Column(nullable = true)
 	private int year;
 
+	@Column(length = 10)
+	@NotEmpty
+	private String license;
+	
+	@Column(length = 30)
+	@NotEmpty
+	private String color;
+	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#getId()
 	 */
@@ -88,16 +96,18 @@ public class Car implements Identifiable, Linkable, Serializable {
 	}
 
 	//adding this constructor because the ID for it is actually generated auto...so even if u set it to 1, it'll be like 802...
-	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
+	public Car(@NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license, @NotEmpty String color) {
 		super();
 		this.owner = owner;
 		this.make = make;
 		this.model = model;
 		this.year = year;
+		this.license = license;
+		this.color = color;
 	}
 	
-	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year) {
-		this(owner, make, model, year);
+	public Car(int id, @NotNull @Valid User owner, @NotEmpty String make, @NotEmpty String model, int year, @NotEmpty String license, @NotEmpty String color) {
+		this(owner, make, model, year, license, color);
 		this.id = id;
 	}
 
@@ -105,7 +115,6 @@ public class Car implements Identifiable, Linkable, Serializable {
 	public int getId() {
 		return id;
 	}
-
 	
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.beans.Identifiable#setId(int)
@@ -157,6 +166,14 @@ public class Car implements Identifiable, Linkable, Serializable {
 		this.year = year;
 	}
 
+	public String getLicense() {
+		return license;
+	}
+	
+	public void setLicense(String license) {
+		this.license = license;
+	}
+	
 	/**
 	 * @return	owner, a User object that owns this car
 	 */
@@ -171,12 +188,26 @@ public class Car implements Identifiable, Linkable, Serializable {
 		this.owner = owner;
 	}
 	
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.revature.rideforce.user.json.Linkable#toUri()
 	 */
 	@Override
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/cars/{id}").buildAndExpand(id).toUri();
+	}
+
+	@Override
+	public String toString() {
+		return "Car [id=" + id + ", owner=" + owner + ", make=" + make + ", model=" + model + ", year=" + year
+				+ ", license=" + license + ", color=" + color + "]";
 	}
 	
 }

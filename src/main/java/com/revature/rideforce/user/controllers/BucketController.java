@@ -48,9 +48,12 @@ public class BucketController {
     public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("user") int id) throws PermissionDeniedException, EntityConflictException{
         User user = (User) userService.findById(id);
         String url = this.amazonClient.uploadFile(file);
-        System.out.println("File uploaded to S3 with url: "+url); //Check for new files with this URL
+        
+        System.out.println(this.amazonClient.toString());
+        System.out.println("File uploaded to S3 with url&&&&&&&&&&&&&&&&&&&&&&&&&&&&& "+url); //Check for new files with this URL
         user.setPhotoUrl(url);
         userService.save(user);
+    
     }
     
     @DeleteMapping("/deleteFile")
