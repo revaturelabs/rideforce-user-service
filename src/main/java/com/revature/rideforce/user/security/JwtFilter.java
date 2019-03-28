@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 				// If authenticated set the security context
 				.ifPresent(SecurityContextHolder.getContext()::setAuthentication);
 
-		log.info("This is the token: " + request.getHeader("Authorization"));
+		log.info("Going to filter");
 //        response.setHeader("Access-Control-Allow-Origin", "*");
 //        response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
 //        response.setHeader("Access-Control-Allow-Headers", "*");
