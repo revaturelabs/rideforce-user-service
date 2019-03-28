@@ -56,6 +56,7 @@ public class UserRole implements EnumLike, Identifiable, Linkable, Serializable 
 	}
 
 	public String getType() {
+		System.out.println("printing out type = " + type);
 		return type.toUpperCase();
 	}
 

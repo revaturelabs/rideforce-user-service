@@ -43,40 +43,42 @@ public class CarServiceTest {
 	@TestConfiguration
 	static class CarServiceTestContextConfiguration {
 		@Bean
-		public CarService carService(CarRepository carRepository) {
-			return new CarService(carRepository);
-		}
-	}
 
-	@Autowired
-	private CarService carService;
+        public CarService carService(CarRepository carRepository) {
+    		return new CarService(carRepository);
+        }
+    }
+ 
+    @Autowired
+    private CarService carService;
+    
+    @Autowired
+    private UserRepository userRepo;
+    
+    @MockBean
+    private CarRepository carRepository;
+    
+    @Before
+    public void setUp()  //set up the mock repo's behavior
+    {
+    	User user = userRepo.getOne(1);
+    	List<Car> list = new ArrayList<>();
+        list.add( new Car(1, user, "make", "model", 2012, "Zelda", "Red") );
+        list.add( new Car(2, user, "honda", "civic", 2016, "Zelda", "Red") );
 
-	@Autowired
-	private UserRepository userRepo;
-
-	@MockBean
-	private CarRepository carRepository;
-
-	@Before
-	public void setUp() // set up the mock repo's behavior
-	{
-		User user = userRepo.getOne(1);
-		List<Car> list = new ArrayList<>();
-		list.add(new Car(1, user, "make", "model", 2012));
-		list.add(new Car(2, user, "honda", "civic", 2016));
-
-		Mockito.when(carRepository.findByOwner(user)).thenReturn(list);
-	}
-
-	@Test
-	public void findByOwnerTest() throws PermissionDeniedException {
-		User owner = new User();
-		// setting a user as logged in so that the user has permission to see the cars
-		SecurityContextHolder.getContext()
-				.setAuthentication(new UsernamePasswordAuthenticationToken(owner, "", owner.getAuthorities()));
-
-		Assertions.assertThat(carService.findByOwner(owner)).isNotNull();
-
+        Mockito.when( carRepository.findByOwner(user) )
+          .thenReturn(list);
+    }
+    
+    @Test 
+    public void findByOwnerTest() throws PermissionDeniedException
+    {
+    	User owner = new User();
+    	//setting a user as logged in so that the user has permission to see the cars
+    	SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(owner, "", owner.getAuthorities()));
+    	
+		Assertions.assertThat( carService.findByOwner(owner) ).isNotNull();
+		
 		SecurityContextHolder.getContext().setAuthentication(null);
 
 	}
