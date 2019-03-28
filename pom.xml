@@ -329,7 +329,7 @@
 		<!-- JDBC -->
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
+			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0</version>
 		</dependency>
 		
