@@ -47,6 +47,8 @@ public class AuthenticationServiceUnitTest {
 
 	private User user;
 	private UserCredentials userCredentials;
+	// TODO: test with registrationInfo and remove suppressing warnings
+	@SuppressWarnings({ "unused" })
 	private UserRegistration registrationInfo;
 
 	@Autowired
