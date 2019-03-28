@@ -29,6 +29,10 @@ eureka:
       default-zone: http://localhost:8761/eureka
     fetch-registry: false
     register-with-eureka: false
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6977de3b5f1ee993db2cfb5c8dbc7636e689033c
       
 server:
   port: 5555
