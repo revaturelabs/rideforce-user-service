@@ -24,7 +24,7 @@ public class UserRole implements EnumLike, Identifiable, Linkable, Serializable 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Min(1)
+	//@Min(1)
 	@Column(name = "ROLE_ID")
 	@SequenceGenerator(name = "roleid", sequenceName = "roleid")
 	@GeneratedValue(generator = "roleid", strategy = GenerationType.SEQUENCE)
