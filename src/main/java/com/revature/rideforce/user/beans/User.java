@@ -62,7 +62,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Id
 	@Column(name = "USER_ID")
-	@SequenceGenerator(name = "useridgen", sequenceName = "userid")
+	@SequenceGenerator(name = "useridgen", sequenceName = "userid", allocationSize = 1, initialValue = 50 )
 	@GeneratedValue(generator = "useridgen", strategy = GenerationType.SEQUENCE)
 	private int id;
 
