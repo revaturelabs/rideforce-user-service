@@ -147,6 +147,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 	@Transient
 	private String authToken;
 
+	public User(int id) {
+		super();
+		this.id = id;
+	}
+
 	public User() {
 		super();
 		this.role = new UserRole();

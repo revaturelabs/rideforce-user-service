@@ -49,6 +49,11 @@ public class ContactType implements EnumLike, Identifiable, Linkable, Serializab
 		super();
 	}
 	
+	public ContactType(@Min(1) int id) {
+		super();
+		this.id = id;
+	}
+
 	public ContactType(int id, @NotEmpty String type) {
 		super();
 		this.id = id;

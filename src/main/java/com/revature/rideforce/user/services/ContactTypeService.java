@@ -22,6 +22,9 @@ public class ContactTypeService extends CrudService<ContactType> {
 	public ContactType findByType(String type) {
 		return contactTypeRepository.findByTypeIgnoreCase(type);
 	}
+//	public ContactType findById(int id) {
+//		return contactTypeRepository.findById(id);
+//	}
 	
 	@Override
 	protected void throwOnConflict(ContactType obj) throws EntityConflictException {

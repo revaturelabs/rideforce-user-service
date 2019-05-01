@@ -31,7 +31,7 @@ public class ContactInfo implements Identifiable, Linkable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Min(1)
+	//@Min(1)
 	@Column(name = "CONTACT_INFO_ID")
 	@SequenceGenerator(name = "contactinfoid", sequenceName = "contactinfoid")
 	@GeneratedValue(generator = "contactinfoid", strategy = GenerationType.SEQUENCE)
@@ -53,6 +53,24 @@ public class ContactInfo implements Identifiable, Linkable, Serializable {
 	@Column(length = 100)
 	@NotEmpty
 	private String info;
+
+	public ContactInfo() {
+		super();
+	}
+
+	public ContactInfo(int id, @NotNull @Valid User user, @NotNull @Valid ContactType type, @NotEmpty String info) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.type = type;
+		this.info = info;
+	}
+
+	public ContactInfo(@NotNull @Valid User user, @NotNull @Valid ContactType type, @NotEmpty String info) {
+		this.user = user;
+		this.type = type;
+		this.info = info;
+	}
 
 	@Override
 	public int getId() {
@@ -92,4 +110,10 @@ public class ContactInfo implements Identifiable, Linkable, Serializable {
 	public URI toUri() {
 		return UriComponentsBuilder.fromPath("/contact-info/{id}").buildAndExpand(id).toUri();
 	}
+
+	@Override
+	public String toString() {
+		return "ContactInfo [id=" + id + ", user=" + user.getId() + ", type=" + type + ", info=" + info + "]";
+	}
+	
 }
