@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +17,10 @@ import com.nimbusds.jose.JOSEException;
 import com.revature.rideforce.user.beans.RegistrationToken;
 import com.revature.rideforce.user.beans.ResponseError;
 import com.revature.rideforce.user.services.AuthenticationService;
-
 import net.minidev.json.JSONObject;
 
 @Lazy(true)
 @RestController
-@CrossOrigin(origins = "*")
 public class JWKController {
 	@Autowired
 	private JSONObject publicJWK;

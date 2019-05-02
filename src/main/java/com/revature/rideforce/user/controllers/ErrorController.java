@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.revature.rideforce.user.beans.ResponseError;
 
 @Lazy(true)
-@CrossOrigin(origins = "*")
 @RestController
 @RestControllerAdvice
 public class ErrorController extends AbstractErrorController {

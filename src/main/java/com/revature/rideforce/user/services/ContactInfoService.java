@@ -11,12 +11,17 @@ import com.revature.rideforce.user.repository.ContactInfoRepository;
 
 @Service
 public class ContactInfoService extends CrudService<ContactInfo> {
+	@Autowired
 	ContactInfoRepository contactInfoRepository;
 
 	@Autowired
 	public ContactInfoService(ContactInfoRepository contactInfoRepository) {
 		super(contactInfoRepository);
 		this.contactInfoRepository = contactInfoRepository;
+	}
+	
+	public List<ContactInfo> findByUserid(int id) {
+		return contactInfoRepository.findByUserId(id);
 	}
 	
 	public List<ContactInfo> findByUser(User user) {

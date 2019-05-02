@@ -47,6 +47,8 @@ public class UserService extends CrudService<User> {
 		super(userRepository);
 		this.userRepository = userRepository;
 	}
+	
+
 
 	/**
 	 * finds the correct {@linkplain User} after being provided the email

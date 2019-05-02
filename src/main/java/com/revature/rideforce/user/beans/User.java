@@ -62,7 +62,7 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Id
 	@Column(name = "USER_ID")
-	@SequenceGenerator(name = "useridgen", sequenceName = "userid", allocationSize = 1, initialValue = 50 )
+	@SequenceGenerator(name = "useridgen", sequenceName = "userid")
 	@GeneratedValue(generator = "useridgen", strategy = GenerationType.SEQUENCE)
 	private int id;
 
@@ -146,6 +146,11 @@ public class User implements UserDetails, Identifiable, Linkable, Serializable {
 
 	@Transient
 	private String authToken;
+
+	public User(int id) {
+		super();
+		this.id = id;
+	}
 
 	public User() {
 		super();

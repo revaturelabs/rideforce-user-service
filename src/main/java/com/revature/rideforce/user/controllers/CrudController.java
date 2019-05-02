@@ -63,7 +63,9 @@ public abstract class CrudController<T extends Identifiable & Linkable> {
 	 */
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+		
 		try {
+			log.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
 			log.info("Finding Id: " + id);
 		T found = service.findById(id);
 		return found == null
