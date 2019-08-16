@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
+import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
@@ -43,7 +44,9 @@ public class AuthenticationServiceIntegrationTest {
 	@Test(expected = InvalidRegistrationKeyException.class)
 	public void registerWithInvalidRegistrationInfoThrowsException() throws InvalidRegistrationKeyException,
 			EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
-		authenticationService.register(null);
+User noRegistration= new User();
+
+		authenticationService.register(noRegistration);
 	}
 
 	@Test

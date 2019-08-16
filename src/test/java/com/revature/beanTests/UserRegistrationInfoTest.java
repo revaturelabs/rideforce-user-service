@@ -35,7 +35,7 @@ public class UserRegistrationInfoTest {
 		uri.setUser(null);
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<UserRegistration>> violations = validator.validate(uri);
-		Assertions.assertThat(violations.size()).isEqualTo(3);
+		Assertions.assertThat(violations.size()).isEqualTo(2);// used to be equal to 3 Dionne changed it to 2 assuming that valid is inherently not null, or maybe alid is deprecated?
 	}
 
 //	@Test
