@@ -55,13 +55,13 @@ public class AuthenticationServiceUnitTest {
 
 	@Autowired
 	private AuthenticationService authenticationService;
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
-	}
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//	    return new BCryptPasswordEncoder();
+//	}
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+//	
 	@MockBean
 	private UserRepository userRepo;
 	@MockBean
@@ -78,7 +78,7 @@ public class AuthenticationServiceUnitTest {
 		user.setLastName("admin");
 		user.setFirstName("admin");
 		Assertions.assertThat(user).isNotNull();
-		Assertions.assertThat(passwordEncoder).isNotNull();
+		//Assertions.assertThat(passwordEncoder).isNotNull();
 		Assertions.assertThat(userService).isNotNull();
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
