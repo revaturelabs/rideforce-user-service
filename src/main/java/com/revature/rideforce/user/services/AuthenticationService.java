@@ -206,7 +206,7 @@ public class AuthenticationService {
 				// Convert the email claim to a string
 				.map(Object::toString)
 				// Find a user by the email
-				.map(uRepo::findByEmail)
+				.map(uRepo::findByEmailIgnoreCase)
 				// Create an authentication object from the user
 				.map(u -> new UsernamePasswordAuthenticationToken(u, "", u.getAuthorities()))
 				// Return null if anything in this chain is null

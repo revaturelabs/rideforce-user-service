@@ -97,19 +97,19 @@ public class UserRepositoryTest {
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());
 		user = repository.save(user);
-		User returnedUser = repository.findByEmail("email@email.com");
+		User returnedUser = repository.findByEmailIgnoreCase("email@email.com");
 		Assertions.assertThat(returnedUser).isNotNull();
 	}
 	
 	@Test
 	public void findByEmailEmptyString() {
-		User returnedUser = repository.findByEmail("");
+		User returnedUser = repository.findByEmailIgnoreCase("");
 		Assertions.assertThat(returnedUser).isNull();
 	}
 	
 	@Test
 	public void findByEmailNonexistantEmail() {
-		User returnedUser = repository.findByEmail("doesn'texist");
+		User returnedUser = repository.findByEmailIgnoreCase("doesn'texist");
 		Assertions.assertThat(returnedUser).isNull();
 	}
 	

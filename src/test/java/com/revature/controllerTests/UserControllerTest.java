@@ -93,7 +93,7 @@ public class UserControllerTest {
 	// Logged out user get requests permissions may be security concern
 	@Test
 	public void loggedOutUserCanGetByEmail() throws Exception {
-		this.mockMvc.perform(get("/users?email=admin@revature.com")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/users?email=aataxitrans@gmail.com")).andExpect(status().isOk());
 	}
 	
 	@Test
@@ -141,7 +141,7 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserFindByWeirdCaseEmailShouldWork() throws Exception
 	{ 							//so to put parameters in get request url, it's a ? not a /   !!!!
-		this.mockMvc.perform(get("/users?email=adMIN@REVature.com")).andExpect(status().is2xxSuccessful());
+		this.mockMvc.perform(get("/users?email=aatAXiTrans@gmail.com")).andExpect(status().is2xxSuccessful());
 	}
 	
 	@Test()

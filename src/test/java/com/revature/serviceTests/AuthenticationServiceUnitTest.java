@@ -83,7 +83,7 @@ public class AuthenticationServiceUnitTest {
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
 		user.setActive(Active.ACTIVE);
-		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
+		Mockito.when(userRepo.findByEmailIgnoreCase("admin@revature.com")).thenReturn(user);
 
 		Mockito.when(userService.add(any())).then(i -> i.getArgument(0)); // return the user it was given
 //		https://stackoverflow.com/questions/2684630/how-can-i-make-a-method-return-an-argument-that-was-passed-to-it
