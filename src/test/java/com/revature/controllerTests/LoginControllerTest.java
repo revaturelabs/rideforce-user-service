@@ -50,7 +50,8 @@ public class LoginControllerTest {
 	@Test
 	//unsure why this does not work 
 	public void validUserCredentialDifferentCaseEmailShouldntMatterTest() throws Exception {
-		UserCredentials userCred = new UserCredentials("admin@revature.com", "123");
+		
+		UserCredentials userCred = new UserCredentials("KyleSAnderson@jourrapide.com", "12345678");
 		//turn object into JSON string for the body
 		ObjectMapper om = new ObjectMapper();
 		String userCredJson = om.writeValueAsString(userCred);

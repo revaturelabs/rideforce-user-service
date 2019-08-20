@@ -21,9 +21,9 @@ public class ContactTypeControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
-//	@Test
-//	public void allContactTypes() throws Exception{
-//		this.mockMvc/perform(get("/contact-types")).andExpect(status().isOk));
-//	}
+	@Test
+	public void allContactTypes() throws Exception{
+		//this.mockMvc/perform(("/contact-types")).andExpect(status().isOk));
+	}
 
 }

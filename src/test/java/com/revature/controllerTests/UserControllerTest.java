@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
+import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -71,7 +73,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void loggedOutUserCannotPutUsers() throws Exception {
+	public void loggedOutUserCannotPutUsers() throws PermissionDeniedException, Exception {
 		this.mockMvc.perform(put("/users")).andExpect(status().isForbidden());
 	}
 	
