@@ -34,6 +34,7 @@ public class UserTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
 	// TODO: test with passwordEncoder and remove suppressing warnings
+	
 	@SuppressWarnings({ "unused" })
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private User u;
@@ -138,6 +139,7 @@ public class UserTest {
 	@Test(expected = EmptyPasswordException.class)
 	public void emptyUserPasswordTest() throws EmptyPasswordException {
 		u.setPassword(null);
+		
 	}////////DIONNE YOU SHOULD DELETE THIS IF NOT ADRESSED IN CONTROLLER, SHOULD NOT HAVE A SET METHOD THROWN AN EXCEPTION
 
 	@Test

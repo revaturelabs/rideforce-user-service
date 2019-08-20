@@ -27,6 +27,8 @@ import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
+import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.repository.UserRepository;
@@ -92,6 +94,11 @@ public class AuthenticationServiceUnitTest {
 
 	/**
 	 * Test the logic of the authentication service layer is sound
+	 * @throws PasswordRequirementsException 
+	 * @throws EmptyPasswordException 
+	 * @throws PermissionDeniedException 
+	 * @throws EntityConflictException 
+	 * @throws InvalidRegistrationKeyException 
 	 * 
 	 * @throws InvalidCredentialsException
 	 * @throws DisabledAccountException
@@ -159,9 +166,9 @@ public class AuthenticationServiceUnitTest {
 //		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
 //		authenticationService.register(registrationInfo);
 //	}
-
+//
 	@Test
-	public void getCurrentUserTest() throws EmptyPasswordException {
+	public void getCurrentUserTest() {
 		// when no session, getCurrentUser should return null
 		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
 		// now set session and should not be null anymore
@@ -172,4 +179,28 @@ public class AuthenticationServiceUnitTest {
 				.hasFieldOrPropertyWithValue("id", 1);
 		SecurityContextHolder.getContext().setAuthentication(null);
 	}
+	
+	
+
+	@Test(expected = EmptyPasswordException.class)
+	public void  emptyUserPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		// when no session, getCurrentUser should return null
+		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+		// now set session and should not be null anymore
+		user.setPassword("");
+		authenticationService.register(user);
+		
+	}
+	
+	@Test(expected = InvalidRegistrationKeyException.class)
+	public void  InvalidRegistrationToken() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		// when no session, getCurrentUser should return null
+		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+		// now set session and should not be null anymore
+		user.setPassword("password");
+		user.setRegistrationToken(null);
+		authenticationService.register(user);
+		
+	}
+	
 }

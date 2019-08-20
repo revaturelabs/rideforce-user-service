@@ -115,6 +115,9 @@ public class AuthenticationService {
 	 */
 	public User register(User ur) throws InvalidRegistrationKeyException, EntityConflictException,
 			PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		if(ur.getPassword()=="") {
+			throw new EmptyPasswordException();
+		}
 		// Check the registration token
 		RegistrationToken registrationToken = validateRegistrationToken(ur.getRegistrationToken());
 		if (registrationToken != null) {
@@ -123,6 +126,7 @@ public class AuthenticationService {
 		} else {
 			throw new InvalidRegistrationKeyException();
 		}
+		
 
 		// Sign the user up with Cognito
 		cognito.signUp(new SignUpRequest().withClientId(cc.getClientId()).withUsername(ur.getEmail().toLowerCase())
