@@ -38,9 +38,9 @@ spring:
   application:
     name: user-service
   datasource:
-    url: ${JDBC_URL}
-    username: ${JDBC_USERNAME}
-    password: ${JDBC_PASSWORD}         #INSTEAD, CAN JUST ADD ENV VARIABLES    SPRING_DATASOURCE_URL/USERNAME/PASSWORD
+    url: jdbc:oracle:thin:@rideforce-dev2.chueiwozbnfz.us-east-1.rds.amazonaws.com:1521:RIDE #${JDBC_URL}
+    username: rideforce #${JDBC_USERNAME}
+    password: rideforce #${JDBC_PASSWORD}         #INSTEAD, CAN JUST ADD ENV VARIABLES    SPRING_DATASOURCE_URL/USERNAME/PASSWORD
     driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     show-sql: false
