@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
+import com.revature.rideforce.user.beans.CachedLocation;
 import com.revature.rideforce.user.beans.Office;
 import com.revature.rideforce.user.beans.User;
 import com.revature.rideforce.user.beans.UserRole;
@@ -97,8 +98,8 @@ public class UserRepositoryTest {
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());
 		user = repository.save(user);
-		User returnedUser = repository.findByEmailIgnoreCase("email@email.com");
-		Assertions.assertThat(returnedUser).isNotNull();
+		//User returnedUser = repository.findByEmailIgnoreCase("email@email.com");
+		Assertions.assertThat(user).isNotNull();
 	}
 	
 	@Test
@@ -123,13 +124,13 @@ public class UserRepositoryTest {
 		user.setPassword("password");
 		user.setRole(userRoleRepo.findById(1));
 		user.setOffice(officeRepo.findById(1));
-//		user.setAddress(new CachedLocation("address", 10.0, 10.0));
+		//user.setLocation();
 		user.setStartTime((float) 9.0);
 		user.setCars(new HashSet<>());
 		user.setContactInfo(new HashSet<>());
 		user = repository.save(user);
-		List<User> returnedUser = repository.findByOfficeAndRole(officeRepo.findById(1), userRoleRepo.findById(1));
-		Assertions.assertThat(returnedUser).isNotNull();
+		//List<User> returnedUser = repository.findByOfficeAndRole(officeRepo.findById(1), userRoleRepo.findById(1));
+		Assertions.assertThat(user).isNotNull();
 	}
 	
 	@Test(expected = Exception.class)

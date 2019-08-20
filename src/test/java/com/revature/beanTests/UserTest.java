@@ -129,7 +129,7 @@ public class UserTest {
 
 		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
-				++counter;
+				counter++;
 			}
 		}
 		

@@ -23,7 +23,9 @@ public class ContactTypeControllerTest {
 	
 	@Test
 	public void allContactTypes() throws Exception{
+
 //		this.mockMvc/perform(get("/contact-types")).andExpect(status().isOk));
+
 	}
 
 }
