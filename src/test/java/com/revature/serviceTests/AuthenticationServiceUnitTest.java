@@ -166,6 +166,27 @@ public class AuthenticationServiceUnitTest {
 //		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
 //		authenticationService.register(registrationInfo);
 //	}
+	
+	
+//	
+//	@Test(expected = NullPointerException.class)
+//	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
+//	{
+//	
+//		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+//		// now set session and should not be null anymore
+//		user.setPassword(null);
+//		user.setRegistrationToken("DJF");
+//		
+//		authenticationService.register(user);
+//		
+//	}
+//	
+//	@Test(expected = PasswordRequirementsException.class)
+//	public void registerWithInvalidPasswordTest() throws PasswordRequirementsException, InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException {
+//		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
+//		authenticationService.register(registrationInfo);
+//	}
 //
 	@Test
 	public void getCurrentUserTest() {

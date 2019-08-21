@@ -42,6 +42,7 @@ public class UserControllerTest {
 	public void loggedOutUserCanGetUsers() throws Exception {
 		this.mockMvc.perform(get("/users")).andExpect(status().isOk());
 	}
+	
 
 	@Test
 	public void loggedOutUserCanGetUsersById() throws Exception {
@@ -106,6 +107,10 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserCanGetByInvalidEmail() throws Exception {
 		this.mockMvc.perform(get("/users?email=test")).andExpect(status().isNotFound());
+	}
+	@Test
+	public void loggedOutUserCanGetByRole() throws Exception {
+		this.mockMvc.perform(get("/users?role=Admin")).andExpect(status().isOk());
 	}
 	
 	// Logged out user get requests permissions may be security concern
