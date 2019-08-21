@@ -10,8 +10,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -25,6 +27,8 @@ import com.revature.rideforce.user.exceptions.DisabledAccountException;
 import com.revature.rideforce.user.exceptions.EmptyPasswordException;
 import com.revature.rideforce.user.exceptions.EntityConflictException;
 import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
+import com.revature.rideforce.user.exceptions.InvalidRegistrationKeyException;
+import com.revature.rideforce.user.exceptions.PasswordRequirementsException;
 import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.json.Active;
 import com.revature.rideforce.user.repository.UserRepository;
@@ -53,8 +57,13 @@ public class AuthenticationServiceUnitTest {
 
 	@Autowired
 	private AuthenticationService authenticationService;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//	    return new BCryptPasswordEncoder();
+//	}
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+//	
 	@MockBean
 	private UserRepository userRepo;
 	@MockBean
@@ -71,12 +80,12 @@ public class AuthenticationServiceUnitTest {
 		user.setLastName("admin");
 		user.setFirstName("admin");
 		Assertions.assertThat(user).isNotNull();
-		Assertions.assertThat(passwordEncoder).isNotNull();
+		//Assertions.assertThat(passwordEncoder).isNotNull();
 		Assertions.assertThat(userService).isNotNull();
 		user.setEmail("admin@revature.com");
 		user.setPassword("password");
 		user.setActive(Active.ACTIVE);
-		Mockito.when(userRepo.findByEmail("admin@revature.com")).thenReturn(user);
+		Mockito.when(userRepo.findByEmailIgnoreCase("admin@revature.com")).thenReturn(user);
 
 		Mockito.when(userService.add(any())).then(i -> i.getArgument(0)); // return the user it was given
 //		https://stackoverflow.com/questions/2684630/how-can-i-make-a-method-return-an-argument-that-was-passed-to-it
@@ -85,6 +94,11 @@ public class AuthenticationServiceUnitTest {
 
 	/**
 	 * Test the logic of the authentication service layer is sound
+	 * @throws PasswordRequirementsException 
+	 * @throws EmptyPasswordException 
+	 * @throws PermissionDeniedException 
+	 * @throws EntityConflictException 
+	 * @throws InvalidRegistrationKeyException 
 	 * 
 	 * @throws InvalidCredentialsException
 	 * @throws DisabledAccountException
@@ -152,9 +166,30 @@ public class AuthenticationServiceUnitTest {
 //		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
 //		authenticationService.register(registrationInfo);
 //	}
-
+	
+	
+//	
+//	@Test(expected = NullPointerException.class)
+//	public void registerWithNullPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException
+//	{
+//	
+//		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+//		// now set session and should not be null anymore
+//		user.setPassword(null);
+//		user.setRegistrationToken("DJF");
+//		
+//		authenticationService.register(user);
+//		
+//	}
+//	
+//	@Test(expected = PasswordRequirementsException.class)
+//	public void registerWithInvalidPasswordTest() throws PasswordRequirementsException, InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException {
+//		registrationInfo = new UserRegistration(this.user, "a", registrationTokenProvider.generateToken());
+//		authenticationService.register(registrationInfo);
+//	}
+//
 	@Test
-	public void getCurrentUserTest() throws EmptyPasswordException {
+	public void getCurrentUserTest() {
 		// when no session, getCurrentUser should return null
 		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
 		// now set session and should not be null anymore
@@ -165,4 +200,28 @@ public class AuthenticationServiceUnitTest {
 				.hasFieldOrPropertyWithValue("id", 1);
 		SecurityContextHolder.getContext().setAuthentication(null);
 	}
+	
+	
+
+	@Test(expected = EmptyPasswordException.class)
+	public void  emptyUserPasswordTest() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		// when no session, getCurrentUser should return null
+		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+		// now set session and should not be null anymore
+		user.setPassword("");
+		authenticationService.register(user);
+		
+	}
+	
+	@Test(expected = InvalidRegistrationKeyException.class)
+	public void  InvalidRegistrationToken() throws InvalidRegistrationKeyException, EntityConflictException, PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		// when no session, getCurrentUser should return null
+		Assertions.assertThat(authenticationService.getCurrentUser()).isNull();
+		// now set session and should not be null anymore
+		user.setPassword("password");
+		user.setRegistrationToken(null);
+		authenticationService.register(user);
+		
+	}
+	
 }

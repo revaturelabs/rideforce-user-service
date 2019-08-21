@@ -60,7 +60,7 @@ public class UserService extends CrudService<User> {
 	public User findByEmail(String email) throws PermissionDeniedException {
 		log.info("Attempting to retrieve user by email from userRepository");
 		log.debug("User email: {}", email);
-		User found = userRepository.findByEmail(email);
+		User found = userRepository.findByEmailIgnoreCase(email);
 
 		log.info("User {} found", found);
 
@@ -127,7 +127,7 @@ public class UserService extends CrudService<User> {
 	 */
 	@Override
 	protected void throwOnConflict(User obj) throws EntityConflictException {
-		User existing = userRepository.findByEmail(obj.getUsername());
+		User existing = userRepository.findByEmailIgnoreCase(obj.getUsername());
 		if (existing != null && existing.getId() != obj.getId()) {
 			throw new EmailAlreadyUsedException(obj.getUsername());
 		}
