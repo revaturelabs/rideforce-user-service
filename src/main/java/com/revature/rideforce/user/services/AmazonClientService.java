@@ -44,9 +44,7 @@ public class AmazonClientService {
         File convFile = new File(file.getOriginalFilename());
         try(FileOutputStream fos = new FileOutputStream(convFile)) {
             fos.write(file.getBytes());
-        } finally {
-            
-        }        
+        }       
         
         return convFile;
     }

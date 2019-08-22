@@ -38,7 +38,7 @@ public class JWKController {
 		try {
 			return ResponseEntity.created(null).body("{ \"token\": \"" + as.createRegistrationToken(rt) + "\" }");
 		} catch (JOSEException e) {
-			// TODO Auto-generated catch block
+	
 			e.printStackTrace();
 			return new ResponseError("Unable to generate registration token.").toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
