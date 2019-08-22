@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.validation.ConstraintViolation;
 
 import org.assertj.core.api.Assertions;
@@ -33,6 +34,7 @@ public class UserTest {
 
 	private LocalValidatorFactoryBean localValidatorFactory;
 	// TODO: test with passwordEncoder and remove suppressing warnings
+	
 	@SuppressWarnings({ "unused" })
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private User u;
@@ -74,7 +76,7 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(0);
+		Assertions.assertThat(counter).isEqualTo(1);
 	}
 
 	@Test
@@ -99,10 +101,10 @@ public class UserTest {
 
 		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
+				++counter;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+		Assertions.assertThat(counter).isEqualTo(2);
 	}
 
 	@Test
@@ -113,10 +115,10 @@ public class UserTest {
 
 		for (ConstraintViolation<User> v : violations) {
 			if (!v.getPropertyPath().toString().contains(".")) {
-				counter++;
+				++counter;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+		Assertions.assertThat(counter).isEqualTo(2);//ilocation and lastName
 	}
 
 	@Test
@@ -130,13 +132,15 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+		
+		Assertions.assertThat(counter).isEqualTo(2);//equal to 2 beacuse location does not contain "." 
 	}
 
 	@Test(expected = EmptyPasswordException.class)
 	public void emptyUserPasswordTest() throws EmptyPasswordException {
-		u.setPassword("");
-	}
+		u.setPassword(null);
+		
+	}////////DIONNE YOU SHOULD DELETE THIS IF NOT ADRESSED IN CONTROLLER, SHOULD NOT HAVE A SET METHOD THROWN AN EXCEPTION
 
 	@Test
 	public void nullUserRoleTest() {
@@ -149,7 +153,8 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+	
+		Assertions.assertThat(counter).isEqualTo(2);//equal to 2 beacuse location does not contain "."
 	}
 
 	@Test
@@ -163,7 +168,7 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+		Assertions.assertThat(counter).isEqualTo(2);//is equal to used to be 1 but here the violaitons include location so it is now 2
 	}
 
 	@Test
@@ -191,7 +196,8 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+	
+		Assertions.assertThat(counter).isEqualTo(2);//equal to 2 beacuse location does not contain "."
 	}
 
 	@Test
@@ -205,7 +211,8 @@ public class UserTest {
 				counter++;
 			}
 		}
-		Assertions.assertThat(counter).isEqualTo(1);
+	
+		Assertions.assertThat(counter).isEqualTo(2);//equal to 2 beacuse location does not contain "."
 	}
 
 	@Test

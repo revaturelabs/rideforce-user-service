@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideforce.user.UserApplication;
 import com.revature.rideforce.user.beans.User;
+import com.revature.rideforce.user.exceptions.InvalidCredentialsException;
+import com.revature.rideforce.user.exceptions.PermissionDeniedException;
 import com.revature.rideforce.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -40,6 +42,7 @@ public class UserControllerTest {
 	public void loggedOutUserCanGetUsers() throws Exception {
 		this.mockMvc.perform(get("/users")).andExpect(status().isOk());
 	}
+	
 
 	@Test
 	public void loggedOutUserCanGetUsersById() throws Exception {
@@ -71,7 +74,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void loggedOutUserCannotPutUsers() throws Exception {
+	public void loggedOutUserCannotPutUsers() throws PermissionDeniedException, Exception {
 		this.mockMvc.perform(put("/users")).andExpect(status().isForbidden());
 	}
 	
@@ -93,7 +96,7 @@ public class UserControllerTest {
 	// Logged out user get requests permissions may be security concern
 	@Test
 	public void loggedOutUserCanGetByEmail() throws Exception {
-		this.mockMvc.perform(get("/users?email=admin@revature.com")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/users?email=aataxitrans@gmail.com")).andExpect(status().isOk());
 	}
 	
 	@Test
@@ -104,6 +107,10 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserCanGetByInvalidEmail() throws Exception {
 		this.mockMvc.perform(get("/users?email=test")).andExpect(status().isNotFound());
+	}
+	@Test
+	public void loggedOutUserCanGetByRole() throws Exception {
+		this.mockMvc.perform(get("/users?role=Admin")).andExpect(status().isOk());
 	}
 	
 	// Logged out user get requests permissions may be security concern
@@ -141,7 +148,7 @@ public class UserControllerTest {
 	@Test
 	public void loggedOutUserFindByWeirdCaseEmailShouldWork() throws Exception
 	{ 							//so to put parameters in get request url, it's a ? not a /   !!!!
-		this.mockMvc.perform(get("/users?email=adMIN@REVature.com")).andExpect(status().is2xxSuccessful());
+		this.mockMvc.perform(get("/users?email=aatAXiTrans@gmail.com")).andExpect(status().is2xxSuccessful());
 	}
 	
 	@Test()

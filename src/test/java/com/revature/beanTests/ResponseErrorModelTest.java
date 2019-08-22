@@ -64,7 +64,7 @@ private LocalValidatorFactoryBean localValidatorFactory;
 	@Test
 	public void responseErrorHashCodeTest() {
 		ResponseError re = new ResponseError("message");
-		assertEquals(re.hashCode(), 954926055);
+		assertEquals( 954926055, re.hashCode());
 	}
 	
 	@Test

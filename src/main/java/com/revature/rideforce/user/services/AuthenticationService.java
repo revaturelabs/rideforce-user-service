@@ -115,6 +115,9 @@ public class AuthenticationService {
 	 */
 	public User register(User ur) throws InvalidRegistrationKeyException, EntityConflictException,
 			PermissionDeniedException, EmptyPasswordException, PasswordRequirementsException {
+		if(ur.getPassword()=="") {
+			throw new EmptyPasswordException();
+		}
 		// Check the registration token
 		RegistrationToken registrationToken = validateRegistrationToken(ur.getRegistrationToken());
 		if (registrationToken != null) {
@@ -123,6 +126,7 @@ public class AuthenticationService {
 		} else {
 			throw new InvalidRegistrationKeyException();
 		}
+		
 
 		// Sign the user up with Cognito
 		cognito.signUp(new SignUpRequest().withClientId(cc.getClientId()).withUsername(ur.getEmail().toLowerCase())
@@ -206,7 +210,7 @@ public class AuthenticationService {
 				// Convert the email claim to a string
 				.map(Object::toString)
 				// Find a user by the email
-				.map(uRepo::findByEmail)
+				.map(uRepo::findByEmailIgnoreCase)
 				// Create an authentication object from the user
 				.map(u -> new UsernamePasswordAuthenticationToken(u, "", u.getAuthorities()))
 				// Return null if anything in this chain is null
