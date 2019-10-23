@@ -1,4 +1,4 @@
-package com.example.rideforce;
+package com.revature.rideforce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
