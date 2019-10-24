@@ -77,12 +77,30 @@ public class Location {
 	/**
 	 * Constructor based on parameters listed below
 	 * Useful when creating transient Locations since they do not have an lid yet
+	 * and not have a latitude or longitude
 	 * 
 	 * @param address - The street address of this Location
-	 * @param city - The city of this Location
-	 * @param state - The two letter state code of this Location
-	 * @param zip - The zipcode of this Location
-	 * @param latitude - The latitude of this Location
+	 * @param city    - The city of this Location
+	 * @param state   - The two letter state code of this Location
+	 * @param zip     - The zipcode of this Location
+	 */
+	public Location(String address, String city, String state, String zip) {
+		super();
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+	}
+
+	/**
+	 * Constructor based on parameters listed below
+	 * Useful when creating transient Locations since they do not have an lid yet
+	 * 
+	 * @param address   - The street address of this Location
+	 * @param city      - The city of this Location
+	 * @param state     - The two letter state code of this Location
+	 * @param zip       - The zipcode of this Location
+	 * @param latitude  - The latitude of this Location
 	 * @param longitude - The longitude of this Location
 	 */
 	public Location(String address, String city, String state, String zip, Double latitude, Double longitude) {
@@ -99,12 +117,12 @@ public class Location {
 	 * Constructor based on parameters list below
 	 * Useful for persistent or detached Locations since they have an lid
 	 * 
-	 * @param lid - The primary key to identify a Location by
-	 * @param address - The street address of this Location
-	 * @param city - The city of this Location
-	 * @param state - The two letter state code of this Location
-	 * @param zip - The zipcode of this Location
-	 * @param latitude - The latitude of this Location
+	 * @param lid       - The primary key to identify a Location by
+	 * @param address   - The street address of this Location
+	 * @param city      - The city of this Location
+	 * @param state     - The two letter state code of this Location
+	 * @param zip       - The zipcode of this Location
+	 * @param latitude  - The latitude of this Location
 	 * @param longitude - The longitude of this Location
 	 */
 	public Location(Integer lid, String address, String city, String state, String zip, Double latitude,
