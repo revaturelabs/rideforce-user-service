@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="users")
 public class User {
+	
     /**
      * Basic primary key of users in the table from the database
      */
@@ -46,17 +47,21 @@ public class User {
     @JoinTable(name = "roles_users_JT", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns = {
             @JoinColumn(name = "rid") })
     private List<Role> roles;
+    
     /**
      * Where the user is currently located. See model {@link Location}.
      */
     @OneToOne
     @JoinColumn(name = "lid")
     Location location;
+    
     /**
      * Mainly used to determine whether or not the driver is currently able to drive people.
      */
     @Column
-    private boolean is_active;
+    private boolean isActive;
+    
+    //No arg constructor.
     public User() {
         super();
     }
@@ -69,10 +74,10 @@ public class User {
      * @param lname
      * @param roles         Determines whether the user is a driver, rider, or both. See model {@link Role}.
      * @param location      Where the user is currently located. See model {@link Location}.
-     * @param is_active     Mainly used to determine whether or not the driver is currently able to drive people.
+     * @param isActive     Mainly used to determine whether or not the driver is currently able to drive people.
      */
     public User(String email, String password, String fname, String lname, List<Role> roles, Location location,
-            boolean is_active) {
+            boolean isActive) {
         super();
         this.email = email;
         this.password = password;
@@ -80,7 +85,7 @@ public class User {
         this.lname = lname;
         this.roles = roles;
         this.location = location;
-        this.is_active = is_active;
+        this.isActive = isActive;
     }
     
     /**
@@ -93,10 +98,10 @@ public class User {
      * @param lname
      * @param roles         Determines whether the user is a driver, rider, or both. See model {@link Role}.
      * @param location      Where the user is currently located. See model {@link Location}.
-     * @param is_active     Mainly used to determine whether or not the driver is currently able to drive people.
+     * @param isActive     Mainly used to determine whether or not the driver is currently able to drive people.
      */
     public User(int uid, String email, String password, String fname, String lname, List<Role> roles, Location location,
-            boolean is_active) {
+            boolean isActive) {
         super();
         this.uid = uid;
         this.email = email;
@@ -105,7 +110,7 @@ public class User {
         this.lname = lname;
         this.roles = roles;
         this.location = location;
-        this.is_active = is_active;
+        this.isActive = isActive;
     }
     
     //Begin public getters and setters
@@ -151,18 +156,18 @@ public class User {
     public void setLocation(Location location) {
         this.location = location;
     }
-    public boolean isIs_active() {
-        return is_active;
+    public boolean getIsActive() {
+        return isActive;
     }
-    public void setIs_active(boolean is_active) {
-        this.is_active = is_active;
+    public void setIs_active(boolean isActive) {
+        this.isActive = isActive;
     }
     //End public getters and setters
     
     @Override
     public String toString() {
         return "User [uid=" + uid + ", email=" + email + ", password=" + password + ", fname=" + fname + ", lname="
-                + lname + ", is_active=" + is_active + "]";
+                + lname + ", is_active=" + isActive + "]";
     }
     
 }
