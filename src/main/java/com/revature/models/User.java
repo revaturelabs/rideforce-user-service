@@ -15,6 +15,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ * Represents a User's features, to be mapped in the database.
+ * 
+ * @author Kush Patel, Coel DeLeon, Clinton Yoos
+ * 
+ * @version 1908sdet.0.1
+ *
+ */
 @Entity
 @Table(name="users")
 public class User {
