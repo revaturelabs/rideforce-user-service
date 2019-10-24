@@ -58,7 +58,7 @@ public class User {
     /**
      * Mainly used to determine whether or not the driver is currently able to drive people.
      */
-    @Column
+    @Column(name = "is_active")
     private boolean isActive;
     
     //No arg constructor.
