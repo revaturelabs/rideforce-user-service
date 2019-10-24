@@ -33,7 +33,7 @@ public class User {
     @Id
     @SequenceGenerator(sequenceName = "user_id_maker", name = "user_seq")
     @GeneratedValue(generator = "user_seq", strategy = GenerationType.SEQUENCE)
-    @Column
+    @Column(name = "u_id")
     private int uid;
     
     /**
@@ -52,7 +52,7 @@ public class User {
      * Determines whether the user is a driver, rider, or both. See model {@link Role}.
      */
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "roles_users_JT", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns = {
+    @JoinTable(name = "roles_users_JT", joinColumns = { @JoinColumn(name = "u_id") }, inverseJoinColumns = {
             @JoinColumn(name = "rid") })
     private List<Role> roles;
     
