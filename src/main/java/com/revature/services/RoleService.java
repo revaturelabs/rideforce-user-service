@@ -8,7 +8,7 @@ public interface RoleService {
 	
 	public Role getRoleById(int id);
 	
-	public Role getByName(String rname);
+	public Role getByRname(String rname);
 	
 
 }

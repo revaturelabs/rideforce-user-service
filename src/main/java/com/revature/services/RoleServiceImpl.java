@@ -1,7 +1,5 @@
 package com.revature.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.models.Role;
@@ -24,8 +22,8 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public Role getByName(String rname) {
-		return (Role) rr.findByName(rname);
+	public Role getByRname(String rname) {
+		return (Role) rr.findByRname(rname);
 	}
 
 }
