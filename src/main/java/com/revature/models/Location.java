@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ * Represents a Location's features, to be mapped in the database
+ * 
+ * @author Michael Rollberg
+ *
+ */
 @Entity
 @Table(name = "Locations")
 public class Location {
@@ -43,7 +49,7 @@ public class Location {
 	private String state;
 
 	/**
-	 * The zip code of this Location
+	 * The zipcode of this Location
 	 * Example: 94043
 	 */
 	@Column(name = "ZIP", nullable = false)
@@ -75,7 +81,7 @@ public class Location {
 	 * @param address - The street address of this Location
 	 * @param city - The city of this Location
 	 * @param state - The two letter state code of this Location
-	 * @param zip - The zip code of this Location
+	 * @param zip - The zipcode of this Location
 	 * @param latitude - The latitude of this Location
 	 * @param longitude - The longitude of this Location
 	 */
@@ -97,7 +103,7 @@ public class Location {
 	 * @param address - The street address of this Location
 	 * @param city - The city of this Location
 	 * @param state - The two letter state code of this Location
-	 * @param zip - The zip code of this Location
+	 * @param zip - The zipcode of this Location
 	 * @param latitude - The latitude of this Location
 	 * @param longitude - The longitude of this Location
 	 */
