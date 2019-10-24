@@ -1,6 +1,8 @@
 package com.revature.controllers;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.maps.model.LatLng;
 import com.revature.models.Location;
+import com.revature.services.LocationService;
 
 /**
  * 
@@ -25,6 +29,12 @@ import com.revature.models.Location;
 @RestController
 @CrossOrigin
 public class LocationController {
+	
+	/**
+	 * Inject the LocationService, to do business logic for controller
+	 */
+	@Autowired
+	LocationService ls;
 
 	/**
 	 * Return a location by lid
@@ -34,7 +44,7 @@ public class LocationController {
 	 */
 	@GetMapping(value = "{lid}")
 	public Location getLocationById(@PathVariable("lid") int lid) {
-		return null;
+		return ls.getLocation(lid);
 	}
 
 	/**
@@ -44,7 +54,7 @@ public class LocationController {
 	 */
 	@GetMapping()
 	public List<Location> getLocation() {
-		return null;
+		return ls.getLocations();
 	}
 
 	/**
@@ -55,7 +65,7 @@ public class LocationController {
 	 */
 	@PostMapping(consumes = "application/json")
 	public Location createLocation(@RequestBody Location location) {
-		return null;
+		return ls.createLocation(location);
 	}
 
 	/**
@@ -68,7 +78,7 @@ public class LocationController {
 	@PutMapping(value = "{lid}", consumes = "application/json")
 	public Location updateLocation(@PathVariable("lid") int lid, @RequestBody Location location) {
 		location.setLid(lid);
-		return null;
+		return ls.updateLocation(location);
 	}
 
 	/**
@@ -77,7 +87,7 @@ public class LocationController {
 	 * @param lid - lid of Location
 	 */
 	@DeleteMapping(value = "{lid}")
-	public void deleteLocation(@PathVariable("lid") int lid) {
-
+	public boolean deleteLocation(@PathVariable("lid") int lid) {
+		return ls.deleteLocation(lid);
 	}
 }
