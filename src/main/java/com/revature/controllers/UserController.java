@@ -49,18 +49,16 @@ public class UserController {
 	
 	@GetMapping(params = "isActive")
 	@RequestMapping("/drivers")
-	public List<User> getAllActiveDrivers(@RequestParam(required = false) Boolean isActive){
+	public List<User> getAllActiveDrivers(@RequestParam boolean isActive){
 		
 		System.out.println(isActive);
 		
 		if(isActive == true) {
 			return us.getAllActiveDrivers();
-		} else if(isActive == false) {
+		} else {
 			return us.getAllInactiveDrivers();
 		}
-			
-		return us.getAllDrivers();
-		
+					
 	}
 	
 	/**
@@ -109,9 +107,9 @@ public class UserController {
 	 * @param user the User which you would like to make a record for in the
 	 *             database.
 	 */
-	@PostMapping(consumes = "application/json")
-	public void createUser(@RequestBody User user) {
-		us.createUser(user);
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	public User createUser(@RequestBody User user) {
+		return us.createUser(user);
 	}
 
 	/**
@@ -123,9 +121,9 @@ public class UserController {
 	 * 
 	 * @param user the User which you would like to update in the database.
 	 */
-	@PutMapping(consumes = "application/json")
-	public void updateUser(@RequestBody User user) {
-		us.updateUser(user);
+	@PutMapping(consumes = "application/json", produces = "application/json")
+	public User updateUser(@RequestBody User user) {
+		return us.updateUser(user);
 	}
 
 	/**
@@ -138,7 +136,8 @@ public class UserController {
 	 *            database.
 	 */
 	@DeleteMapping(value = "{uid}")
-	public void deleteUser(@PathVariable("uid") int uid) {
-		us.deleteUser(us.getUserById(uid));
+	public boolean deleteUser(@PathVariable("uid") int uid) {
+		return us.deleteUser(us.getUserById(uid));
 	}
+	
 }

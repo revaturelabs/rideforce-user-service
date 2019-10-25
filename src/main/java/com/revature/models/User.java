@@ -51,7 +51,7 @@ public class User {
     /**
      * Determines whether the user is a driver, rider, or both. See model {@link Role}.
      */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "roles_users_JT", joinColumns = { @JoinColumn(name = "u_id") }, inverseJoinColumns = {
             @JoinColumn(name = "rid") })
     private List<Role> roles;
@@ -59,7 +59,7 @@ public class User {
     /**
      * Where the user is currently located. See model {@link Location}.
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lid")
     Location location;
     
