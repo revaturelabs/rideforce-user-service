@@ -46,7 +46,23 @@ public class UserController {
 	public List<User> getAllUsers() {
 		return us.getAllUsers();
 	}
-
+	
+	@GetMapping(params = "isActive")
+	@RequestMapping("/drivers")
+	public List<User> getAllActiveDrivers(@RequestParam(required = false) Boolean isActive){
+		
+		System.out.println(isActive);
+		
+		if(isActive == true) {
+			return us.getAllActiveDrivers();
+		} else if(isActive == false) {
+			return us.getAllInactiveDrivers();
+		}
+			
+		return us.getAllDrivers();
+		
+	}
+	
 	/**
 	 * This method is called when a get request is sent to the backend and the URI
 	 * is "/users/{uid}"
@@ -75,6 +91,12 @@ public class UserController {
 	@GetMapping(params = "email")
 	public User getUserByEmail(@RequestParam("email") @NotEmpty String email) {
 		return us.getUserByEmail(email);
+	}
+	
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	@RequestMapping("/login")
+	public User userLogin(@RequestBody String email, @RequestBody String password) {
+		return us.userLogin(email, password);
 	}
 
 	/**

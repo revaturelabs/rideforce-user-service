@@ -39,7 +39,7 @@ public class User {
     /**
      * Email of Revature employee; used for login
      */
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
     private String password;
