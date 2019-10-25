@@ -49,15 +49,17 @@ public class UserController {
 	
 	@GetMapping(params = "isActive")
 	@RequestMapping("/drivers")
-	public List<User> getAllActiveDrivers(@RequestParam boolean isActive){
+	public List<User> getAllActiveDrivers(@RequestParam(required = false) Boolean isActive){
+		
+		System.out.println(isActive);
 		
 		if(isActive == true) {
 			return us.getAllActiveDrivers();
 		} else if(isActive == false) {
 			return us.getAllInactiveDrivers();
-		}else {
-			return us.getAllDrivers();
 		}
+			
+		return us.getAllDrivers();
 		
 	}
 	
