@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.maps.model.LatLng;
 import com.revature.models.Location;
 import com.revature.services.LocationService;
 
