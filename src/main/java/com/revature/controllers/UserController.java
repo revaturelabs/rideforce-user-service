@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.revature.models.User;
 import com.revature.services.LocationService;
 import com.revature.services.UserService;
@@ -32,8 +34,8 @@ public class UserController {
 	 */
 	@Autowired
 	UserService us;
-	
-	@Autowired 
+
+	@Autowired
 	LocationService ls;
 
 	/**
@@ -50,21 +52,22 @@ public class UserController {
 	public List<User> getAllUsers() {
 		return us.getAllUsers();
 	}
-	
+
 	@GetMapping(params = "isActive")
 	@RequestMapping("/drivers")
-	public List<User> getAllActiveDrivers(@RequestParam boolean isActive){
-		
+	public List<User> getAllActiveDrivers(@RequestParam boolean isActive) {
+
 		System.out.println(isActive);
-		
-		if(isActive == true) {
+
+		if (isActive == true) {
 			return us.getAllActiveDrivers();
-		} else {
+		}
+		else {
 			return us.getAllInactiveDrivers();
 		}
-					
+
 	}
-	
+
 	/**
 	 * This method is called when a get request is sent to the backend and the URI
 	 * is "/users/{uid}"
@@ -94,7 +97,7 @@ public class UserController {
 	public User getUserByEmail(@RequestParam("email") @NotEmpty String email) {
 		return us.getUserByEmail(email);
 	}
-	
+
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@RequestMapping("/login")
 	public User userLogin(@RequestBody User u) {
@@ -113,7 +116,9 @@ public class UserController {
 	 */
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public User createUser(@RequestBody User user) {
-		ls.createLocation(user.getLocation());
+		user.setLocation(ls.createLocation(user.getLocation()));
+		System.out.println(user.getLocation());
+		System.out.println(user);
 		return us.createUser(user);
 	}
 
@@ -127,8 +132,17 @@ public class UserController {
 	 * @param user the User which you would like to update in the database.
 	 */
 	@PutMapping(consumes = "application/json", produces = "application/json")
-	public User updateUser(@RequestBody User user) {
-		return us.updateUser(user);
+	public User updateUser(@RequestBody User updatedUser, HttpServletResponse response) {
+
+		updatedUser.setLocation(ls.updateLocation(updatedUser.getLocation()));
+		if (updatedUser.getLocation() == null) {
+			response.setStatus(400);
+			return null;
+		}
+		System.out.println(updatedUser.getLocation());
+		System.out.println(updatedUser);
+
+		return us.updateUser(updatedUser);
 	}
 
 	/**
@@ -144,5 +158,5 @@ public class UserController {
 	public boolean deleteUser(@PathVariable("uid") int uid) {
 		return us.deleteUser(us.getUserById(uid));
 	}
-	
+
 }

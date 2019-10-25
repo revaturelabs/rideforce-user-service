@@ -18,14 +18,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(int id) {
-		return ur.findById(id).get();
+		if (ur.findById(id).isPresent()) {
+			return ur.findById(id).get();
+		}
+		return null;
 	}
 
 	@Override
 	public User getUserByEmail(String email) {
 		return ur.findByEmail(email);
 	}
-	
+
 	@Override
 	public User userLogin(String email, String password) {
 		return ur.findByEmailAndPassword(email, password);
@@ -33,9 +36,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getAllUsers() {
-		return (List<User>)ur.findAll();
+		return (List<User>) ur.findAll();
 	}
-	
+
 	@Override
 	public List<User> getAllDrivers() {
 		Role r = new Role(1, "Driver");
@@ -48,8 +51,8 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllActiveDrivers() {
 		List<User> drivers = getAllDrivers();
 		ArrayList<User> actives = new ArrayList<User>();
-		for(User u : drivers) {
-			if(u.getIsActive() == true) {
+		for (User u : drivers) {
+			if (u.getIsActive() == true) {
 				actives.add(u);
 			}
 		}
@@ -60,8 +63,8 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllInactiveDrivers() {
 		List<User> drivers = getAllDrivers();
 		ArrayList<User> inactives = new ArrayList<User>();
-		for(User u : drivers) {
-			if(u.getIsActive() == false) {
+		for (User u : drivers) {
+			if (u.getIsActive() == false) {
 				inactives.add(u);
 			}
 		}
@@ -87,8 +90,8 @@ public class UserServiceImpl implements UserService {
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 }
