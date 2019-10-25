@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.revature.models.User;
+import com.revature.services.LocationService;
 import com.revature.services.UserService;
 
 @RestController
@@ -31,6 +32,9 @@ public class UserController {
 	 */
 	@Autowired
 	UserService us;
+	
+	@Autowired 
+	LocationService ls;
 
 	/**
 	 * This method is called when a get request is sent to the backend and the URI
@@ -109,6 +113,7 @@ public class UserController {
 	 */
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public User createUser(@RequestBody User user) {
+		ls.createLocation(user.getLocation());
 		return us.createUser(user);
 	}
 
