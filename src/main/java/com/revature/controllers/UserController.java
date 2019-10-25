@@ -34,8 +34,8 @@ public class UserController {
 	 */
 	@Autowired
 	UserService us;
-
-	@Autowired
+	
+	@Autowired 
 	LocationService ls;
 
 	/**
@@ -56,7 +56,6 @@ public class UserController {
 	@GetMapping(params = "isActive")
 	@RequestMapping("/drivers")
 	public List<User> getAllActiveDrivers(@RequestParam boolean isActive) {
-
 		System.out.println(isActive);
 
 		if (isActive == true) {
@@ -65,7 +64,7 @@ public class UserController {
 		else {
 			return us.getAllInactiveDrivers();
 		}
-
+					
 	}
 
 	/**
@@ -158,5 +157,4 @@ public class UserController {
 	public boolean deleteUser(@PathVariable("uid") int uid) {
 		return us.deleteUser(us.getUserById(uid));
 	}
-
 }
