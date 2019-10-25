@@ -28,7 +28,7 @@ public class LocationServiceImpl implements LocationService {
 	 * Google Geo APIs.
 	 */
 	@Autowired
-	private GeoApiContext geoApiContext;
+	GeoApiContext geoApiContext;
 
 	/**
 	 * Create a {@link Location} and save to database
@@ -97,7 +97,13 @@ public class LocationServiceImpl implements LocationService {
 			return results[0].geometry.location;
 		} catch (ApiException | InterruptedException | IOException e) {
 			Thread.currentThread().interrupt();
+			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public void setGeoApiContext(GeoApiContext geoApiContext) {
+		this.geoApiContext = geoApiContext;
+		
 	}
 }
