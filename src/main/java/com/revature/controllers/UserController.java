@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.revature.models.User;
+import com.revature.services.LocationService;
 import com.revature.services.UserService;
 
 @RestController
@@ -31,6 +34,9 @@ public class UserController {
 	 */
 	@Autowired
 	UserService us;
+	
+	@Autowired 
+	LocationService ls;
 
 	/**
 	 * This method is called when a get request is sent to the backend and the URI
@@ -46,23 +52,21 @@ public class UserController {
 	public List<User> getAllUsers() {
 		return us.getAllUsers();
 	}
-	
+
 	@GetMapping(params = "isActive")
 	@RequestMapping("/drivers")
-	public List<User> getAllActiveDrivers(@RequestParam(required = false) Boolean isActive){
-		
+	public List<User> getAllActiveDrivers(@RequestParam boolean isActive) {
 		System.out.println(isActive);
-		
-		if(isActive == true) {
+
+		if (isActive == true) {
 			return us.getAllActiveDrivers();
-		} else if(isActive == false) {
+		}
+		else {
 			return us.getAllInactiveDrivers();
 		}
-			
-		return us.getAllDrivers();
-		
+					
 	}
-	
+
 	/**
 	 * This method is called when a get request is sent to the backend and the URI
 	 * is "/users/{uid}"
@@ -92,7 +96,7 @@ public class UserController {
 	public User getUserByEmail(@RequestParam("email") @NotEmpty String email) {
 		return us.getUserByEmail(email);
 	}
-	
+
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@RequestMapping("/login")
 	public User userLogin(@RequestBody User u) {
@@ -109,9 +113,12 @@ public class UserController {
 	 * @param user the User which you would like to make a record for in the
 	 *             database.
 	 */
-	@PostMapping(consumes = "application/json")
-	public void createUser(@RequestBody User user) {
-		us.createUser(user);
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	public User createUser(@RequestBody User user) {
+		user.setLocation(ls.createLocation(user.getLocation()));
+		System.out.println(user.getLocation());
+		System.out.println(user);
+		return us.createUser(user);
 	}
 
 	/**
@@ -123,9 +130,18 @@ public class UserController {
 	 * 
 	 * @param user the User which you would like to update in the database.
 	 */
-	@PutMapping(consumes = "application/json")
-	public void updateUser(@RequestBody User user) {
-		us.updateUser(user);
+	@PutMapping(consumes = "application/json", produces = "application/json")
+	public User updateUser(@RequestBody User updatedUser, HttpServletResponse response) {
+
+		updatedUser.setLocation(ls.updateLocation(updatedUser.getLocation()));
+		if (updatedUser.getLocation() == null) {
+			response.setStatus(400);
+			return null;
+		}
+		System.out.println(updatedUser.getLocation());
+		System.out.println(updatedUser);
+
+		return us.updateUser(updatedUser);
 	}
 
 	/**
@@ -138,7 +154,7 @@ public class UserController {
 	 *            database.
 	 */
 	@DeleteMapping(value = "{uid}")
-	public void deleteUser(@PathVariable("uid") int uid) {
-		us.deleteUser(us.getUserById(uid));
+	public boolean deleteUser(@PathVariable("uid") int uid) {
+		return us.deleteUser(us.getUserById(uid));
 	}
 }

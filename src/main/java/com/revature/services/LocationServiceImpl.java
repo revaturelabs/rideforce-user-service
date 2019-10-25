@@ -65,10 +65,13 @@ public class LocationServiceImpl implements LocationService {
 	 * @return {@link Location} - updated {@link Location}
 	 */
 	public Location updateLocation(Location l) {
-		LatLng latLng = getLatLng(l.getAddress() + " " + l.getCity() + " " + l.getState() + " " + l.getZip());
-		l.setLatitude(latLng.lat);
-		l.setLongitude(latLng.lng);
-		return lr.save(l);
+		if (lr.existsById(l.getLid())) {
+			LatLng latLng = getLatLng(l.getAddress() + " " + l.getCity() + " " + l.getState() + " " + l.getZip());
+			l.setLatitude(latLng.lat);
+			l.setLongitude(latLng.lng);
+			return lr.save(l);
+		}
+		return null;
 	}
 
 	/**

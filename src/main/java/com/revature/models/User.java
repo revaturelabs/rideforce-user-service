@@ -51,7 +51,7 @@ public class User {
     /**
      * Determines whether the user is a driver, rider, or both. See model {@link Role}.
      */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "roles_users_JT", joinColumns = { @JoinColumn(name = "u_id") }, inverseJoinColumns = {
             @JoinColumn(name = "rid") })
     private List<Role> roles;
