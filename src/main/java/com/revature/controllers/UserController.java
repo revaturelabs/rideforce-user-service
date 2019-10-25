@@ -95,8 +95,8 @@ public class UserController {
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@RequestMapping("/login")
-	public User userLogin(@RequestBody String email, @RequestBody String password) {
-		return us.userLogin(email, password);
+	public User userLogin(@RequestBody User u) {
+		return us.userLogin(u.getEmail(), u.getPassword());
 	}
 
 	/**
