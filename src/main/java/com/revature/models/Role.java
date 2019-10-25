@@ -45,16 +45,6 @@ public class Role {
 	}
 
 	/**
-	 * Constructor for the Role Model without id.
-	 * 
-	 * @param rname
-	 */
-	public Role(String rname) {
-		super();
-		this.rname = rname;
-	}
-
-	/**
 	 * Full constructor for the role table.
 	 * 
 	 * @param id
@@ -91,5 +81,5 @@ public class Role {
 	public String toString() {
 		return "Role [id=" + id + ", rname=" + rname + "]";
 	}
-
+	
 }
