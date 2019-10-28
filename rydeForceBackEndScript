@@ -1,0 +1,19 @@
+#!/bin/bash
+
+processId=`jps -v | grep "RydeForceBackEnd" | cut -f 1 -d " "`
+
+echo $processId
+
+if [ -z $processId ]
+then
+        echo "not running"
+else
+        echo "running"
+        kill -s 9 $processId
+fi
+
+# Replace #{} with own credentials
+mvn -DMAPS_API_KEY=${MAPS_API_KEY} -DRIDEFORCE_JDBC_PASSWORD=${RIDEFORCE_JDBC_PASSWORD} -DRIDEFORCE_JDBC_USERNAME=${RIDEFORCE_JDBC_USERNAME} -DRIDEFORCE_JDBC_URL=${RIDEFORCE_JDBC_URL} -f ~/.jenkins/workspace/RydeForceUserService/pom.xml package
+
+# Replace #{} with own credentials
+echo "java -jar -DMAPS_API_KEY=${MAPS_API_KEY} -DRIDEFORCE_JDBC_PASSWORD=${RIDEFORCE_JDBC_PASSWORD} -DRIDEFORCE_JDBC_USERNAME=${RIDEFORCE_JDBC_USERNAME} -DRIDEFORCE_JDBC_URL=${RIDEFORCE_JDBC_URL} -Dname=RydeForceBackEnd -Dserver.port=8888 ~/.jenkins/workspace/RydeForceUserService/target/rideforce-v2-user-service-0.0.1-SNAPSHOT.jar > ~/output.txt" | at now
