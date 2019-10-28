@@ -34,8 +34,8 @@ public class UserController {
 	 */
 	@Autowired
 	UserService us;
-	
-	@Autowired 
+
+	@Autowired
 	LocationService ls;
 
 	/**
@@ -53,18 +53,17 @@ public class UserController {
 		return us.getAllUsers();
 	}
 
-	@GetMapping(params = "isActive")
-	@RequestMapping("/drivers")
-	public List<User> getAllActiveDrivers(@RequestParam boolean isActive) {
-		System.out.println(isActive);
-
-		if (isActive == true) {
-			return us.getAllActiveDrivers();
+	@GetMapping(value = "/drivers", params = "isActive")
+	public List<User> getAllActiveDrivers(@RequestParam(required = false) Boolean isActive) {
+		if (isActive != null) {
+			if (isActive == true) {
+				return us.getAllActiveDrivers();
+			}
+			else {
+				return us.getAllInactiveDrivers();
+			}
 		}
-		else {
-			return us.getAllInactiveDrivers();
-		}
-					
+		return us.getAllDrivers();
 	}
 
 	/**
@@ -97,10 +96,15 @@ public class UserController {
 		return us.getUserByEmail(email);
 	}
 
-	@PostMapping(consumes = "application/json", produces = "application/json")
-	@RequestMapping("/login")
-	public User userLogin(@RequestBody User u) {
-		return us.userLogin(u.getEmail(), u.getPassword());
+	@PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+	public User userLogin(@RequestBody User u, HttpServletResponse response) {
+		User user = us.userLogin(u.getEmail(), u.getPassword());
+		if (user == null) {
+			response.setStatus(401);
+			return null;
+		}
+		return user;
+
 	}
 
 	/**
@@ -114,11 +118,19 @@ public class UserController {
 	 *             database.
 	 */
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public User createUser(@RequestBody User user) {
-		user.setLocation(ls.createLocation(user.getLocation()));
-		System.out.println(user.getLocation());
-		System.out.println(user);
-		return us.createUser(user);
+	public User createUser(@RequestBody User user, HttpServletResponse response) {
+		user.setLocation(user.getLocation());
+		if (user.getLocation() == null) {
+			response.setStatus(400);
+			return null;
+		}
+		User newUser = us.createUser(user);
+		if (newUser == null) {
+			response.setStatus(400);
+			return null;
+		}
+		return newUser;
+
 	}
 
 	/**
@@ -130,18 +142,24 @@ public class UserController {
 	 * 
 	 * @param user the User which you would like to update in the database.
 	 */
-	@PutMapping(consumes = "application/json", produces = "application/json")
-	public User updateUser(@RequestBody User updatedUser, HttpServletResponse response) {
-
-		updatedUser.setLocation(ls.updateLocation(updatedUser.getLocation()));
-		if (updatedUser.getLocation() == null) {
+	@PutMapping(value = "/{uid}", consumes = "application/json", produces = "application/json")
+	public User updateUser(@PathVariable("uid") int uid, @RequestBody User user, HttpServletResponse response) {
+		user.setUid(uid);
+		
+		user.setLocation(ls.updateLocation(user.getLocation()));
+		if (user.getLocation() == null) {
 			response.setStatus(400);
 			return null;
 		}
-		System.out.println(updatedUser.getLocation());
-		System.out.println(updatedUser);
 
-		return us.updateUser(updatedUser);
+		User updatedUser = us.updateUser(user);
+		if (updatedUser == null) {
+			response.setStatus(400);
+			return null;
+		}
+
+		return updatedUser;
+
 	}
 
 	/**
