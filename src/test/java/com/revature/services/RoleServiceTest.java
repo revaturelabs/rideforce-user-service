@@ -2,7 +2,13 @@ package com.revature.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +21,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.revature.models.Role;
+import com.revature.models.User;
 import com.revature.repos.RoleRepo;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,18 +47,30 @@ public class RoleServiceTest {
 	
 	@Test
 	public void contexLoads() throws Exception {
-		assertThat(rs).isNotNull();
+		assertNotNull(rs);
 	}
 
 	@Test
-	public void createRole() {
-		Role newRole = new Role("Test Role");
+	public void createRoleValid() {
+		Role newRole = new Role(0, "Test Role");
 
 		doReturn(role1).when(rr).save(newRole);
+		doReturn(false).when(rr).existsById(newRole.getId());
 
 		Role testRole = rs.createRole(newRole);
 
 		assertEquals(testRole, role1);
+	}
+	
+	@Test 
+	public void createRoleAlreadyExists() {
+		Role newRole = new Role(1, "Test Role");
+		
+		doReturn(true).when(rr).existsById(newRole.getId());
+		
+		Role testRole = rs.createRole(newRole);
+		
+		assertNull(testRole);
 	}
 
 	@Test
@@ -80,6 +100,41 @@ public class RoleServiceTest {
 		List<Role> testRoles = rs.getAllRoles();
 
 		assertEquals(testRoles, actualRoles);
+	}
+	
+	@Test
+	public void updateRoleValid() {
+		doReturn(role1).when(rr).save(role1);
+		doReturn(true).when(rr).existsById(role1.getId());
+
+		Role testRole = rs.updateRole(role1);
+
+		assertEquals(testRole, role1);
+	}
+
+	@Test
+	public void updateRoleNotExists() {
+		Role updateRole = new Role(50, "Update Role");
+
+		doReturn(false).when(rr).existsById(updateRole.getId());
+
+		Role testRole = rs.updateRole(updateRole);
+
+		assertNull(testRole);
+	}
+	
+	@Test
+	public void deleteRoleTrue() {
+		doNothing().when(rr).deleteById(role1.getId());
+
+		assertTrue(rs.deleteRole(role1.getId()));
+	}
+
+	@Test
+	public void deleteRoleFalse() {
+		doThrow(new EmptyResultDataAccessException(role1.getId())).when(rr).deleteById(role1.getId());
+
+		assertFalse(rs.deleteRole(role1.getId()));
 	}
 
 }
