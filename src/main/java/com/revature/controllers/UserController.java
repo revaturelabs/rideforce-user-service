@@ -119,7 +119,7 @@ public class UserController {
 	 */
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public User createUser(@RequestBody User user, HttpServletResponse response) {
-		user.setLocation(user.getLocation());
+		user.setLocation(ls.createLocation(user.getLocation()));
 		if (user.getLocation() == null) {
 			response.setStatus(400);
 			return null;
