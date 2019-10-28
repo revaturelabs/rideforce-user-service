@@ -31,7 +31,7 @@ public class User {
      * Basic primary key of users in the table from the database
      */
     @Id
-    @SequenceGenerator(sequenceName = "user_id_maker", name = "user_seq")
+    @SequenceGenerator(sequenceName = "user_id_maker", name = "user_seq", allocationSize = 1)
     @GeneratedValue(generator = "user_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "u_id")
     private int uid;
@@ -177,5 +177,71 @@ public class User {
         return "User [uid=" + uid + ", email=" + email + ", password=" + password + ", fname=" + fname + ", lname="
                 + lname + ", is_active=" + isActive + "]";
     }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((fname == null) ? 0 : fname.hashCode());
+		result = prime * result + (isActive ? 1231 : 1237);
+		result = prime * result + ((lname == null) ? 0 : lname.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+		result = prime * result + uid;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		}
+		else if (!email.equals(other.email))
+			return false;
+		if (fname == null) {
+			if (other.fname != null)
+				return false;
+		}
+		else if (!fname.equals(other.fname))
+			return false;
+		if (isActive != other.isActive)
+			return false;
+		if (lname == null) {
+			if (other.lname != null)
+				return false;
+		}
+		else if (!lname.equals(other.lname))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		}
+		else if (!location.equals(other.location))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		}
+		else if (!password.equals(other.password))
+			return false;
+		if (roles == null) {
+			if (other.roles != null)
+				return false;
+		}
+		else if (!roles.equals(other.roles))
+			return false;
+		if (uid != other.uid)
+			return false;
+		return true;
+	}
+    
     
 }

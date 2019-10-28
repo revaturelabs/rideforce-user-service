@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Role;
@@ -73,11 +74,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(User user) {
+		if (user == null || ur.existsById(user.getUid())) {
+			return null;
+		}
 		return ur.save(user);
 	}
 
 	@Override
 	public User updateUser(User user) {
+		if (user == null || !ur.existsById(user.getUid())) {
+			return null;
+		}
 		return ur.save(user);
 	}
 
@@ -85,7 +92,7 @@ public class UserServiceImpl implements UserService {
 	public boolean deleteUser(User user) {
 		try {
 			ur.delete(user);
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			return false;
 		}
 

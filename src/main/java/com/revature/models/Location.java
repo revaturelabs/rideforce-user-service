@@ -93,6 +93,24 @@ public class Location {
 	}
 
 	/**
+	 * Constructor based on parameters below
+	 * 
+	 * @param lid     - The primary key to identify a Location by
+	 * @param address - The street address of this Location
+	 * @param city    - The city of this Location
+	 * @param state   - The two letter state code of this Location
+	 * @param zip     - The zipcode of this Location
+	 */
+	public Location(Integer lid, String address, String city, String state, String zip) {
+		super();
+		this.lid = lid;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+	}
+
+	/**
 	 * Constructor based on parameters listed below
 	 * Useful when creating transient Locations since they do not have an lid yet
 	 * 
@@ -250,7 +268,7 @@ public class Location {
 	 * 
 	 * @return Double - id of Location
 	 */
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 

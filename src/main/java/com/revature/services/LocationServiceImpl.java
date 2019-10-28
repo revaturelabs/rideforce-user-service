@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.google.maps.GeoApiContext;
@@ -18,7 +19,8 @@ import com.revature.repos.LocationRepository;
 public class LocationServiceImpl implements LocationService {
 
 	/**
-	 * Inject the LocationRepository, the way to get a {@link Location} from database
+	 * Inject the LocationRepository, the way to get a {@link Location} from
+	 * database
 	 */
 	@Autowired
 	LocationRepository lr;
@@ -32,18 +34,28 @@ public class LocationServiceImpl implements LocationService {
 
 	/**
 	 * Create a {@link Location} and save to database
+	 * 
 	 * @param l - {@link Location} to create
 	 * @return {@link Location} - newly created {@link Location}
 	 */
 	public Location createLocation(Location l) {
+		if (l == null || (l.getLid() != null && lr.existsById(l.getLid())) || l.getAddress() == null
+				|| l.getCity() == null || l.getState() == null || l.getZip() == null) {
+			return null;
+		}
 		LatLng latLng = getLatLng(l.getAddress() + " " + l.getCity() + " " + l.getState() + " " + l.getZip());
+		if (latLng == null) {
+			return null;
+		}
 		l.setLatitude(latLng.lat);
 		l.setLongitude(latLng.lng);
+		System.out.println(l);
 		return lr.save(l);
 	}
 
 	/**
 	 * Get all {@link Location}s
+	 * 
 	 * @return List<{@link Location}> - List of all {@link Location}s
 	 */
 	public List<Location> getLocations() {
@@ -52,6 +64,7 @@ public class LocationServiceImpl implements LocationService {
 
 	/**
 	 * Get a {@link Location} by lid
+	 * 
 	 * @param lid - lid of {@link Location}
 	 * @return {@link Location} - {@link Location} with specified lid
 	 */
@@ -61,21 +74,27 @@ public class LocationServiceImpl implements LocationService {
 
 	/**
 	 * Update a {@link Location}
+	 * 
 	 * @param l - {@link Location} with updated fields
 	 * @return {@link Location} - updated {@link Location}
 	 */
 	public Location updateLocation(Location l) {
-		if (lr.existsById(l.getLid())) {
-			LatLng latLng = getLatLng(l.getAddress() + " " + l.getCity() + " " + l.getState() + " " + l.getZip());
-			l.setLatitude(latLng.lat);
-			l.setLongitude(latLng.lng);
-			return lr.save(l);
+		if (l == null || l.getLid() == null || !lr.existsById(l.getLid()) || l.getAddress() == null
+				|| l.getCity() == null || l.getState() == null || l.getZip() == null) {
+			return null;
 		}
-		return null;
+		LatLng latLng = getLatLng(l.getAddress() + " " + l.getCity() + " " + l.getState() + " " + l.getZip());
+		if (latLng == null) {
+			return null;
+		}
+		l.setLatitude(latLng.lat);
+		l.setLongitude(latLng.lng);
+		return lr.save(l);
 	}
 
 	/**
 	 * Delete a {@link Location} by lid
+	 * 
 	 * @param lid - lid of {@link Location}
 	 * @return boolean - whether the deletion was successful
 	 */
@@ -83,7 +102,7 @@ public class LocationServiceImpl implements LocationService {
 		try {
 			lr.deleteById(lid);
 			return true;
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -97,7 +116,12 @@ public class LocationServiceImpl implements LocationService {
 	public LatLng getLatLng(String address) {
 		try {
 			GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
-			return results[0].geometry.location;
+			if (results.length == 0) {
+				return null;
+			}
+			else {
+				return results[0].geometry.location;
+			}
 		} catch (ApiException | InterruptedException | IOException e) {
 			Thread.currentThread().interrupt();
 			e.printStackTrace();
@@ -107,6 +131,6 @@ public class LocationServiceImpl implements LocationService {
 
 	public void setGeoApiContext(GeoApiContext geoApiContext) {
 		this.geoApiContext = geoApiContext;
-		
+
 	}
 }

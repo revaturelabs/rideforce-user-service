@@ -11,6 +11,14 @@ public interface RoleService {
 	 * @return newly created {@link Role}.
 	 */
 	public Role createRole(Role role);
+	
+	/**
+	 * Update a {@link Role} and save to database
+	 * 
+	 * @param role {@link Role} to update.
+	 * @return updated {@link Role}.
+	 */
+	public Role updateRole(Role role);
 
 	/**
 	 * Get a {@link Role} by ID
@@ -35,5 +43,12 @@ public interface RoleService {
 	 * @return List of all {@link Role}s in the database.
 	 */
 	public List<Role> getAllRoles();
+	
+	/**
+	 * Delete a {@link Role} from the database by id
+	 * @param rid - id of {@link Role} 
+	 * @return boolean - whether the deletion was successful
+	 */
+	public boolean deleteRole(int rid);
 	
 }

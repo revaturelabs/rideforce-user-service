@@ -2,6 +2,8 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,7 @@ import com.revature.services.LocationService;
 @RestController
 @CrossOrigin
 public class LocationController {
-	
+
 	/**
 	 * Inject the LocationService, to do business logic for controller
 	 */
@@ -52,7 +54,7 @@ public class LocationController {
 	 * @return null
 	 */
 	@GetMapping()
-	public List<Location> getLocation() {
+	public List<Location> getLocations() {
 		return ls.getLocations();
 	}
 
@@ -63,8 +65,15 @@ public class LocationController {
 	 * @return null
 	 */
 	@PostMapping(consumes = "application/json")
-	public Location createLocation(@RequestBody Location location) {
-		return ls.createLocation(location);
+	public Location createLocation(@RequestBody Location location, HttpServletResponse response) {
+		Location newLocation = ls.createLocation(location);
+		if (newLocation == null) {
+			response.setStatus(400);
+			return null;
+		}
+		else {
+			return newLocation;
+		}
 	}
 
 	/**
@@ -75,9 +84,17 @@ public class LocationController {
 	 * @return null
 	 */
 	@PutMapping(value = "{lid}", consumes = "application/json")
-	public Location updateLocation(@PathVariable("lid") int lid, @RequestBody Location location) {
+	public Location updateLocation(@PathVariable("lid") int lid, @RequestBody Location location,
+			HttpServletResponse response) {
 		location.setLid(lid);
-		return ls.updateLocation(location);
+		Location updatedLocation = ls.updateLocation(location);
+		if (updatedLocation == null) {
+			response.setStatus(400);
+			return null;
+		}
+		else {
+			return updatedLocation;
+		}
 	}
 
 	/**

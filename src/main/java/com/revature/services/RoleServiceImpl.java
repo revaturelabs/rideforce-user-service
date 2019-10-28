@@ -3,6 +3,7 @@ package com.revature.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Role;
@@ -16,6 +17,9 @@ public class RoleServiceImpl implements RoleService {
 	
 	@Override
 	public Role createRole(Role role) {
+		if (role == null || (role.getId() != null && rr.existsById(role.getId()))) {
+			return null;
+		}
 		return rr.save(role);
 	}
 
@@ -32,6 +36,25 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public List<Role> getAllRoles() {
 		return (List<Role>)rr.findAll();
+	}
+
+	@Override
+	public Role updateRole(Role role) {
+		if (role == null || role.getId() == null || !rr.existsById(role.getId())) {
+			return null;
+		}
+		return rr.save(role);
+	}
+	
+	@Override
+	public boolean deleteRole(int rid) {
+		try {
+			rr.deleteById(rid);
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
